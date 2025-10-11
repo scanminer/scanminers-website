@@ -120,6 +120,20 @@ Resend setup:
   - SDK suggests moving init into Next.js instrumentation if desired
 - Cloudflare Web Analytics: add `NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN` to enable beacon in layout
 
+### Sentry validation (runbook)
+Pre-reqs:
+- `NEXT_PUBLIC_SENTRY_DSN` and `SENTRY_DSN` configured in the target environment (local or Cloudflare Pages).
+
+Steps:
+1. Open `/sentry-example-page`.
+2. Click “Throw Sample Error” to generate a client exception and call `/api/sentry-example-api`.
+3. Confirm both a frontend error and a backend event in Sentry.
+4. If events don’t arrive:
+   - Disable ad blockers; the `/monitoring` tunnel is configured but can still be blocked.
+   - Verify DSNs match the Sentry project.
+   - Ensure `/monitoring` is not intercepted by middleware or rewrites.
+   - Check sampling; production defaults are lower.
+
 ---
 
 ## 8. Health and diagnostics

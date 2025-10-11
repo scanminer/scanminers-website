@@ -6,6 +6,15 @@ The format is based on Keep a Changelog, and this project adheres loosely to Sem
 
 ## [Unreleased]
 
+## [2025-10-12]
+### Changed
+- Sentry: switch to env-based DSNs (`NEXT_PUBLIC_SENTRY_DSN` for client, `SENTRY_DSN` for server/edge) with sensible prod sampling (lower `tracesSampleRate`, lower `replaysSessionSampleRate`, logs disabled in prod)
+- Disabled `automaticVercelMonitors` in `next.config.ts` (not applicable on Cloudflare Pages)
+- Example page: removed `next/head` usage and added App Router `metadata.ts`
+
+### Added
+- `.env.example`: added `NEXT_PUBLIC_SENTRY_DSN` and clarified Sentry configuration variables
+
 ## [2025-10-11]
 ### Added
 - Sentry integration across client/server/edge with example page and global error boundary

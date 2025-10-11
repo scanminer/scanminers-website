@@ -2,9 +2,14 @@ import type { Metadata } from "next";
 import { allInsights } from "contentlayer/generated";
 import { absoluteUrl } from "@/lib/url";
 
+function unwrapParams(p: Promise<{ slug: string }> | { slug: string }): Promise<{ slug: string }> {
+  // Detect promise by presence of then; avoid using any
+  const maybeThen = (p as { then?: unknown }).then;
+  return typeof maybeThen === "function" ? (p as Promise<{ slug: string }>) : Promise.resolve(p as { slug: string });
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
-  const p = (params as any)?.then ? await (params as Promise<{ slug: string }>) : (params as { slug: string });
-  const { slug: s } = p;
+  const { slug: s } = await unwrapParams(params);
   const post = allInsights.find((p: { slug: string }) => p.slug === s);
   const title = post?.title ?? "Insight";
   const description = post?.summary ?? undefined;

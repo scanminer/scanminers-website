@@ -116,3 +116,44 @@ Additional docs:
 3. `npm run dev` (uses Webpack; Turbopack disabled for Contentlayer watch).
 4. Content lives in `content/insights` and `content/case-studies` (MDX).
 5. `npm run build` then `npm start` for a prod preview.
+
+## Sentry (error tracking)
+
+This project includes Sentry for client, server, and edge runtimes. DSNs are read from env.
+
+Env vars:
+- `NEXT_PUBLIC_SENTRY_DSN` (browser; public)
+- `SENTRY_DSN` (server/edge; secret)
+
+Local test:
+1. Add DSNs to `.env.local`.
+2. `npm run dev` and open `http://localhost:3000/sentry-example-page`.
+3. Click “Throw Sample Error”. This triggers a frontend error and calls `/api/sentry-example-api`.
+4. Check your Sentry project for the events. If you see a connectivity warning, disable ad blockers. A tunnel route `/monitoring` is configured to help avoid blocking.
+
+Production test:
+1. Set the same env vars in Cloudflare Pages (Production and Preview).
+2. After deploy, visit `/sentry-example-page` on your site and click the button.
+3. Confirm events in Sentry. Sampling is lower in production by default; adjust in the Sentry config files if needed.
+
+### Troubleshooting
+- No events arriving:
+	- Ensure `NEXT_PUBLIC_SENTRY_DSN` (client) and `SENTRY_DSN` (server/edge) are set in the environment used to run the app.
+	- Try disabling ad blockers; while a tunnel route `/monitoring` is set up, some blockers may still interfere.
+	- Check that your Sentry project and DSNs match the environment.
+- Client errors blocked:
+	- Verify that `/monitoring` isn’t matched by `middleware.ts` or other rewrites. Our middleware currently only matches `/api/contact`.
+- Edge/server errors missing:
+	- Confirm your failing route uses Edge or Node runtime and that `instrumentation.ts` is present at the repo root. We export `onRequestError` which should capture unhandled request errors.
+- CSP/CORS issues:
+	- If using a CSP, ensure Sentry ingest host and the tunnel path (`/monitoring`) are allowed.
+- Sampling too low:
+	- In production we lower tracing and replay session sampling. Adjust values in `sentry.server.config.ts`, `sentry.edge.config.ts`, and `instrumentation-client.ts`.
+- Source maps / stack traces:
+	- Source map upload is configured via `withSentryConfig` in `next.config.ts`. Ensure builds run in CI and network egress isn’t blocked. Check build logs for Sentry upload messages.
+
+### Sentry smoke test (quick)
+1. Ensure `NEXT_PUBLIC_SENTRY_DSN` and `SENTRY_DSN` are set (local or CF Pages).
+2. Open `/sentry-example-page` and click “Throw Sample Error”.
+3. Verify two events in Sentry: one frontend exception and one backend API request.
+4. Optionally request `/monitoring` directly to verify the tunnel route responds (200/204); if blocked, try without ad blockers.

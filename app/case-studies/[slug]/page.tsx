@@ -4,6 +4,7 @@ import type { CaseStudy } from "contentlayer/generated";
 import { allCaseStudies } from "contentlayer/generated";
 import { MDXContentServer } from "@/components/mdx-content-server";
 import { notFound } from "next/navigation";
+import { formatDate } from "@/lib/date";
 
 export const runtime = 'edge';
 export const dynamic = "force-dynamic";
@@ -38,13 +39,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           )}
 
           <h1 className="text-4xl font-bold mb-3">{study.title}</h1>
-          <time className="text-sm text-gray-500">
-            {new Date(study.publishedAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </time>
+          <time className="text-sm text-gray-500">{formatDate(study.publishedAt)}</time>
           {study.summary && <p className="mt-3 text-gray-700">{study.summary}</p>}
 
           <div className="mdx mt-8">

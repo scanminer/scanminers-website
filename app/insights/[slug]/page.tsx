@@ -4,19 +4,20 @@ import type { Insight } from "contentlayer/generated";
 import { allInsights } from "contentlayer/generated";
 import { MDXContentServer } from "@/components/mdx-content-server";
 import { notFound } from "next/navigation";
+import { formatDate } from "@/lib/date";
 
-type PageProps = { params: Promise<{ slug: string }> };
+type PageProps = { params: Promise<{ slug: string }> | { slug: string } };
 
 export const runtime = 'edge';
 export const dynamic = "force-dynamic";
 
-function isPromise<T>(val: any): val is Promise<T> {
-  return !!val && typeof val.then === 'function';
+function unwrapParams(p: Promise<{ slug: string }> | { slug: string }): Promise<{ slug: string }> {
+  const maybeThen = (p as { then?: unknown }).then;
+  return typeof maybeThen === 'function' ? (p as Promise<{ slug: string }>) : Promise.resolve(p as { slug: string });
 }
 
 export default async function InsightPage({ params }: PageProps) {
-  const p = isPromise<{ slug: string }>(params) ? await params : (params as unknown as { slug: string });
-  const { slug } = p;
+  const { slug } = await unwrapParams(params);
   const post = allInsights.find((p: Insight) => p.slug === slug) as Insight | undefined;
 
   if (!post) {
@@ -70,14 +71,4 @@ export default async function InsightPage({ params }: PageProps) {
       </main>
     </div>
   );
-}
-
-function formatDate(input: string | Date): string {
-  const d = new Date(input);
-  if (isNaN(d.getTime())) return '';
-  const months = [
-    'January','February','March','April','May','June',
-    'July','August','September','October','November','December'
-  ];
-  return `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
 }

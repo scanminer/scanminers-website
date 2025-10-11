@@ -1,0 +1,34 @@
+name: Sentry Smoke Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL to test (e.g., https://preview.example.com)"
+        required: true
+        type: string
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hit Sentry example backend (expect 500)
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="${{ inputs.base_url }}/api/sentry-example-api"
+          echo "Requesting: $url"
+          status=$(curl -s -o /dev/null -w "%{http_code}" "$url" || true)
+          echo "Status: $status"
+          if [ "$status" -ne 500 ]; then
+            echo "Expected 500 from example API to trigger Sentry backend event, got $status" >&2
+            exit 1
+          fi
+      - name: Optional - hit frontend example page
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -s "${{ inputs.base_url }}/sentry-example-page" >/dev/null || true
+        
+      - name: Notes
+        run: echo "Verify events in Sentry project after running this smoke test."

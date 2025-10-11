@@ -1,59 +1,57 @@
-# .github/workflows/content-qa.yml
-
-name: 'Content Quality Gate'
+name: Content Quality Gate
 
 on:
   pull_request:
     paths:
-      name: 'Content Quality Gate'
+      - 'content/**'
+      - 'contentlayer.config.ts'
 
-      on:
-        pull_request:
-          paths:
-            - 'content/**'
-            - 'contentlayer.config.ts'
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for getting changed files
 
-      jobs:
-        validate-content:
-          runs-on: ubuntu-latest
-          steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-              with:
-                fetch-depth: 0 # Required for getting changed files
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                node-version: '20'
-                cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
 
-            - name: Install dependencies
-              run: npm ci
+      - name: Validate Contentlayer build
+        run: npx contentlayer build
+        # This step will fail if Zod validation in your schema fails.
 
-            - name: Validate Contentlayer build
-              id: contentlayer
-              run: npx contentlayer build
-              # This step will fail if Zod validation in your schema fails.
+      - name: Get changed MDX files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            content/**/*.mdx
 
-            - name: Get changed MDX files
-              id: changed-files
-              uses: tj-actions/changed-files@v44
-              with:
-                files: |
-                  content/**/*.mdx
+      - name: Lint for citation rules
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: node scripts/ensure-citations.js ${{ steps.changed-files.outputs.all_changed_files }}
 
-            - name: Lint for citation rules
-              if: steps.changed-files.outputs.any_changed == 'true'
-              run: node scripts/ensure-citations.js ${{ steps.changed-files.outputs.all_changed_files }}
-
-            - name: Lychee Link Checker
-              uses: lycheeverse/lychee-action@v1
-              with:
-                args: "--verbose --no-progress './content/**/*.mdx'"
-                # This checks all links in changed MDX files.
-        id: citation-lint
+      - name: Prepare lychee include file
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          # This is a placeholder for the ensure-citations.js script.
-          # For now, we'll just ensure the job structure is in place.
-          echo "Citation lint passed (placeholder)."
+          printf "%s\n" ${{ steps.changed-files.outputs.all_changed_files }} > .lychee-include
+
+      - name: Lychee Link Checker (changed files)
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress --include-file .lychee-include
+
+      - name: Lychee Link Checker (fallback, all content)
+        if: steps.changed-files.outputs.any_changed != 'true'
+        uses: lycheeverse/lychee-action@v1
+        with:
+          args: --verbose --no-progress './content/**/*.mdx'

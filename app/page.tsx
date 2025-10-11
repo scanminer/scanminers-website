@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { absoluteUrl } from "@/lib/url";
 import type { Insight, CaseStudy } from "contentlayer/generated";
 import { allInsights, allCaseStudies } from "contentlayer/generated";
+import { formatDate } from "@/lib/date";
 
 export default function Home() {
   const latestInsights: Insight[] = allInsights
@@ -64,9 +65,7 @@ export default function Home() {
                   <Link href={s.url} className="group">
                     <h3 className="text-xl font-semibold group-hover:text-blue-600">{s.title}</h3>
                   </Link>
-                  <time className="block text-sm text-gray-500 mt-1">
-                    {new Date(s.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-                  </time>
+                  <time className="block text-sm text-gray-500 mt-1">{formatDate(s.publishedAt)}</time>
                   {s.summary && <p className="mt-2 text-gray-700 dark:text-gray-300">{s.summary}</p>}
                 </li>
               ))}
@@ -88,9 +87,7 @@ export default function Home() {
                   <Link href={p.url} className="group">
                     <h3 className="text-xl font-semibold group-hover:text-blue-600">{p.title}</h3>
                   </Link>
-                  <time className="block text-sm text-gray-500 mt-1">
-                    {new Date(p.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-                  </time>
+                  <time className="block text-sm text-gray-500 mt-1">{formatDate(p.publishedAt)}</time>
                   {p.summary && <p className="mt-2 text-gray-700 dark:text-gray-300">{p.summary}</p>}
                 </li>
               ))}
