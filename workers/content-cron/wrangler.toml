@@ -1,7 +1,7 @@
 # workers/content-cron/wrangler.toml
 name = "scanminers-content-cron"
 main = "src/index.ts"
-compatibility_date = "2025-10-12"
+compatibility_date = "2025-10-11"
 
 # Cron triggers are now ENABLED.
 [triggers]
