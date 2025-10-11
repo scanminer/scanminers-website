@@ -126,8 +126,8 @@ Pre-reqs:
 
 Steps:
 1. Open `/sentry-example-page`.
-2. Click “Throw Sample Error” to generate a client exception and call `/api/sentry-example-api`.
-3. Confirm both a frontend error and a backend event in Sentry.
+2. Click “Throw Sample Error” to generate a client exception. The backend sample route (`/api/sentry-example-api`) is currently disabled to avoid a Next-on-Pages bundling error. You can reintroduce it under a different path if needed.
+3. Confirm a frontend error in Sentry. If you reintroduce a backend route, you can validate a backend event as well.
 4. If events don’t arrive:
    - Disable ad blockers; the `/monitoring` tunnel is configured but can still be blocked.
    - Verify DSNs match the Sentry project.

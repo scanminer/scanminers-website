@@ -12,23 +12,23 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Hit Sentry example backend (expect 500)
+      - name: Check health endpoint
         shell: bash
         run: |
           set -euo pipefail
-          url="${{ inputs.base_url }}/api/sentry-example-api"
+          url="${{ inputs.base_url }}/api/health"
           echo "Requesting: $url"
           status=$(curl -s -o /dev/null -w "%{http_code}" "$url" || true)
           echo "Status: $status"
-          if [ "$status" -ne 500 ]; then
-            echo "Expected 500 from example API to trigger Sentry backend event, got $status" >&2
+          if [ "$status" -ne 200 ]; then
+            echo "Expected 200 from health endpoint, got $status" >&2
             exit 1
           fi
-      - name: Optional - hit frontend example page
+      - name: Hit frontend example page (triggers client error)
         shell: bash
         run: |
           set -euo pipefail
           curl -s "${{ inputs.base_url }}/sentry-example-page" >/dev/null || true
         
       - name: Notes
-        run: echo "Verify events in Sentry project after running this smoke test."
+        run: echo "Verify the frontend event in Sentry project after running this smoke test."

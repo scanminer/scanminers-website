@@ -128,7 +128,7 @@ Env vars:
 Local test:
 1. Add DSNs to `.env.local`.
 2. `npm run dev` and open `http://localhost:3000/sentry-example-page`.
-3. Click “Throw Sample Error”. This triggers a frontend error and calls `/api/sentry-example-api`.
+3. Click “Throw Sample Error”. This triggers a frontend error. Note: the sample backend route was disabled to avoid a Cloudflare Pages bundling issue.
 4. Check your Sentry project for the events. If you see a connectivity warning, disable ad blockers. A tunnel route `/monitoring` is configured to help avoid blocking.
 
 Production test:
