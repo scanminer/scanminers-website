@@ -103,6 +103,12 @@ If a secret is exposed or you wish to rotate periodically:
 - Generated artifacts from Contentlayer are ignored via `.gitignore`.
 - Images used by MDX live in `public/`.
 
+---
+
+Additional docs:
+- Handover: `docs/HANDOVER.md`
+- Changelog: `CHANGELOG.md`
+
 ## Dev Setup
 
 1. `nvm use 20 && npm ci`
