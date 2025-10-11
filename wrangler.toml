@@ -5,3 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 # Next on Pages will generate the worker; we just provide flags/dates.
 # You can also set environment bindings here if needed later.
+
+# Cloudflare Pages (Beta) configuration
+# This lets Pages pick up compatibility flags from wrangler.toml.
+pages_build_output_dir = ".vercel/output/static"
