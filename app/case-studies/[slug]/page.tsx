@@ -12,7 +12,7 @@ type PageProps = { params: Promise<{ slug: string }> };
 
 export default async function CaseStudyPage({ params }: PageProps) {
   const { slug } = await params;
-  const study = allCaseStudies.find((s) => s.slug === slug) as CaseStudy | undefined;
+  const study = allCaseStudies.find((s: CaseStudy) => s.slug === slug) as CaseStudy | undefined;
   if (!study) return notFound();
 
   return (
@@ -55,7 +55,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <section className="mt-12">
               <h2 className="text-xl font-semibold mb-3">Provenance</h2>
               <ol className="list-decimal ml-6 space-y-2 text-gray-700">
-                {study.provenance.map((p, idx) => (
+                {study.provenance.map((p: string, idx: number) => (
                   <li key={idx}>{p}</li>
                 ))}
               </ol>
@@ -66,7 +66,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             <section className="mt-12">
               <h2 className="text-xl font-semibold mb-3">References</h2>
               <ol className="list-decimal ml-6 space-y-2 text-gray-700">
-                {study.citations.map((c, idx) => (
+                {study.citations.map((c: string, idx: number) => (
                   <li key={idx}>{c}</li>
                 ))}
               </ol>

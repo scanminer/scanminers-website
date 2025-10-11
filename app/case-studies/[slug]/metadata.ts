@@ -4,7 +4,7 @@ import { absoluteUrl } from "@/lib/url";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug: s } = await params;
-  const study = allCaseStudies.find((p) => p.slug === s);
+  const study = allCaseStudies.find((p: { slug: string }) => p.slug === s);
   const title = study?.title ?? "Case Study";
   const description = study?.summary ?? undefined;
   const url = absoluteUrl(`/case-studies/${s}`);

@@ -7,12 +7,12 @@ import { allInsights, allCaseStudies } from "contentlayer/generated";
 export default function Home() {
   const latestInsights: Insight[] = allInsights
     .slice()
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .sort((a: Insight, b: Insight) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 3);
 
   const latestCaseStudies: CaseStudy[] = allCaseStudies
     .slice()
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .sort((a: CaseStudy, b: CaseStudy) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 3);
 
   return (
@@ -83,7 +83,7 @@ export default function Home() {
             <p className="text-gray-600">No insights yet.</p>
           ) : (
             <ul className="space-y-6">
-              {latestInsights.map((p) => (
+              {latestInsights.map((p: Insight) => (
                 <li key={p._id} className="border-b pb-4">
                   <Link href={p.url} className="group">
                     <h3 className="text-xl font-semibold group-hover:text-blue-600">{p.title}</h3>

@@ -13,16 +13,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/case-studies"), lastModified: now, changeFrequency: "weekly", priority: 0.7 },
   ];
 
-  const insightRoutes: MetadataRoute.Sitemap = allInsights.map((p) => ({
+  const insightRoutes: MetadataRoute.Sitemap = allInsights.map((p: { url: string; publishedAt?: string }) => ({
     url: absoluteUrl(p.url),
-    lastModified: new Date(p.publishedAt),
+    lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  const caseStudyRoutes: MetadataRoute.Sitemap = allCaseStudies.map((p) => ({
+  const caseStudyRoutes: MetadataRoute.Sitemap = allCaseStudies.map((p: { url: string; publishedAt?: string }) => ({
     url: absoluteUrl(p.url),
-    lastModified: new Date(p.publishedAt),
+    lastModified: p.publishedAt ? new Date(p.publishedAt) : now,
     changeFrequency: "monthly",
     priority: 0.7,
   }));

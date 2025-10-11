@@ -15,7 +15,7 @@ export const runtime = 'edge';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug: s } = await params;
-  const post = allInsights.find((p) => p.slug === s);
+  const post = allInsights.find((p: Insight) => p.slug === s);
   const title = post?.title ?? "Insight";
   const description = post?.summary ?? undefined;
   const url = absoluteUrl(`/insights/${s}`);
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function InsightPage({ params }: PageProps) {
   const { slug } = await params;
-  const post = allInsights.find((p) => p.slug === slug) as Insight | undefined;
+  const post = allInsights.find((p: Insight) => p.slug === slug) as Insight | undefined;
 
   if (!post) {
     return notFound();
@@ -92,7 +92,7 @@ export default async function InsightPage({ params }: PageProps) {
             <section className="mt-12">
               <h2 className="text-xl font-semibold mb-3">References</h2>
               <ol className="list-decimal ml-6 space-y-2 text-gray-700">
-                {post.citations.map((c, idx) => (
+                {post.citations.map((c: string, idx: number) => (
                   <li key={idx}>{c}</li>
                 ))}
               </ol>
