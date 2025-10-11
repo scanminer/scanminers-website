@@ -4,6 +4,7 @@ import { absoluteUrl } from "@/lib/url";
 import type { CaseStudy } from "contentlayer/generated";
 import { allCaseStudies } from "contentlayer/generated";
 import { slugifyTag } from "@/lib/slug";
+import { formatDate } from "@/lib/date";
 
 export const metadata: Metadata = {
   title: "Case Studies | Scanminers",
@@ -65,13 +66,7 @@ export default function CaseStudiesIndexPage() {
                 <Link href={s.url} className="group">
                   <h2 className="text-2xl font-semibold group-hover:text-blue-600">{s.title}</h2>
                 </Link>
-                <time className="block text-sm text-gray-500 mt-1">
-                  {new Date(s.publishedAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
+                <time className="block text-sm text-gray-500 mt-1">{formatDate(s.publishedAt)}</time>
                 {s.summary && <p className="mt-3 text-gray-700">{s.summary}</p>}
                 {Array.isArray((s as CaseStudy & { tags?: string[] }).tags) && (s as CaseStudy & { tags?: string[] }).tags!.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">

@@ -5,6 +5,7 @@ import { allInsights } from "contentlayer/generated";
 import type { Metadata } from "next";
 import { absoluteUrl } from "@/lib/url";
 import { slugifyTag } from "@/lib/slug";
+import { formatDate } from "@/lib/date";
 
 export const metadata: Metadata = {
   title: "Insights | Scanminers",
@@ -68,13 +69,7 @@ export default function InsightsIndexPage() {
                     {p.title}
                   </h2>
                 </Link>
-                <time className="block text-sm text-gray-500 mt-1">
-                  {new Date(p.publishedAt).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
+                <time className="block text-sm text-gray-500 mt-1">{formatDate(p.publishedAt)}</time>
                 {p.summary && (
                   <p className="mt-3 text-gray-700">{p.summary}</p>
                 )}
