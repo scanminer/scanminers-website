@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { allCaseStudies } from "contentlayer/generated";
 import { absoluteUrl } from "@/lib/url";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug: s } = await params;
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { slug: s } = params;
   const study = allCaseStudies.find((p: { slug: string }) => p.slug === s);
   const title = study?.title ?? "Case Study";
   const description = study?.summary ?? undefined;
