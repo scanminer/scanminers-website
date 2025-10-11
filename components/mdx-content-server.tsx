@@ -1,6 +1,5 @@
 "use client";
-import * as React from "react";
-import { getMDXComponent } from "next-contentlayer/hooks";
+import { useMDXComponent } from "next-contentlayer/hooks";
 
 export type MDXContentServerProps = {
   code: string;
@@ -9,6 +8,6 @@ export type MDXContentServerProps = {
 };
 
 export function MDXContentServer({ code, components }: MDXContentServerProps) {
-  const Component = React.useMemo(() => getMDXComponent(code), [code]);
+  const Component = useMDXComponent(code);
   return <Component components={components} />;
 }
