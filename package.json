@@ -11,6 +11,7 @@
     "contentlayer": "contentlayer build"
   },
   "dependencies": {
+    "@sentry/nextjs": "^8.55.0",
     "contentlayer": "^0.3.4",
     "next": "15.5.4",
     "next-contentlayer": "^0.3.4",
