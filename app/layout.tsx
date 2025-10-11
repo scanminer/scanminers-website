@@ -23,6 +23,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cfAnalyticsToken = process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN;
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
@@ -38,6 +39,13 @@ export default function RootLayout({
           </nav>
         </header>
         <main>{children}</main>
+        {cfAnalyticsToken ? (
+          <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon={`{\"token\":\"${cfAnalyticsToken}\"}`}
+          />
+        ) : null}
       </body>
     </html>
   );

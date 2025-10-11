@@ -102,3 +102,11 @@ If a secret is exposed or you wish to rotate periodically:
 
 - Generated artifacts from Contentlayer are ignored via `.gitignore`.
 - Images used by MDX live in `public/`.
+
+## Dev Setup
+
+1. `nvm use 20 && npm ci`
+2. Create `.env.local` from `.env.example` and fill keys.
+3. `npm run dev` (uses Webpack; Turbopack disabled for Contentlayer watch).
+4. Content lives in `content/insights` and `content/case-studies` (MDX).
+5. `npm run build` then `npm start` for a prod preview.
