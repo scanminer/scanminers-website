@@ -32,8 +32,8 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 - NEXT_PUBLIC_TURNSTILE_SITE_KEY: Turnstile site key (public)
 - TURNSTILE_SECRET_KEY: Turnstile secret key (server)
 - RESEND_API_KEY: Resend API key (server)
-- RESEND_FROM: Verified sender address (e.g., contact@yourdomain)
-- RESEND_TO: One or more recipient emails (comma-separated)
+- RESEND_FROM: Verified sender address (e.g., contact@scanminers.com)
+- RESEND_TO: One or more recipient emails (comma-separated), ex: founders@scanminers.com
 - NEXT_PUBLIC_SITE_URL: Your site’s base URL (e.g., https://example.com)
 
 ## Contact form
@@ -41,6 +41,26 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 - Page: `/contact`
 - API route: `/api/contact` (Edge runtime)
 - Validates and verifies Cloudflare Turnstile before sending an email via Resend’s REST API.
+
+### Using contact@scanminers.com and founders@scanminers.com
+
+Sending (Resend):
+- Add your domain to Resend and complete domain verification (SPF/DKIM records).
+- In Resend → Senders, add `contact@scanminers.com` and verify it (or verify the entire domain).
+- Create an API key and set `RESEND_API_KEY` in Cloudflare Pages and `.env.local`.
+- Set `RESEND_FROM=contact@scanminers.com` in env. The API route will fallback to this if `RESEND_FROM` is unset.
+
+Receiving (Cloudflare Email Routing or your mailbox provider):
+- If you don’t have a mailbox, use Cloudflare Email Routing:
+	- Cloudflare dashboard → Email → Email Routing → Add `contact@scanminers.com` and `founders@scanminers.com`.
+	- Create routing rules to forward incoming mail to your real inboxes (e.g., Gmail, Fastmail).
+	- Alternatively, provision real mailboxes at your provider and point MX to that provider.
+
+Production wiring:
+- In Cloudflare Pages (Production + Preview envs):
+	- RESEND_API_KEY, RESEND_FROM=contact@scanminers.com
+	- RESEND_TO=founders@scanminers.com (or a comma-separated list)
+	- NEXT_PUBLIC_TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY, NEXT_PUBLIC_SITE_URL
 
 ## Content and SEO
 

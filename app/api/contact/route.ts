@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true });
     }
 
-    const from = process.env.RESEND_FROM || "contact@yourverifieddomain.com";
+  const from = process.env.RESEND_FROM || "contact@scanminers.com";
     const toEnv = process.env.RESEND_TO || "you@example.com";
     const to = toEnv.includes(",") ? toEnv.split(",").map((s) => s.trim()).filter(Boolean) : toEnv;
     const subject = "New Demo Request from Scanminers Website";
