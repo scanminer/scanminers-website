@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-  "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "contentlayer": "contentlayer build"
   },
   "dependencies": {
@@ -22,7 +22,8 @@
     "react-email": "^4.3.0",
     "resend": "^6.1.2",
     "rss": "^1.2.2",
-    "sharp": "^0.34.4"
+    "sharp": "^0.34.4",
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
