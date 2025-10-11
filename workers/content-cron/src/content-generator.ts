@@ -30,7 +30,7 @@ Rules:
 
 export async function generateContent(env: Env, topic: string): Promise<string> {
   const prompt = getPerplexityPrompt(topic);
-  const model = env.PERPLEXITY_MODEL || 'llama-3.1-sonar-large-128k-online';
+  const model = env.PERPLEXITY_MODEL || 'sonar-pro';
 
   const response = await fetch('https://api.perplexity.ai/chat/completions', {
     method: 'POST',

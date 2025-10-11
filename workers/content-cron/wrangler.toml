@@ -9,5 +9,5 @@ crons = ["0 9 * * 1"] # Runs every Monday at 9 AM UTC.
 
 [vars]
 GH_REPO = "moodyguyhub/scanminers-website"
-# Optional: override Perplexity model at deploy-time. Default used in code:
-# PERPLEXITY_MODEL = "llama-3.1-sonar-large-128k-online"
+# Optional: override Perplexity model at deploy-time. Default used in code is "sonar-pro".
+# PERPLEXITY_MODEL = "sonar-pro"
