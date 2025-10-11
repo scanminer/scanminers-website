@@ -1,0 +1,7 @@
+name = "scanminers-website"
+compatibility_date = "2024-06-10"
+# Enable Node.js built-in compatibility for Cloudflare Workers
+compatibility_flags = ["nodejs_compat"]
+
+# Next on Pages will generate the worker; we just provide flags/dates.
+# You can also set environment bindings here if needed later.
