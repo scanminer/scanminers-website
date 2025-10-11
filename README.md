@@ -1,55 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Scanminers Website
 
-## Getting Started
+Production-ready Next.js 15 (App Router) site with MDX content (via Contentlayer), SEO (sitemap, robots, RSS), a Turnstile-protected contact form, and Cloudflare Pages deployment using Next on Pages.
 
-First, run the development server:
+## Quick start
+
+1) Install dependencies
+
+```bash
+npm ci
+```
+
+2) Configure env vars
+
+- Copy `.env.example` to `.env.local` and fill values.
+- Required for local dev: `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`.
+- To enable email: `RESEND_API_KEY` (plus `RESEND_FROM`, `RESEND_TO`).
+- Optional: `NEXT_PUBLIC_SITE_URL` for absolute URLs in metadata/sitemap.
+
+3) Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+See `.env.example` for the full list. These same keys should be added in Cloudflare Pages → Project settings → Environment variables (Production and Preview environments).
 
-## Learn More
+- NEXT_PUBLIC_TURNSTILE_SITE_KEY: Turnstile site key (public)
+- TURNSTILE_SECRET_KEY: Turnstile secret key (server)
+- RESEND_API_KEY: Resend API key (server)
+- RESEND_FROM: Verified sender address (e.g., contact@yourdomain)
+- RESEND_TO: One or more recipient emails (comma-separated)
+- NEXT_PUBLIC_SITE_URL: Your site’s base URL (e.g., https://example.com)
 
-To learn more about Next.js, take a look at the following resources:
+## Contact form
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Page: `/contact`
+- API route: `/api/contact` (Edge runtime)
+- Validates and verifies Cloudflare Turnstile before sending an email via Resend’s REST API.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Content and SEO
 
-## Deploy on Vercel
+- MDX content via Contentlayer in `content/`
+- RSS: `/insights/rss.xml`, `/case-studies/rss.xml`
+- Sitemap: `/sitemap.xml`, Robots: `/robots.txt`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy: Cloudflare Pages
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This repo is configured for Cloudflare Pages with Next on Pages.
 
-## Contact Form and Turnstile
+- We include `.npmrc` and a `preinstall` script to ensure installs succeed with peer-deps.
+- `wrangler.toml` enables `nodejs_compat` to satisfy Worker runtime warnings about Node built-ins.
+- Dynamic routes export `runtime='edge'` to meet Next on Pages requirements.
 
-This project includes a contact form protected by Cloudflare Turnstile to reduce spam.
+### First-time setup
 
-Setup:
+1) In Cloudflare Pages → Settings → Environment variables (for both Production and Preview):
+	- NEXT_PUBLIC_TURNSTILE_SITE_KEY
+	- TURNSTILE_SECRET_KEY
+	- RESEND_API_KEY
+	- RESEND_FROM (recommended)
+	- RESEND_TO (recommended)
+	- NEXT_PUBLIC_SITE_URL (recommended)
 
-1. Create a Turnstile widget in the Cloudflare dashboard.
-2. Copy your Site Key and Secret Key.
-3. Create a `.env.local` file at the project root and add:
+2) Trigger a new deploy by pushing to `main`.
 
-	```bash
-	NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_site_key_here
-	TURNSTILE_SECRET_KEY=your_secret_key_here
-	```
+## Rotating secrets (recommended)
 
-4. Restart the dev server. The form lives on `/contact` and submits to `/api/contact`.
+If a secret is exposed or you wish to rotate periodically:
 
-For now, submissions are logged on the server along with the Turnstile verification result. Add your preferred email provider later (Resend, SES, SMTP).
+1) Cloudflare Turnstile: generate a new secret key in the dashboard. Update `TURNSTILE_SECRET_KEY` in Cloudflare Pages and your local `.env.local`.
+2) Resend: create a new API key and revoke the old one. Update `RESEND_API_KEY` in Cloudflare Pages and `.env.local`.
+3) If you changed `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, update both Cloudflare Pages and `.env.local`.
+4) Redeploy to apply changes.
+
+## Notes
+
+- Generated artifacts from Contentlayer are ignored via `.gitignore`.
+- Images used by MDX live in `public/`.
