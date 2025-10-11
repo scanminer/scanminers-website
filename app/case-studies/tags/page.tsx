@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   },
 };
 
+// Static page
+
 type PageProps = { searchParams?: Promise<Record<string, string | string[] | undefined>> };
 
 export default async function TagsIndexPage({ searchParams }: PageProps) {

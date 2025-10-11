@@ -8,6 +8,8 @@ import { notFound } from "next/navigation";
 
 type PageProps = { params: Promise<{ tag: string }> };
 
+// SSG via generateStaticParams
+
 export function generateStaticParams() {
   const tags = new Set<string>();
   for (const s of allCaseStudies as Array<CaseStudy & { tags?: string[] }>) {

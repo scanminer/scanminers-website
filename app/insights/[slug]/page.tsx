@@ -11,7 +11,7 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamic = "force-dynamic";
+// SSG via generateStaticParams
 
 export function generateStaticParams() {
   return allInsights.map((p) => ({ slug: p.slug }));
