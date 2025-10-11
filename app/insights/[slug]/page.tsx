@@ -11,11 +11,7 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-// SSG via generateStaticParams
-
-export function generateStaticParams() {
-  return allInsights.map((p) => ({ slug: p.slug }));
-}
+export const runtime = 'edge';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug: s } = await params;

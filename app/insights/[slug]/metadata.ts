@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { allInsights } from "contentlayer/generated";
 import { absoluteUrl } from "@/lib/url";
 
-export function generateStaticParams() {
-  return allInsights.map((p) => ({ slug: p.slug }));
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug: s } = await params;
   const post = allInsights.find((p) => p.slug === s);

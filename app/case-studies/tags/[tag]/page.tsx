@@ -8,17 +8,7 @@ import { notFound } from "next/navigation";
 
 type PageProps = { params: Promise<{ tag: string }> };
 
-// SSG via generateStaticParams
-
-export function generateStaticParams() {
-  const tags = new Set<string>();
-  for (const s of allCaseStudies as Array<CaseStudy & { tags?: string[] }>) {
-    if (Array.isArray(s.tags)) {
-      for (const t of s.tags) tags.add(t);
-    }
-  }
-  return Array.from(tags).map((t) => ({ tag: slugifyTag(t) }));
-}
+export const runtime = 'edge';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { tag: tagParam } = await params;

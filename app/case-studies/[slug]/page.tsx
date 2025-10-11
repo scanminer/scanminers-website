@@ -5,6 +5,7 @@ import { allCaseStudies } from "contentlayer/generated";
 import { MDXContentServer } from "@/components/mdx-content-server";
 import { notFound } from "next/navigation";
 
+export const runtime = 'edge';
 export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ slug: string }> };

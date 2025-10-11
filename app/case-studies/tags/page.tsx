@@ -4,6 +4,8 @@ import { allCaseStudies } from "contentlayer/generated";
 import { slugifyTag } from "@/lib/slug";
 import { absoluteUrl } from "@/lib/url";
 
+export const runtime = 'edge';
+
 export const metadata: Metadata = {
   title: "Tags | Scanminers Case Studies",
   description: "Browse all tags used in Scanminers Case Studies.",
