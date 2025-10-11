@@ -35,6 +35,7 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 - RESEND_FROM: Verified sender address (e.g., contact@scanminers.com)
 - RESEND_TO: One or more recipient emails (comma-separated), ex: founders@scanminers.com
 - NEXT_PUBLIC_SITE_URL: Your site’s base URL (e.g., https://example.com)
+	- Important: Set this in production so sitemap/OG URLs use your domain, not localhost.
 
 ## Contact form
 

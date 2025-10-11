@@ -12,7 +12,16 @@ export default function SentryExamplePage() {
           onClick={() => {
             // Trigger a test error
             try {
-              ;(window as any).myUndefinedFunction()
+              const w = window as unknown as { myUndefinedFunction?: () => void }
+              // Intentionally call an undefined function to test Sentry
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+              if (w.myUndefinedFunction) {
+                w.myUndefinedFunction()
+              } else {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore – intentionally call an undefined function to trigger Sentry
+                w.myUndefinedFunction()
+              }
             } catch (err) {
               Sentry.captureException(err)
               throw err
