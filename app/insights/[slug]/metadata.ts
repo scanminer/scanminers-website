@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { allInsights } from "contentlayer/generated";
 import { absoluteUrl } from "@/lib/url";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug: s } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> | { slug: string } }): Promise<Metadata> {
+  const p = (params as any)?.then ? await (params as Promise<{ slug: string }>) : (params as { slug: string });
+  const { slug: s } = p;
   const post = allInsights.find((p: { slug: string }) => p.slug === s);
   const title = post?.title ?? "Insight";
   const description = post?.summary ?? undefined;

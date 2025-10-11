@@ -10,8 +10,13 @@ type PageProps = { params: Promise<{ slug: string }> };
 export const runtime = 'edge';
 export const dynamic = "force-dynamic";
 
+function isPromise<T>(val: any): val is Promise<T> {
+  return !!val && typeof val.then === 'function';
+}
+
 export default async function InsightPage({ params }: PageProps) {
-  const { slug } = await params;
+  const p = isPromise<{ slug: string }>(params) ? await params : (params as unknown as { slug: string });
+  const { slug } = p;
   const post = allInsights.find((p: Insight) => p.slug === slug) as Insight | undefined;
 
   if (!post) {
