@@ -4,7 +4,8 @@ export const runtime = 'edge';
 
 // Simple env presence check; never returns secret values
 export async function GET() {
-  const present = (k: string) => typeof process.env[k] === 'string' && process.env[k]!.length > 0;
+  const envObj: Record<string, string | undefined> = (typeof process !== 'undefined' && process.env) ? (process.env as Record<string, string | undefined>) : {};
+  const present = (k: string) => typeof envObj[k] === 'string' && !!envObj[k];
   const data = {
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: present('NEXT_PUBLIC_TURNSTILE_SITE_KEY'),
     TURNSTILE_SECRET_KEY: present('TURNSTILE_SECRET_KEY'),
