@@ -34,3 +34,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Contact Form and Turnstile
+
+This project includes a contact form protected by Cloudflare Turnstile to reduce spam.
+
+Setup:
+
+1. Create a Turnstile widget in the Cloudflare dashboard.
+2. Copy your Site Key and Secret Key.
+3. Create a `.env.local` file at the project root and add:
+
+	```bash
+	NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_site_key_here
+	TURNSTILE_SECRET_KEY=your_secret_key_here
+	```
+
+4. Restart the dev server. The form lives on `/contact` and submits to `/api/contact`.
+
+For now, submissions are logged on the server along with the Turnstile verification result. Add your preferred email provider later (Resend, SES, SMTP).

@@ -8,6 +8,26 @@ export { isType } from 'contentlayer/client'
 export type { Markdown, MDX, ImageFieldData, IsoDateTimeString }
 
 /** Document types */
+export type CaseStudy = {
+  /** File path relative to `contentDirPath` */
+  _id: string
+  _raw: Local.RawDocumentData
+  type: 'CaseStudy'
+  title: string
+  publishedAt: IsoDateTimeString
+  summary: string
+  provenance?: string[] | undefined
+  citations?: string[] | undefined
+  tags?: string[] | undefined
+  image?: string | undefined
+  imageAlt?: string | undefined
+  /** MDX file body */
+  body: MDX
+  slug: string
+  url: string
+  imageBlurDataURL: string
+}
+
 export type Insight = {
   /** File path relative to `contentDirPath` */
   _id: string
@@ -35,8 +55,8 @@ export type Insight = {
 export type AllTypes = DocumentTypes | NestedTypes
 export type AllTypeNames = DocumentTypeNames | NestedTypeNames
 
-export type DocumentTypes = Insight
-export type DocumentTypeNames = 'Insight'
+export type DocumentTypes = CaseStudy | Insight
+export type DocumentTypeNames = 'CaseStudy' | 'Insight'
 
 export type NestedTypes = never
 export type NestedTypeNames = never
@@ -44,6 +64,7 @@ export type NestedTypeNames = never
 export type DataExports = {
   allDocuments: DocumentTypes[]
   allInsights: Insight[]
+  allCaseStudies: CaseStudy[]
 }
 
 
@@ -63,6 +84,7 @@ declare global {
 }
 
 export type DocumentTypeMap = {
+  CaseStudy: CaseStudy
   Insight: Insight
 }
 
