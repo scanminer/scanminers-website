@@ -5,13 +5,13 @@ import { allInsights } from "contentlayer/generated";
 import { MDXContentServer } from "@/components/mdx-content-server";
 import { notFound } from "next/navigation";
 
-type PageProps = { params: { slug: string } };
+type PageProps = { params: Promise<{ slug: string }> };
 
 export const runtime = 'edge';
 export const dynamic = "force-dynamic";
 
 export default async function InsightPage({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const post = allInsights.find((p: Insight) => p.slug === slug) as Insight | undefined;
 
   if (!post) {
