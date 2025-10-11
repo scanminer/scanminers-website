@@ -1,0 +1,11 @@
+# workers/content-cron/wrangler.toml
+name = "scanminers-content-cron"
+main = "src/index.ts"
+compatibility_date = "2025-10-12"
+
+# Cron triggers are disabled for now. We will enable them in the final phase.
+# [triggers]
+# crons = ["0 9 * * 1", "0 9 1 * *"] # weekly (Mon 9am), monthly (1st 9am)
+
+[vars]
+GH_REPO = "moodyguyhub/scanminers-website" # Confirmed from your project report
