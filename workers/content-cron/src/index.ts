@@ -13,15 +13,15 @@ export interface Env {
 type ScheduledController = { cron: string };
 type ExecutionContext = { waitUntil(promise: Promise<unknown>): void };
 
-async function runContentWorkflow(env: Env): Promise<Response> {
+async function runContentWorkflow(env: Env, topicInput?: string): Promise<Response> {
   console.log('Starting content workflow...');
   const github = new GitHubClient(env);
 
   // 1. Define topic and paths
-  const topic = 'The Impact of AI on Predictive Maintenance in Mining Operations';
+  const topic = topicInput?.trim() && topicInput.trim().length > 4 ? topicInput.trim() : 'The Impact of AI on Predictive Maintenance in Mining Operations';
   const date = new Date().toISOString().slice(0, 10);
   const slug = topic.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
-  const branchName = `content/weekly-digest-${date}`;
+  let branchName = `content/weekly-digest-${date}`;
   const filePath = `content/insights/${slug}.mdx`;
   const commitMessage = `feat(content): add draft for '${topic}'`;
   const prTitle = `[Content] Draft: ${topic}`;
@@ -56,6 +56,11 @@ ${researchBrief}
     console.log('Getting main branch SHA...');
     const mainSha = await github.getMainBranchSha();
 
+    // Ensure unique branch name if already exists
+    if (await github.branchExists(branchName)) {
+      const stamp = Math.floor(Date.now() / 1000);
+      branchName = `${branchName}-${stamp}`;
+    }
     console.log(`Creating branch: ${branchName}`);
     await github.createBranch(branchName, mainSha);
 
@@ -84,8 +89,10 @@ export default {
     console.log(`Cron job triggered: ${controller.cron}`);
     ctx.waitUntil(runContentWorkflow(env));
   },
-  async fetch(_request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     console.log('Manual trigger received.');
-    return runContentWorkflow(env);
+    const url = new URL(request.url);
+    const topic = url.searchParams.get('topic') ?? undefined;
+    return runContentWorkflow(env, topic ?? undefined);
   },
 };

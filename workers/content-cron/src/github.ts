@@ -42,6 +42,15 @@ export class GitHubClient {
     });
   }
 
+  async branchExists(branchName: string): Promise<boolean> {
+    try {
+      await this.request(`/git/ref/heads/${branchName}`);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   async createCommitAndPush(branchName: string, filePath: string, content: string, message: string): Promise<void> {
     // Base64 encode UTF-8 string (Cloudflare Workers support atob/btoa)
     const contentEncoded = btoa(unescape(encodeURIComponent(content)));
