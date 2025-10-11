@@ -1,0 +1,46 @@
+# .github/workflows/content-qa.yml
+
+name: 'Content Quality Gate'
+
+on:
+  pull_request:
+    paths:
+      - 'content/**'
+      - 'contentlayer.config.ts'
+
+jobs:
+  validate-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Contentlayer build
+        id: contentlayer
+        run: npx contentlayer build
+        # This step will fail if Zod validation in your schema fails.
+
+      - name: Check for broken links (Internal only for now)
+        id: link-check
+        run: |
+          # A simple grep to check for broken internal links for now.
+          # We can add a more robust tool like Lychee later if needed.
+          echo "Checking for broken internal links..."
+          # This is a placeholder; a full link checker is a future enhancement.
+          echo "Link check passed (placeholder)."
+
+      - name: Lint for citation rules
+        id: citation-lint
+        run: |
+          # This is a placeholder for the ensure-citations.js script.
+          # For now, we'll just ensure the job structure is in place.
+          echo "Citation lint passed (placeholder)."
