@@ -30,6 +30,7 @@ Rules:
 
 export async function generateContent(env: Env, topic: string): Promise<string> {
   const prompt = getPerplexityPrompt(topic);
+  const model = env.PERPLEXITY_MODEL || 'llama-3.1-sonar-large-128k-online';
 
   const response = await fetch('https://api.perplexity.ai/chat/completions', {
     method: 'POST',
@@ -39,7 +40,7 @@ export async function generateContent(env: Env, topic: string): Promise<string> 
       Authorization: `Bearer ${env.PERPLEXITY_KEY}`,
     },
     body: JSON.stringify({
-      model: 'pplx-70b-online',
+      model,
       messages: [
         { role: 'system', content: 'Be precise and factual.' },
         { role: 'user', content: prompt },

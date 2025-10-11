@@ -7,6 +7,7 @@ export interface Env {
   GH_TOKEN: string;
   PERPLEXITY_KEY: string;
   GH_REPO: string;
+  PERPLEXITY_MODEL?: string;
 }
 
 // Local type shims for CF runtime to satisfy TS without installing @cloudflare/workers-types
