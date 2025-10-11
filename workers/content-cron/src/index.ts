@@ -13,15 +13,25 @@ export interface Env {
 type ScheduledController = { cron: string };
 type ExecutionContext = { waitUntil(promise: Promise<unknown>): void };
 
-async function runContentWorkflow(env: Env, topicInput?: string): Promise<Response> {
+async function runContentWorkflow(env: Env, topic: string): Promise<Response> {
   console.log('Starting content workflow...');
   const github = new GitHubClient(env);
 
-  // 1. Define topic and paths
-  const topic = topicInput?.trim() && topicInput.trim().length > 4 ? topicInput.trim() : 'The Impact of AI on Predictive Maintenance in Mining Operations';
+  // 1. Define topic and paths (topic is a required argument)
+  if (!topic || topic.trim().length < 5) {
+    return new Response(JSON.stringify({ success: false, error: 'Invalid topic provided.' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+  topic = topic.trim();
   const date = new Date().toISOString().slice(0, 10);
-  const slug = topic.toLowerCase().replace(/\s+/g, '-').slice(0, 50);
-  let branchName = `content/weekly-digest-${date}`;
+  const slug = topic
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .slice(0, 50);
+  let branchName = `content/draft-${slug}`;
   const filePath = `content/insights/${slug}.mdx`;
   const commitMessage = `feat(content): add draft for '${topic}'`;
   const prTitle = `[Content] Draft: ${topic}`;
@@ -53,7 +63,7 @@ ${researchBrief}
 `;
 
     // 4. Create branch, commit file, and open PR
-    console.log('Getting main branch SHA...');
+  console.log('Getting main branch SHA...');
     const mainSha = await github.getMainBranchSha();
 
     // Ensure unique branch name if already exists
@@ -87,12 +97,14 @@ ${researchBrief}
 export default {
   async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     console.log(`Cron job triggered: ${controller.cron}`);
-    ctx.waitUntil(runContentWorkflow(env));
+    const topic = 'Weekly Update: Advancements in Satellite-based Mineral Prospectivity';
+    ctx.waitUntil(runContentWorkflow(env, topic));
   },
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     console.log('Manual trigger received.');
     const url = new URL(request.url);
-    const topic = url.searchParams.get('topic') ?? undefined;
-    return runContentWorkflow(env, topic ?? undefined);
+    const topic = url.searchParams.get('topic');
+    if (!topic) return new Response('Missing "topic" query parameter.', { status: 400 });
+    return runContentWorkflow(env, topic);
   },
 };
