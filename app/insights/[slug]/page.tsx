@@ -3,45 +3,11 @@ import Image from "next/image";
 import type { Insight } from "contentlayer/generated";
 import { allInsights } from "contentlayer/generated";
 import { MDXContentServer } from "@/components/mdx-content-server";
-import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/url";
 import { notFound } from "next/navigation";
 
-type PageProps = {
-  params: Promise<{ slug: string }>;
-};
+type PageProps = { params: Promise<{ slug: string }> };
 
 export const runtime = 'edge';
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug: s } = await params;
-  const post = allInsights.find((p: Insight) => p.slug === s);
-  const title = post?.title ?? "Insight";
-  const description = post?.summary ?? undefined;
-  const url = absoluteUrl(`/insights/${s}`);
-  const defaultOg = absoluteUrl("/og-default.svg");
-  const images = post?.image
-    ? [{ url: absoluteUrl(post.image), alt: post.imageAlt || post.title }]
-    : [{ url: defaultOg }];
-  return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title,
-      description,
-      url,
-      type: "article",
-      images,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: images?.map(i => (typeof i === 'string' ? i : i.url)),
-    },
-  };
-}
 
 export default async function InsightPage({ params }: PageProps) {
   const { slug } = await params;
@@ -74,11 +40,7 @@ export default async function InsightPage({ params }: PageProps) {
           )}
           <h1 className="text-4xl font-bold mb-3">{post.title}</h1>
           <time className="text-sm text-gray-500">
-            {new Date(post.publishedAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {formatDate(post.publishedAt)}
           </time>
           {post.summary && (
             <p className="mt-3 text-gray-700">{post.summary}</p>
@@ -102,4 +64,14 @@ export default async function InsightPage({ params }: PageProps) {
       </main>
     </div>
   );
+}
+
+function formatDate(input: string | Date): string {
+  const d = new Date(input);
+  if (isNaN(d.getTime())) return '';
+  const months = [
+    'January','February','March','April','May','June',
+    'July','August','September','October','November','December'
+  ];
+  return `${months[d.getUTCMonth()]} ${d.getUTCDate()}, ${d.getUTCFullYear()}`;
 }
