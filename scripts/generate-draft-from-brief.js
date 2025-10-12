@@ -30,25 +30,33 @@ async function generateAndSaveImage(prompt, slug) {
   }
 
   console.log(`Generating image with prompt: "${prompt}"`);
-  // Use Stability AI REST API directly to avoid SDK dependency
-  const resp = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${stabilityKey}`,
-      'Content-Type': 'application/json',
-      Accept: 'image/*',
-    },
-    body: JSON.stringify({
-      prompt,
-      output_format: 'webp',
-      aspect_ratio: '16:9',
-    }),
-  });
+  // Stability AI REST API requires multipart/form-data
+  // Do NOT set Content-Type header manually; let fetch set the boundary for FormData.
+  const form = new FormData();
+  form.append('prompt', prompt);
+  form.append('output_format', 'webp');
+  form.append('aspect_ratio', '16:9');
+
+  let resp;
+  try {
+    resp = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${stabilityKey}`,
+        Accept: 'image/*',
+      },
+      body: form,
+    });
+  } catch (networkErr) {
+    console.warn('Network error calling Stability API, skipping image generation:', networkErr?.message || networkErr);
+    return null;
+  }
 
   if (!resp.ok) {
     const ct = resp.headers.get('content-type') || '';
     const errText = ct.includes('application/json') ? JSON.stringify(await resp.json()) : await resp.text();
-    throw new Error(`Stability API error ${resp.status}: ${errText}`);
+    console.warn(`Stability API image generation failed ${resp.status}: ${errText}`);
+    return null;
   }
 
   const arr = await resp.arrayBuffer();
