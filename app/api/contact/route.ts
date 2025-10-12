@@ -1,89 +1,90 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from 'next/server';
+
 export const runtime = 'edge';
 
-type Payload = {
-  name?: string;
-  email?: string;
-  company?: string;
-  message?: string;
-  token?: string;
-};
+async function createGitHubIssue(formData: { name: string; email: string; company?: string; message: string; }) {
+  const token = process.env.GH_TOKEN;
+  const repo = process.env.NEXT_PUBLIC_GH_REPO || 'moodyguyhub/scanminers-website';
 
-type TurnstileVerification = {
-  success: boolean;
-  "error-codes"?: string[];
-  challenge_ts?: string;
-  hostname?: string;
-  action?: string;
-  cdata?: string;
-};
+  if (!token) {
+    console.warn('GH_TOKEN is not set. Skipping GitHub issue creation.');
+    return;
+  }
 
-export async function POST(req: Request) {
+  const issueBody = `
+**New Lead Submission**
+
+- **Name:** ${formData.name}
+- **Email:** ${formData.email}
+- **Company:** ${formData.company || 'N/A'}
+
+---
+
+**Message:**
+${formData.message}
+  `;
+
   try {
-    const body = (await req.json()) as Payload;
-    const { name, email, company, message, token } = body;
-
-    if (!name || !email || !message) {
-      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
-    }
-    if (!token) {
-      return NextResponse.json({ success: false, message: "Missing Turnstile token" }, { status: 400 });
-    }
-
-    // Verify the Turnstile token with Cloudflare
-    const secret = process.env.TURNSTILE_SECRET_KEY;
-    if (!secret) {
-      console.warn("TURNSTILE_SECRET_KEY not set; skipping verification.");
-    }
-
-  let verification: TurnstileVerification | null = null;
-    if (secret) {
-      const params = new URLSearchParams();
-      params.append("secret", secret);
-      params.append("response", token);
-      // Optionally, you may send the IP address if available from headers
-      // const ip = req.headers.get("x-forwarded-for")?.split(",")[0];
-      // if (ip) params.append("remoteip", ip);
-
-      const resp = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params,
-      });
-  verification = (await resp.json()) as TurnstileVerification;
-    }
-
-    // Log the submission and verification result for now
-    console.log("[CONTACT] Submission", {
-      name,
-      email,
-      company,
-      message: message?.slice(0, 1000),
+    const response = await fetch(`https://api.github.com/repos/${repo}/issues`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Scanminers-Website-Contact-Form',
+      },
+      body: JSON.stringify({
+        title: `New Lead: ${formData.name}`,
+        body: issueBody,
+        labels: ['lead'],
+      }),
     });
-    console.log("[CONTACT] Turnstile verification", verification ?? { skipped: true });
 
-    if (verification && verification.success === false) {
-      return NextResponse.json({ success: false, message: "Failed Turnstile verification" }, { status: 400 });
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Failed to create GitHub issue:', errorData);
+    } else {
+      console.log('Successfully created GitHub issue as a backup.');
     }
+  } catch (error) {
+    console.error('Error creating GitHub issue:', error);
+  }
+}
 
-    // Send email via Resend REST API (Edge-friendly)
-    const resendApiKey = process.env.RESEND_API_KEY;
-    if (!resendApiKey) {
-      console.warn("RESEND_API_KEY not set; skipping email send.");
-      return NextResponse.json({ success: true });
-    }
+export async function POST(req: NextRequest) {
+  const { name, email, company, message, token } = await req.json();
 
-  const from = process.env.RESEND_FROM || "contact@scanminers.com";
-    const toEnv = process.env.RESEND_TO || "you@example.com";
-    const to = toEnv.includes(",") ? toEnv.split(",").map((s) => s.trim()).filter(Boolean) : toEnv;
-    const subject = "New Demo Request from Scanminers Website";
+  const formData = new FormData();
+  formData.append('secret', process.env.TURNSTILE_SECRET_KEY!);
+  formData.append('response', token);
+  const ip = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '';
+  if (ip) formData.append('remoteip', ip);
+
+  const turnstileResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    body: formData,
+  });
+
+  const outcome = await turnstileResponse.json();
+  if (!outcome.success) {
+    return NextResponse.json({ success: false, message: 'Invalid Turnstile token.' }, { status: 400 });
+  }
+
+  // Existing Resend email send (kept from prior implementation)
+  const resendApiKey = process.env.RESEND_API_KEY;
+  if (!resendApiKey) {
+    console.warn('RESEND_API_KEY not set; skipping email send.');
+  } else {
+    const from = process.env.RESEND_FROM || 'contact@scanminers.com';
+    const toEnv = process.env.RESEND_TO || 'you@example.com';
+    const to = toEnv.includes(',') ? toEnv.split(',').map((s) => s.trim()).filter(Boolean) : toEnv;
+    const subject = 'New Demo Request from Scanminers Website';
 
     const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (ch) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;",
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
     }[ch] as string));
 
     const html = `<!doctype html>
@@ -92,34 +93,34 @@ export async function POST(req: Request) {
         <table cellpadding="8" cellspacing="0" style="border-collapse:collapse;max-width:640px;width:100%">
           <tr><td style="background:#f5f5f5;width:160px;font-weight:600;vertical-align:top;">Name</td><td>${escapeHtml(name)}</td></tr>
           <tr><td style="background:#f5f5f5;width:160px;font-weight:600;vertical-align:top;">Email</td><td>${escapeHtml(email)}</td></tr>
-          ${company ? `<tr><td style="background:#f5f5f5;width:160px;font-weight:600;vertical-align:top;">Company</td><td>${escapeHtml(company)}</td></tr>` : ""}
+          ${company ? `<tr><td style=\"background:#f5f5f5;width:160px;font-weight:600;vertical-align:top;\">Company</td><td>${escapeHtml(company)}</td></tr>` : ''}
           <tr><td style="background:#f5f5f5;width:160px;font-weight:600;vertical-align:top;">Message</td><td><div style="white-space:pre-wrap;line-height:1.5">${escapeHtml(message)}</div></td></tr>
         </table>
         <p style="font-size:12px;color:#555;margin-top:16px;">Sent from the Scanminers website contact form.</p>
       </body></html>`;
 
     try {
-      const resp = await fetch("https://api.resend.com/emails", {
-        method: "POST",
+      const resp = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
         headers: {
-          "Authorization": `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ from, to, subject, html, reply_to: email }),
       });
       if (!resp.ok) {
         const errText = await resp.text();
-        console.error("[CONTACT] Resend API error", resp.status, errText);
-        return NextResponse.json({ success: false, message: "Failed to send email" }, { status: 500 });
+        console.error('[CONTACT] Resend API error', resp.status, errText);
+        return NextResponse.json({ success: false, message: 'Failed to send email' }, { status: 500 });
       }
     } catch (sendErr) {
-      console.error("[CONTACT] Exception sending email", sendErr);
-      return NextResponse.json({ success: false, message: "Error sending email" }, { status: 500 });
+      console.error('[CONTACT] Exception sending email', sendErr);
+      return NextResponse.json({ success: false, message: 'Error sending email' }, { status: 500 });
     }
-
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error("[CONTACT] Error handling submission", err);
-    return NextResponse.json({ success: false, message: "Server error" }, { status: 500 });
   }
+
+  // NEW: GitHub issue backup (best-effort)
+  await createGitHubIssue({ name, email, company, message });
+
+  return NextResponse.json({ success: true });
 }

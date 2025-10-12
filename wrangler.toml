@@ -8,4 +8,5 @@ compatibility_flags = ["nodejs_compat"]
 
 # Cloudflare Pages (Beta) configuration
 # This lets Pages pick up compatibility flags from wrangler.toml.
-pages_build_output_dir = ".vercel/output/static"
+# IMPORTANT: Do not set pages_build_output_dir for Next.js on Pages.
+# Let Next-on-Pages generate the worker/functions so API routes deploy.

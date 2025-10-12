@@ -5,7 +5,7 @@
   "scripts": {
     "preinstall": "npm config set legacy-peer-deps true",
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npx pagefind --site .next/server/app --output-subdir ../../public/pagefind",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@pagefind/default-ui": "^1.4.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -36,6 +37,7 @@
     "eslint-config-next": "15.5.4",
     "globby": "^11.1.0",
     "gray-matter": "^4.0.3",
+    "pagefind": "^1.4.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
