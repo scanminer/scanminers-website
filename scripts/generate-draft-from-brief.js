@@ -10,7 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const matter = require('gray-matter');
-const fetch = require('node-fetch');
+// Use global fetch available in Node 20+
 const sharp = require('sharp');
 const { Octokit } = require('@octokit/rest');
 const { createStabilityClient } = require('@stability/sdk');
@@ -120,36 +120,98 @@ async function run() {
     // MDX content
     const mdx = `---\ntitle: "${topic}"\nsummary: "A brief summary of the key findings. Please review and edit."\npublishedAt: "${new Date().toISOString().slice(0, 10)}"\nreview_status: "needs-review"\nai_generated: true\ntags: ["AI", "Geoscience", "Draft"]\nimage: "${imageResult ? imageResult.imageUrl : ''}"\nimageAlt: "${imageAlt}"\n---\n\n${articleText}\n`;
 
-    // Commit via Octokit
+    // Commit via Octokit on a feature branch, then open a PR
     const [owner, repo] = repoFull.split('/');
     if (!owner || !repo) throw new Error(`Invalid GITHUB_REPOSITORY: ${repoFull}`);
 
     const octokit = new Octokit({ auth: githubToken });
-    const branch = 'main';
+    const baseBranch = process.env.BASE_BRANCH || 'main';
 
-    console.log('Creating/Updating content file...');
-    await octokit.repos.createOrUpdateFileContents({
-      owner,
-      repo,
-      branch,
-      path: `content/insights/${slug}.mdx`,
-      message: `feat(content): add AI draft for '${topic}'`,
-      content: Buffer.from(mdx).toString('base64'),
-    });
+    // Determine base SHA
+    console.log(`Fetching base branch ref: ${baseBranch}`);
+    const baseRef = await octokit.git.getRef({ owner, repo, ref: `heads/${baseBranch}` });
+    const baseSha = baseRef.data.object.sha;
 
-    if (imageResult) {
-      console.log('Creating/Updating image file...');
-      await octokit.repos.createOrUpdateFileContents({
+    // Create a new branch for the draft
+    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    let branchName = `content/draft/${slug}-${today}`;
+    async function createBranch(name) {
+      return octokit.git.createRef({
         owner,
         repo,
-        branch,
-        path: imageResult.imageUrl.slice(1),
-        message: `feat(image): add cover for '${topic}'`,
-        content: imageResult.imageBuffer.toString('base64'),
+        ref: `refs/heads/${name}`,
+        sha: baseSha,
       });
     }
 
-    console.log('Draft + image committed successfully.');
+    console.log(`Creating feature branch: ${branchName}`);
+    try {
+      await createBranch(branchName);
+    } catch (e) {
+      if (e.status === 422) {
+        // Branch exists; append a short random suffix
+        const suffix = Math.random().toString(36).slice(2, 6);
+        branchName = `content/draft/${slug}-${today}-${suffix}`;
+        console.log(`Branch exists, trying: ${branchName}`);
+        await createBranch(branchName);
+      } else {
+        throw e;
+      }
+    }
+
+    // Helper to upsert files on the branch
+    async function upsertFile(filePath, contentBuffer, message) {
+      let sha;
+      try {
+        const existing = await octokit.repos.getContent({ owner, repo, path: filePath, ref: branchName });
+        if (!Array.isArray(existing.data) && existing.data.sha) sha = existing.data.sha;
+      } catch (err) {
+        // 404 means new file
+        if (err.status !== 404) throw err;
+      }
+
+      await octokit.repos.createOrUpdateFileContents({
+        owner,
+        repo,
+        branch: branchName,
+        path: filePath,
+        message,
+        content: contentBuffer.toString('base64'),
+        sha,
+      });
+    }
+
+    const contentPath = `content/insights/${slug}.mdx`;
+    console.log('Creating/Updating content file on feature branch...');
+    await upsertFile(contentPath, Buffer.from(mdx), `feat(content): add AI draft for '${topic}'`);
+
+    if (imageResult) {
+      const imagePathRel = imageResult.imageUrl.slice(1);
+      console.log('Creating/Updating image file on feature branch...');
+      await upsertFile(imagePathRel, imageResult.imageBuffer, `feat(image): add cover for '${topic}'`);
+    }
+
+    // Open PR
+    console.log('Opening pull request...');
+    let pr;
+    try {
+      pr = await octokit.pulls.create({
+        owner,
+        repo,
+        title: `AI draft: ${topic}`,
+        head: branchName,
+        base: baseBranch,
+        body: `This PR adds an AI-generated draft for '${topic}'.\n\n- Source brief: ${newBriefFile}\n- Image: ${imageResult ? imageResult.imageUrl : 'none'}\n- Review status: needs-review\n\nPlease review content, citations, and scheduling fields (publishedAt, review_status).`,
+      });
+    } catch (e) {
+      if (e.status === 422) {
+        console.warn('PR already exists for this branch or similar head.');
+      } else {
+        throw e;
+      }
+    }
+
+    console.log(`Draft prepared on branch '${branchName}'. ${pr?.data?.html_url ? `PR: ${pr.data.html_url}` : ''}`);
   } catch (err) {
     console.error(err);
     process.exit(1);
