@@ -1,8 +1,11 @@
 # public/admin/config.yml
 
 backend:
-  name: git-gateway
+  name: github
+  repo: scanminer/scanminers-website
   branch: main
+  auth_type: pkce
+  app_id: Ov23lilN5z6EF70BnOw2
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"

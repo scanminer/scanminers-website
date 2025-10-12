@@ -30,13 +30,6 @@ export default function RootLayout({
   const cfAnalyticsToken = process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN;
   return (
     <html lang="en">
-      <head>
-        <Script 
-          id="netlify-identity-widget" 
-          src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-          strategy="afterInteractive"
-        />
-      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
   <Suspense fallback={null}><SentryInit /></Suspense>
         <header className="border-b border-black/10 dark:border-white/10">
