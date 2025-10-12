@@ -4,11 +4,14 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-const isProd = process.env.NODE_ENV === "production";
+const getEnv = (k: string): string | undefined =>
+  typeof process !== 'undefined' && process.env ? process.env[k] : undefined;
+
+const isProd = getEnv('NODE_ENV') === 'production';
 
 Sentry.init({
   dsn:
-    process.env.SENTRY_DSN ||
+    getEnv('SENTRY_DSN') ||
     "https://f0c8defd247eec44b049aaa1ebdfa959@o4510172336291840.ingest.de.sentry.io/4510172344025168",
 
   // Lower tracing in production by default.
