@@ -1,9 +1,0 @@
-node_modules/
-.next/
-.vercel/
-.contentlayer/
-public/pagefind/
-.cf-nop*
-out/
-build/
-dist/
