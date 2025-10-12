@@ -1,5 +1,3 @@
-import { NextResponse } from "next/server";
-
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
@@ -17,5 +15,5 @@ export async function GET() {
   } as const;
 
   const ok = Object.values(data).every(Boolean);
-  return NextResponse.json({ ok, env: data });
+  return new Response(JSON.stringify({ ok, env: data }), { status: 200, headers: { 'content-type': 'application/json' } });
 }

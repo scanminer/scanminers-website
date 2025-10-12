@@ -1,11 +1,10 @@
-import { NextResponse } from 'next/server'
-
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 export function GET() {
   try {
-    return NextResponse.json({ ok: true, rev: 'Rev F' })
+    const body = JSON.stringify({ ok: true, rev: 'Rev G' })
+    return new Response(body, { status: 200, headers: { 'content-type': 'application/json' } })
   } catch {
     return new Response('ok', { status: 200 })
   }
