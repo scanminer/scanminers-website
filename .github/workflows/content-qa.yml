@@ -32,6 +32,9 @@ jobs:
         with:
           args: --no-progress --accept 200,206 ./content
 
+      - name: Build site (for Lighthouse)
+        run: npm run build
+
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11
         with:
