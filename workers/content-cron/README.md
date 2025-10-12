@@ -17,6 +17,24 @@ Upon triggering, it performs the following workflow:
     * Commit the new MDX file to the `content/insights/` directory.
     * Open a pull request against the `main` branch for human review.
 
+### Scheduled Publishing
+
+The worker also supports scheduled publishing of approved content:
+
+- Any open PR that includes a content file under `content/insights/` or `content/case-studies/` will be checked for frontmatter values.
+- When `review_status: approved` and `publishedAt` is a valid date-time in the past (or now), the worker will attempt to merge the PR automatically.
+- If branch protection prevents auto-merge, the attempt will fail (logged) and you can merge manually when ready.
+
+Manual trigger for scheduled publish check:
+
+```bash
+curl "https://<your-worker-url>?action=publish_due"
+```
+
+Notes:
+- Ensure the GitHub token has permission to merge PRs (Write access).
+- Use branch protection with required reviews to keep a human-in-the-loop; editors set `review_status: approved` when ready.
+
 ## Setup & Deployment
 
 ### Prerequisites
