@@ -13,7 +13,6 @@ const matter = require('gray-matter');
 // Use global fetch available in Node 20+
 const sharp = require('sharp');
 const { Octokit } = require('@octokit/rest');
-const { createStabilityClient } = require('@stability/sdk');
 
 function slugify(input) {
   return input
@@ -31,25 +30,36 @@ async function generateAndSaveImage(prompt, slug) {
   }
 
   console.log(`Generating image with prompt: "${prompt}"`);
-  const stability = createStabilityClient({ key: stabilityKey });
-  const { images } = await stability.image.generate({
-    prompt,
-    model: 'sd3',
-    output_format: 'webp',
-    aspect_ratio: '16:9',
+  // Use Stability AI REST API directly to avoid SDK dependency
+  const resp = await fetch('https://api.stability.ai/v2beta/stable-image/generate/core', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${stabilityKey}`,
+      'Content-Type': 'application/json',
+      Accept: 'image/*',
+    },
+    body: JSON.stringify({
+      prompt,
+      output_format: 'webp',
+      aspect_ratio: '16:9',
+    }),
   });
 
-  if (!images || images.length === 0) {
-    throw new Error('Stability AI API did not return any images.');
+  if (!resp.ok) {
+    const ct = resp.headers.get('content-type') || '';
+    const errText = ct.includes('application/json') ? JSON.stringify(await resp.json()) : await resp.text();
+    throw new Error(`Stability API error ${resp.status}: ${errText}`);
   }
 
-  const image = images[0];
+  const arr = await resp.arrayBuffer();
+  const rawBuffer = Buffer.from(arr);
   const imageDir = path.join(process.cwd(), 'public', 'images', 'uploads');
   await fs.promises.mkdir(imageDir, { recursive: true });
   const imagePath = path.join(imageDir, `${slug}.webp`);
   const publicUrl = `/images/uploads/${slug}.webp`;
 
-  await sharp(image.buffer).webp({ quality: 80 }).toFile(imagePath);
+  // Recompress to ensure desired quality/size characteristics
+  await sharp(rawBuffer).webp({ quality: 80 }).toFile(imagePath);
   console.log(`Image saved and compressed to ${imagePath}`);
   const imageBuffer = await fs.promises.readFile(imagePath);
   return { imageUrl: publicUrl, imageBuffer };
