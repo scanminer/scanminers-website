@@ -84,12 +84,12 @@ async function run() {
   try {
     const githubToken = process.env.GH_TOKEN;
     const perplexityKey = process.env.PERPLEXITY_KEY;
-    const stabilityKey = process.env.STABILITY_API_KEY; // New
+  const stabilityKey = process.env.STABILITY_API_KEY; // Optional
     const newBriefFile = process.env.BRIEF_FILE_PATH;
     const repoFull = process.env.GITHUB_REPOSITORY || '';
 
-    if (!githubToken || !perplexityKey || !stabilityKey || !newBriefFile) {
-      throw new Error('Missing required env (GH_TOKEN, PERPLEXITY_KEY, STABILITY_API_KEY, BRIEF_FILE_PATH).');
+    if (!githubToken || !perplexityKey || !newBriefFile) {
+      throw new Error('Missing required env (GH_TOKEN, PERPLEXITY_KEY, BRIEF_FILE_PATH).');
     }
 
     const briefContent = await fs.promises.readFile(newBriefFile, 'utf8');
