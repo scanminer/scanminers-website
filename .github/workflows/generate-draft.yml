@@ -34,7 +34,9 @@ jobs:
 
       - name: Run generator script
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Use a dedicated PAT to allow PR creation from Actions. Create a repo secret named CONTENT_BOT_TOKEN
+          # with permissions: Contents (Read/Write) and Pull requests (Read/Write).
+          GH_TOKEN: ${{ secrets.CONTENT_BOT_TOKEN }}
           PERPLEXITY_KEY: ${{ secrets.PERPLEXITY_KEY }}
           STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
           GITHUB_REPOSITORY: ${{ github.repository }}
