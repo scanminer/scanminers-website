@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 // Simple env presence check; never returns secret values
 export async function GET() {
