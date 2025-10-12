@@ -2,6 +2,9 @@
   "name": "scanminers-website",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <21"
+  },
   "scripts": {
     "preinstall": "npm config set legacy-peer-deps true",
     "dev": "next dev",
