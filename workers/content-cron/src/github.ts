@@ -67,4 +67,31 @@ export class GitHubClient {
     });
     return data.html_url;
   }
+
+  // Scheduling helpers
+  async listOpenPulls(): Promise<Array<{ number: number; title: string; head: { sha: string }; base: { ref: string } }>> {
+    return this.request(`/pulls?state=open&per_page=100`);
+  }
+
+  async getPullFiles(prNumber: number): Promise<Array<{ filename: string }>> {
+    return this.request(`/pulls/${prNumber}/files?per_page=100`);
+  }
+
+  async getFileContentAtRef(path: string, ref: string): Promise<string> {
+    // Get the file contents from a specific ref
+    const data = await this.request<{ content: string; encoding: string }>(`/contents/${encodeURIComponent(path)}?ref=${ref}`);
+    if (data.encoding !== 'base64') {
+      throw new Error(`Unexpected encoding for ${path}@${ref}: ${data.encoding}`);
+    }
+    // atob in Workers handles base64 -> string
+    const decoded = decodeURIComponent(escape(atob(data.content)));
+    return decoded;
+  }
+
+  async mergePullRequest(prNumber: number, commitTitle?: string): Promise<void> {
+    await this.request(`/pulls/${prNumber}/merge`, {
+      method: 'PUT',
+      body: JSON.stringify(commitTitle ? { commit_title: commitTitle, merge_method: 'squash' } : { merge_method: 'squash' }),
+    });
+  }
 }

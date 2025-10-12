@@ -7,6 +7,27 @@
   <title>Content Manager | Scanminers</title>
 </head>
 <body>
+  <script>
+    // Prevent auto-init so we can supply dynamic config overrides
+    window.CMS_MANUAL_INIT = true;
+  </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // Initialize Decap CMS, loading config.yml but overriding backend auth to current origin
+    (function () {
+      const origin = window.location.origin;
+      if (window.CMS && typeof window.CMS.init === 'function') {
+        window.CMS.init({
+          load_config_file: true,
+          config: {
+            backend: {
+              base_url: origin,
+              auth_endpoint: 'api/decap-auth/auth',
+            },
+          },
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

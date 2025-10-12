@@ -95,15 +95,93 @@ ${researchBrief}
   }
 }
 
+function extractFrontmatter(content: string): Record<string, string> {
+  // Very lightweight YAML frontmatter extractor for a few keys
+  const fmMatch = content.match(/^---\n([\s\S]*?)\n---/);
+  const result: Record<string, string> = {};
+  if (!fmMatch) return result;
+  const lines = fmMatch[1].split(/\r?\n/);
+  for (const line of lines) {
+    const m = line.match(/^([A-Za-z0-9_-]+)\s*:\s*(.*)$/);
+    if (m) {
+      const key = m[1].trim();
+      // strip surrounding quotes if present
+      let value = m[2].trim();
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+async function processScheduledPublishes(env: Env): Promise<{ merged: number; checked: number }> {
+  const github = new GitHubClient(env);
+  const openPRs = await github.listOpenPulls();
+  const now = new Date();
+
+  let merged = 0;
+  let checked = 0;
+
+  for (const pr of openPRs) {
+    // Only consider our content PRs targeting main
+    if ((pr.base?.ref ?? '') !== 'main') continue;
+  const files = await github.getPullFiles(pr.number);
+    // Look for content files we manage
+  const contentFiles = files.filter((f: { filename: string }) => /^(content\/(insights|case-studies)\/).+\.(md|mdx)$/i.test(f.filename));
+    if (contentFiles.length === 0) continue;
+    checked++;
+
+    // Read frontmatter from the first content file in the PR
+    const headSha = pr.head?.sha as string;
+    let shouldMerge = false;
+    for (const file of contentFiles) {
+      const raw = await github.getFileContentAtRef(file.filename, headSha);
+      const fm = extractFrontmatter(raw);
+      const publishedAt = fm.publishedAt || fm.published_at || fm.publishAt;
+      const reviewStatus = (fm.review_status || '').toLowerCase();
+      if (!publishedAt) continue;
+      const when = new Date(publishedAt);
+      if (isNaN(when.getTime())) continue;
+      if (reviewStatus !== 'approved') continue; // require human approval gate
+      if (when <= now) {
+        shouldMerge = true;
+        break;
+      }
+    }
+
+    if (shouldMerge) {
+      // Try to merge; if branch protection prevents it, the API will error out
+      try {
+        await github.mergePullRequest(pr.number, `Auto-publish: ${pr.title}`);
+        merged++;
+      } catch (e) {
+        console.error(`Failed to merge PR #${pr.number}:`, (e as Error).message);
+      }
+    }
+  }
+
+  return { merged, checked };
+}
+
 export default {
   async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     console.log(`Cron job triggered: ${controller.cron}`);
     const topic = 'Weekly Update: Advancements in Satellite-based Mineral Prospectivity';
     ctx.waitUntil(runContentWorkflow(env, topic));
+    ctx.waitUntil(processScheduledPublishes(env).then(({ merged, checked }) => {
+      console.log(`Scheduled publish check: merged=${merged}, checked=${checked}`);
+    }));
   },
   async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     console.log('Manual trigger received.');
     const url = new URL(request.url);
+    const action = url.searchParams.get('action');
+    if (action === 'publish_due') {
+      const result = await processScheduledPublishes(env);
+      return new Response(JSON.stringify({ success: true, ...result }), { headers: { 'Content-Type': 'application/json' } });
+    }
     const topic = url.searchParams.get('topic');
     if (!topic) return new Response('Missing "topic" query parameter.', { status: 400 });
     return runContentWorkflow(env, topic);
