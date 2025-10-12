@@ -16,6 +16,7 @@
     "contentlayer": "contentlayer build"
   },
   "dependencies": {
+    "@octokit/rest": "^21.0.2",
     "@sentry/browser": "10.19.0",
     "contentlayer": "^0.3.4",
     "next": "15.5.4",

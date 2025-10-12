@@ -1,0 +1,42 @@
+name: Generate Draft from Brief
+
+on:
+  workflow_dispatch:
+    inputs:
+      brief_path:
+        description: Path to the brief file (e.g., content/briefs/2025-10-12-test.md)
+        required: true
+  push:
+    paths:
+      - 'content/briefs/**'
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci --legacy-peer-deps
+
+      - name: Run generator script
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PERPLEXITY_KEY: ${{ secrets.PERPLEXITY_KEY }}
+          STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BRIEF_FILE_PATH: ${{ github.event.inputs.brief_path || github.event.head_commit.added[0] || github.event.head_commit.modified[0] }}
+        run: node scripts/generate-draft-from-brief.js
