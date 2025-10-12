@@ -1,6 +1,7 @@
 // scripts/semantic-qa.js
 const fs = require('fs');
 const globby = require('globby');
+const matter = require('gray-matter');
 
 const TECH_REQUIRED = [/sar|sentinel-1|polsar|insar/i, /hyperspectral|hsi|enmap|prisma/i, /multispectral|msi|sentinel-2|landsat/i];
 const FEATURE_HINTS = [/ndvi|ndmi|mndwi|ndsi|pcii|pca|savi|gndvi|bsi|slope|aspect|glcm|texture/i, /band\s*(ratio|math|index)/i];
@@ -13,6 +14,18 @@ let errors = 0;
 
 for (const f of files) {
     const s = fs.readFileSync(f, 'utf8');
+    // Parse frontmatter to determine draft or review status
+    let fm;
+    try {
+        fm = matter(s).data || {};
+    } catch {
+        fm = {};
+    }
+    const isDraft = fm.draft === true || fm.review_status === 'needs-review';
+    if (isDraft) {
+        console.warn(`⚠️  Skipping QA for draft/needs-review: ${f}`);
+        continue;
+    }
     const needsTech = TECH_REQUIRED.some(r => r.test(s));
     if (needsTech && !FEATURE_HINTS.some(r => r.test(s))) {
         console.error(`❌ ERROR: Missing feature details (indices/textures) in ${f}`);
