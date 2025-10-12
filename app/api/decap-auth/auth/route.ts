@@ -1,6 +1,6 @@
-import crypto from "node:crypto";
-
 import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "edge";
 
 type HandshakeTemplateParams = {
   provider: string;
@@ -20,6 +20,14 @@ const STATE_TTL_SECONDS = 10 * 60; // 10 minutes
 
 const GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
 const GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token";
+
+function generateState() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+
+  return `state-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
+}
 
 function buildHandshakeHtml({ provider, authorizeUrl, origin }: HandshakeTemplateParams) {
   return `<!DOCTYPE html>
@@ -160,7 +168,7 @@ export async function GET(request: NextRequest) {
   if (!code) {
     try {
       const { clientId } = getClientCredentials();
-      const state = crypto.randomUUID();
+  const state = generateState();
       const authorizeUrl = new URL(GITHUB_AUTHORIZE_URL);
       authorizeUrl.searchParams.set("client_id", clientId);
       authorizeUrl.searchParams.set("redirect_uri", redirectUri);
