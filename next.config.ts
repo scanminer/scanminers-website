@@ -2,7 +2,12 @@ import { withContentlayer } from 'next-contentlayer'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Your Next.js config options go here in the future
+  async redirects() {
+    return [
+      { source: '/case-studies/rss.xml', destination: '/case-studies/feed.xml', permanent: true },
+      { source: '/insights/rss.xml', destination: '/insights/feed.xml', permanent: true },
+    ];
+  },
 };
 
 // Note: Sentry Webpack auto-wrapping of App Route handlers is disabled due to
