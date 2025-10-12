@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Scanminers Case Studies]]></title>
+        <description><![CDATA[Case studies from Scanminers]]></description>
+        <link>https://scanminers.com/case-studies</link>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Sun, 12 Oct 2025 01:03:12 GMT</lastBuildDate>
+        <atom:link href="https://scanminers.com/case-studies/rss.xml" rel="self" type="application/rss+xml"/>
+        <language><![CDATA[en]]></language>
+        <item>
+            <title><![CDATA[Bauxite Prospectivity in Payas–İslahiye, SE Turkey]]></title>
+            <description><![CDATA[Proprietary analysis using multisensor fusion identified 7 high-potential zones and 183 priority points for bauxite exploration in SE Turkey, mapping 33 existing mines.]]></description>
+            <link>https://scanminers.com/case-studies/bauxite-payas-islahiye</link>
+            <guid isPermaLink="false">/case-studies/bauxite-payas-islahiye</guid>
+            <pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Payas–İslahiye Pilot: Targeting High-Potential Zones]]></title>
+            <description><![CDATA[How our AI-MPM workflow shortlisted actionable target zones in the Payas–İslahiye region.]]></description>
+            <link>https://scanminers.com/case-studies/payas-islahiye-pilot</link>
+            <guid isPermaLink="false">/case-studies/payas-islahiye-pilot</guid>
+            <pubDate>Wed, 10 Sep 2025 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>
