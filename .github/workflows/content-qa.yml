@@ -1,4 +1,4 @@
-name: Content Quality Gate
+name: 'Content Quality Gate'
 
 on:
   pull_request:
@@ -7,51 +7,32 @@ on:
       - 'contentlayer.config.ts'
 
 jobs:
-  validate-content:
+  qa:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          fetch-depth: 0 # Required for getting changed files
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+          node-version: '20'
           cache: 'npm'
+      - run: npm ci
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Validate Contentlayer build
+      - name: Contentlayer Validation
         run: npx contentlayer build
-        # This step will fail if Zod validation in your schema fails.
 
-      - name: Get changed MDX files
-        id: changed-files
-        uses: tj-actions/changed-files@v44
-        with:
-          files: |
-            content/**/*.mdx
+      - name: Semantic QA
+        run: node scripts/semantic-qa.js
 
-      - name: Lint for citation rules
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: node scripts/ensure-citations.js ${{ steps.changed-files.outputs.all_changed_files }}
+      - name: Check Alt Text & Image Sizes (≤1MB)
+        run: node scripts/check-alt-and-size.js
 
-      - name: Prepare lychee include file
-        if: steps.changed-files.outputs.any_changed == 'true'
-        run: |
-          printf "%s\n" ${{ steps.changed-files.outputs.all_changed_files }} > .lychee-include
-
-      - name: Lychee Link Checker (changed files)
-        if: steps.changed-files.outputs.any_changed == 'true'
+      - name: Link Checker
         uses: lycheeverse/lychee-action@v1
         with:
-          args: --verbose --no-progress --include-file .lychee-include
+          args: --no-progress --accept 200,206 ./content
 
-      - name: Lychee Link Checker (fallback, all content)
-        if: steps.changed-files.outputs.any_changed != 'true'
-        uses: lycheeverse/lychee-action@v1
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
         with:
-          args: --verbose --no-progress './content/**/*.mdx'
+          configPath: .lighthouserc.json
+          uploadArtifacts: true
