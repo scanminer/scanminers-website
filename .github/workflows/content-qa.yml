@@ -2,9 +2,8 @@ name: 'Content Quality Gate'
 
 on:
   pull_request:
-    paths:
-      - 'content/**'
-      - 'contentlayer.config.ts'
+    branches:
+      - '**'
 
 jobs:
   qa:
@@ -12,31 +11,59 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for content changes
+        id: content-changes
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          if git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -qE '^content/|^contentlayer\.config\.ts$'; then
+            echo "has_content_changes=true" >> $GITHUB_OUTPUT
+            echo "Content changes detected - running full QA"
+          else
+            echo "has_content_changes=false" >> $GITHUB_OUTPUT
+            echo "No content changes - skipping content validation"
+          fi
+
       - uses: actions/setup-node@v4
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         with:
           node-version: '20'
           cache: 'npm'
+
       - run: npm ci
+        if: steps.content-changes.outputs.has_content_changes == 'true'
 
       - name: Contentlayer Validation
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         run: npx contentlayer build
 
       - name: Semantic QA
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         run: node scripts/semantic-qa.js
 
       - name: Check Alt Text & Image Sizes (≤1MB)
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         run: node scripts/check-alt-and-size.js
 
       - name: Link Checker
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         uses: lycheeverse/lychee-action@v1
         with:
           args: --no-progress --accept 200,206 ./content
 
       - name: Build site (for Lighthouse)
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         run: npm run build
 
       - name: Lighthouse CI
+        if: steps.content-changes.outputs.has_content_changes == 'true'
         uses: treosh/lighthouse-ci-action@v11
         with:
           configPath: .lighthouserc.json
           uploadArtifacts: true
+
+      - name: Skip QA (no content changes)
+        if: steps.content-changes.outputs.has_content_changes == 'false'
+        run: echo "✅ No content changes detected - QA check passed"
