@@ -1,0 +1,66 @@
+# public/admin/config.yml
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+publish_mode: editorial_workflow
+
+collections:
+  # This is the new collection for creating AI content briefs
+  - name: "briefs"
+    label: "AI Content Briefs"
+    folder: "content/briefs"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Topic / Article Title", name: "title", widget: "string" }
+      - { label: "Context for AI", name: "context", widget: "markdown", hint: "Provide detailed notes, key points, data, or links for the AI to use." }
+      - {
+          label: "Status",
+          name: "status",
+          widget: "select",
+          options: ["New Brief", "Generating Draft", "Draft Ready"],
+          default: "New Brief",
+          hint: "Set to 'New Brief' to kick off automation. The system will update it.",
+        }
+
+  # This is for editing existing Insights
+  - name: "insights"
+    label: "Insights"
+    folder: "content/insights"
+    create: true # Allows manual creation as a fallback
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "publishedAt", widget: "datetime" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Cover Image", name: "image", widget: "image", required: false }
+      - { label: "Image Alt Text", name: "imageAlt", widget: "string", required: false }
+      - {
+          label: "Review Status",
+          name: "review_status",
+          widget: "select",
+          options: ["needs-review", "approved"],
+          default: "needs-review",
+        }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  # This is for editing existing Case Studies
+  - name: "case_studies"
+    label: "Case Studies"
+    folder: "content/case-studies"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "publishedAt", widget: "datetime" }
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Provenance", name: "provenance", widget: "list", required: false }
+      - { label: "Cover Image", name: "image", widget: "image", required: false }
+      - { label: "Image Alt Text", name: "imageAlt", widget: "string", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
