@@ -1,9 +1,6 @@
 'use client'
 
-import * as Sentry from '@sentry/nextjs'
-
 export default function GlobalError({ error }: { error: Error & { digest?: string } }) {
-  Sentry.captureException(error)
   return (
     <html>
       <body>

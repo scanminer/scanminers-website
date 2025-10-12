@@ -15,10 +15,13 @@ const eslintConfig = [
     ignores: [
       "node_modules/**",
       ".next/**",
+      ".vercel/**",
+      ".cf-nop*/**",
       "out/**",
       "build/**",
       "next-env.d.ts",
       ".contentlayer/**",
+      "public/pagefind/**",
     ],
   },
   {

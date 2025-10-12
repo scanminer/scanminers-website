@@ -1,0 +1,1 @@
+This folder was accidentally re-created by tooling. It should not exist; feeds are static in /public. Safe to delete.

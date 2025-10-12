@@ -23,6 +23,9 @@
 # production
 /build
 
+# cloudflare next-on-pages build output
+.cf-nop*
+
 # misc
 .DS_Store
 *.pem

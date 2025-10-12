@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { isRateLimited } from '@/lib/rate-limiter';
 
 export const runtime = 'edge';
 
@@ -51,6 +52,12 @@ ${formData.message}
 }
 
 export async function POST(req: NextRequest) {
+  // Basic Edge-safe rate limiting by IP
+  const ipForLimit = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'anon'
+  if (isRateLimited(ipForLimit)) {
+    return NextResponse.json({ success: false, message: 'Too many requests.' }, { status: 429 })
+  }
+
   const { name, email, company, message, token } = await req.json();
 
   const formData = new FormData();

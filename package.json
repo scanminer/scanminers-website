@@ -5,14 +5,15 @@
   "scripts": {
     "preinstall": "npm config set legacy-peer-deps true",
     "dev": "next dev",
-    "build": "next build && npx pagefind --site .next/server/app --output-subdir ../../public/pagefind",
+    "build": "npm run contentlayer || true && next build && node scripts/generate-feeds.mjs && npx pagefind --site .next/server/app --output-subdir ../../public/pagefind",
+    "cf:pack": "npx @cloudflare/next-on-pages -o .cf-nop -c",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "contentlayer": "contentlayer build"
   },
   "dependencies": {
-    "@sentry/nextjs": "^10.19.0",
+    "@sentry/browser": "10.19.0",
     "contentlayer": "^0.3.4",
     "next": "15.5.4",
     "next-contentlayer": "^0.3.4",

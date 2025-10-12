@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { Search } from "@/components/Search";
+import { Suspense } from "react";
+import { SentryInit } from "@/components/SentryInit";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+  <Suspense fallback={null}><SentryInit /></Suspense>
         <header className="border-b border-black/10 dark:border-white/10">
           <nav className="max-w-5xl mx-auto flex items-center justify-between p-4">
             <Link href="/" className="font-semibold">Scanminers</Link>
