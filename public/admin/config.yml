@@ -37,6 +37,8 @@ collections:
   - name: "insights"
     label: "Insights"
     folder: "content/insights"
+    extension: "mdx"
+    format: "frontmatter"
     create: true # Allows manual creation as a fallback
     slug: "{{slug}}"
     fields:
@@ -59,6 +61,8 @@ collections:
   - name: "case_studies"
     label: "Case Studies"
     folder: "content/case-studies"
+    extension: "mdx"
+    format: "frontmatter"
     create: true
     slug: "{{slug}}"
     fields:
