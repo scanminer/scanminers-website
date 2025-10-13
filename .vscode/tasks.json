@@ -11,6 +11,28 @@
 				"$eslint-stylish"
 			],
 			"group": "build"
+		},
+		{
+			"label": "Install deps (npm ci)",
+			"type": "shell",
+			"command": "npm ci",
+			"args": [],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Install deps",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"ci"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
 		}
 	]
 }
