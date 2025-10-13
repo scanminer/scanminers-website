@@ -64,7 +64,17 @@ export async function POST(req: Request) {
     }
 
     return new Response(null, cors(req, { status: 202 }));
-  } catch (e: any) {
-    return json(500, { error: String(e?.message || e) });
+  } catch (e: unknown) {
+    let message = 'Unknown error';
+    if (e instanceof Error) message = e.message;
+    else if (typeof e === 'string') message = e;
+    else {
+      try {
+        message = JSON.stringify(e);
+      } catch {
+        message = String(e);
+      }
+    }
+    return json(500, { error: message });
   }
 }
