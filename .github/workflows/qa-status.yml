@@ -1,0 +1,65 @@
+name: QA Status Bridge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  checks: read
+  statuses: write
+
+jobs:
+  bridge-qa-status:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Content Quality Gate to pass and set 'qa' status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.payload.pull_request.head.sha;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prUrl = context.payload.pull_request.html_url;
+
+            function isQaRun(cr) {
+              const name = (cr?.name || '').toLowerCase();
+              return name === 'qa' || name.includes('content quality gate');
+            }
+
+            async function contentQAPassed() {
+              const res = await github.request('GET /repos/{owner}/{repo}/commits/{ref}/check-runs', {
+                owner,
+                repo,
+                ref: sha,
+                // required media type for checks API
+                headers: { accept: 'application/vnd.github+json' },
+              });
+              const runs = res.data.check_runs || [];
+              return runs.some(cr => isQaRun(cr) && cr.conclusion === 'success');
+            }
+
+            // Poll up to ~10 minutes (40 * 15s)
+            const maxAttempts = 40;
+            const delayMs = 15000;
+            let attempt = 0;
+            while (attempt < maxAttempts) {
+              attempt++;
+              if (await contentQAPassed()) {
+                await github.request('POST /repos/{owner}/{repo}/statuses/{sha}', {
+                  owner,
+                  repo,
+                  sha,
+                  state: 'success',
+                  context: 'qa',
+                  target_url: prUrl,
+                  description: 'Content Quality Gate passed',
+                  headers: { accept: 'application/vnd.github+json' },
+                });
+                core.info(`Set classic commit status 'qa' = success for ${sha}`);
+                return;
+              }
+              core.info(`Content QA not passed yet (attempt ${attempt}/${maxAttempts}). Waiting ${delayMs}ms...`);
+              await new Promise(r => setTimeout(r, delayMs));
+            }
+            core.setFailed('Content Quality Gate did not pass within timeout; not setting qa status.');

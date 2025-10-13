@@ -1,0 +1,32 @@
+name: Regenerate Post Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      post_slug:
+        description: 'Slug of the post (content/insights/<slug>.mdx)'
+        required: true
+        type: string
+      prompt:
+        description: 'Optional prompt override to use for generation'
+        required: false
+        type: string
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install deps
+        run: npm ci
+      - name: Regenerate image
+        env:
+          GH_TOKEN: ${{ secrets.CONTENT_BOT_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
+          POST_SLUG: ${{ inputs.post_slug }}
+          PROMPT_OVERRIDE: ${{ inputs.prompt }}
+        run: node scripts/regenerate-image-for-post.js

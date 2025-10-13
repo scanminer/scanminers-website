@@ -80,6 +80,10 @@ Structure:\n- Executive Summary (200-300 words)\n- Key Data Points (bulleted, ea
 \n## Visuals\nImage Prompt: A professional, high-tech, earth-tone cover image related to ${topic}, photorealistic or technical illustration, suitable as a hero cover.\nAlt Text: A concise, descriptive alt text for accessibility.
 `;
 
+function q(s) {
+  return JSON.stringify(s == null ? '' : String(s));
+}
+
 async function run() {
   try {
     const githubToken = process.env.GH_TOKEN;
@@ -136,7 +140,18 @@ async function run() {
     const imageResult = await generateAndSaveImage(imagePrompt, slug);
 
     // MDX content
-    const mdx = `---\ntitle: "${topic}"\nsummary: "A brief summary of the key findings. Please review and edit."\npublishedAt: "${new Date().toISOString().slice(0, 10)}"\nreview_status: "needs-review"\nai_generated: true\ntags: ["AI", "Geoscience", "Draft"]\nimage: "${imageResult ? imageResult.imageUrl : ''}"\nimageAlt: "${imageAlt}"\n---\n\n${articleText}\n`;
+    const mdx = `---\n` +
+      `title: ${q(topic)}\n` +
+      `summary: ${q('A brief summary of the key findings. Please review and edit.')}\n` +
+      `publishedAt: ${q(new Date().toISOString().slice(0, 10))}\n` +
+      `review_status: "needs-review"\n` +
+      `ai_generated: true\n` +
+      `tags: ["AI", "Geoscience", "Draft"]\n` +
+      `image: ${q(imageResult ? imageResult.imageUrl : '')}\n` +
+      `imageAlt: ${q(imageAlt)}\n` +
+      `imagePrompt: ${q(imagePrompt)}\n` +
+      `---\n\n` +
+      `${articleText}\n`;
 
     // Commit via Octokit on a feature branch, then open a PR
     const [owner, repo] = repoFull.split('/');
