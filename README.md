@@ -109,6 +109,28 @@ Additional docs:
 - Handover: `docs/HANDOVER.md`
 - Changelog: `CHANGELOG.md`
 
+## Image generation and regeneration
+
+This repo includes automation to generate and regenerate cover images for posts.
+
+- Generate draft from a brief: see `.github/workflows/generate-draft.yml`. The generator will create an MDX draft and a cover image, and persist the `imagePrompt` used in frontmatter.
+- Regenerate a post image: run the workflow `.github/workflows/regenerate-image.yml` manually with inputs `post_slug` (e.g. `cobalt-in-battery-supply-chains`) and optional `prompt` to override. It opens a PR with the updated image and persists the last-used prompt to `imagePrompt`.
+
+CMS button:
+- In Decap CMS (`/admin` → Insights entry), use the "Regenerate Cover (AI)" button. You can optionally type a prompt override next to the button.
+- The button calls an Edge API route at `/api/images/regenerate` which dispatches the GitHub workflow.
+
+Required environment variables (Cloudflare Pages → Project settings → Environment variables):
+- `ADMIN_ACTION_TOKEN`: a strong random string. Editors will paste it once in the CMS; it's sent as an auth header to the API route.
+- One of the following for GitHub workflow dispatch from the API route:
+	- `WORKFLOW_DISPATCH_TOKEN`: a fine-grained PAT with repo and workflow scopes; or
+	- `CONTENT_BOT_TOKEN`: reuse the existing PAT used by generators.
+- Optional for image generation service: `STABILITY_API_KEY` (required for actual generation in CI).
+
+Notes:
+- The CMS widget derives the slug from the entry's frontmatter or file path; if not found, it falls back to a title-based slug. Ensure the file name under `content/insights/` matches the slug of the post.
+- The API route validates `x-admin-action-token` and returns 202 on success (queued). Check GitHub Actions for progress.
+
 ## Dev Setup
 
 1. `nvm use 20 && npm ci`

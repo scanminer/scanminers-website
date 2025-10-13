@@ -31,6 +31,7 @@ Top-level paths:
   - `api/contact/route.ts` — Turnstile verify + email via Resend REST
   - `api/health/route.ts` — Minimal health check `{ ok: true, rev: 'Rev E' }`
   - `api/health/env/route.ts` — Returns booleans for env presence (no secret values)
+  - `api/images/regenerate/route.ts` — Securely dispatches GitHub workflow to regenerate a post's cover image
   - `insights/`, `case-studies/` — Content-driven pages
   - `sentry-example-page/` — Triggers an error for Sentry validation
 - `components/` — MDX renderers and contact form
@@ -61,6 +62,10 @@ Recommended for SEO and analytics:
 - `NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN` — Cloudflare Web Analytics (optional)
 
 Sentry:
+Image generation & admin actions:
+- `ADMIN_ACTION_TOKEN` — Required to authorize `/api/images/regenerate` from Decap. Use a strong random string and share with editors.
+- `WORKFLOW_DISPATCH_TOKEN` — Fine-grained PAT with repo/workflow scope used by the API to call GitHub `workflow_dispatch`. Alternatively set `CONTENT_BOT_TOKEN` and the API will reuse it.
+- `STABILITY_API_KEY` — Enables image generation in CI workflows and scripts.
 - `SENTRY_DSN` — Optional DSN to enable error reporting across runtimes
 
 Local development:
@@ -157,6 +162,12 @@ Incident: Contact emails not arriving
 - Rotate `RESEND_API_KEY` and redeploy if suspected leak
 
 Incident: Sitemap URLs wrong domain
+Incident: CMS "Regenerate Cover" button does nothing
+- Ensure `ADMIN_ACTION_TOKEN` is set in Cloudflare Pages and that the editor pasted it once in the CMS prompt (stored in localStorage as `ADMIN_ACTION_TOKEN`).
+- Ensure either `WORKFLOW_DISPATCH_TOKEN` or `CONTENT_BOT_TOKEN` is set in the environment so the API can call GitHub.
+- Check Cloudflare Pages logs for `/api/images/regenerate` requests and response codes. 202 means queued; 401/500 indicates auth/config issues.
+- Verify the GitHub Action "Regenerate Post Image" ran. If it failed, open the logs; confirm `STABILITY_API_KEY` is present if you expect image generation.
+
 - Ensure `NEXT_PUBLIC_SITE_URL` is set for Production and Preview
 - `lib/url.ts` defaults to `https://scanminers.com` in production, but explicit env is preferred
 
