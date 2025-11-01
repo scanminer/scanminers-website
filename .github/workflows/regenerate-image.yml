@@ -26,9 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # Always run the latest workflow/script from the default branch codebase,
-          # while targeting the desired content branch via BASE_BRANCH env below.
-          ref: ${{ github.event.repository.default_branch }}
+          # Checkout the branch whose workflow was dispatched (or the provided input),
+          # so we use the matching script version without requiring default-branch merge.
+          # Falls back to the dispatch ref name.
+          ref: ${{ inputs.branch || github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -41,6 +42,7 @@ jobs:
           STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
           POST_SLUG: ${{ inputs.post_slug }}
           POST_PATH: ${{ inputs.post_path }}
+          # Operate on the same branch we checked out unless explicitly provided
           BASE_BRANCH: ${{ inputs.branch || github.ref_name }}
           PROMPT_OVERRIDE: ${{ inputs.prompt }}
         run: node scripts/regenerate-image-for-post.js
