@@ -12,6 +12,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <h1 className="text-2xl font-semibold">Admin</h1>
         <nav className="mt-4 flex gap-4 text-sm">
           <Link className="hover:underline" href="/admin">Review Queue</Link>
+          <Link className="hover:underline" href="/admin/drafts">Drafts</Link>
           <Link className="hover:underline" href="/admin/system">System</Link>
         </nav>
       </header>
