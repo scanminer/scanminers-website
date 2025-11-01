@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { Insight, CaseStudy, Brief } from "contentlayer/generated";
 import { allInsights, allCaseStudies, allBriefs } from "contentlayer/generated";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 type RawDoc = { slug?: string; title?: string; _raw?: { flattenedPath?: string; sourceFilePath?: string } };
 

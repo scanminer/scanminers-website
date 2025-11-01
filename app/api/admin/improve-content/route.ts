@@ -7,7 +7,7 @@ import { makeOctokit, getDefaultBranchSha, createBranchFrom, getFileContent, com
 import { allInsights, allCaseStudies, allBriefs } from "contentlayer/generated";
 import type { Insight, CaseStudy, Brief } from "contentlayer/generated";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const PreviewBody = z.object({
   kind: z.enum(["insight", "case", "brief"]).default("insight"),

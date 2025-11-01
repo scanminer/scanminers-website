@@ -4,7 +4,7 @@ import { z } from "zod";
 import { generateDraftWithPerplexity, toFrontmatterMDX } from "../../../../lib/ai/perplexity";
 import { createContentPR } from "../../../../lib/github";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const Body = z.object({
   topic: z.string().min(4),

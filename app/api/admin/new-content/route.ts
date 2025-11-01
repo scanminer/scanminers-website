@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createContentPR } from "@/lib/github";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 const Body = z.object({
   type: z.enum(["insight", "case", "brief"]).default("insight"),
