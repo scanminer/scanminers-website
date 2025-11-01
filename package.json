@@ -33,6 +33,7 @@
     "react-email": "^4.3.0",
     "resend": "^6.1.2",
     "rss": "^1.2.2",
+    "gray-matter": "^4.0.3",
     "sharp": "^0.34.4",
     "zod": "4.1.12"
   },
@@ -47,8 +48,7 @@
     "@types/rss": "^0.0.32",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
-    "globby": "^11.1.0",
-    "gray-matter": "^4.0.3",
+  "globby": "^11.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "pagefind": "^1.4.0",
