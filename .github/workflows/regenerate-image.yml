@@ -35,6 +35,12 @@ jobs:
           node-version: 20
       - name: Install deps
         run: npm ci
+      - name: Debug inputs
+        run: |
+          echo "ref_name=${{ github.ref_name }}"
+          echo "inputs.branch=${{ inputs.branch }}"
+          echo "inputs.post_slug=${{ inputs.post_slug }}"
+          echo "using BASE_BRANCH=${{ inputs.branch || github.ref_name }}"
       - name: Regenerate image
         env:
           GH_TOKEN: ${{ secrets.CONTENT_BOT_TOKEN }}

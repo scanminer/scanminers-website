@@ -16,6 +16,8 @@ const matter = require('gray-matter');
 const sharp = require('sharp');
 const { Octokit } = require('@octokit/rest');
 
+const SCRIPT_VERSION = '2025-11-01-b';
+
 function slugify(input) {
   return input
     .toLowerCase()
@@ -77,11 +79,14 @@ function defaultPrompt(title) {
 }
 
 async function run() {
+  console.log(`[regen-image] script version: ${SCRIPT_VERSION}`);
   const githubToken = process.env.GH_TOKEN;
   const repoFull = process.env.GITHUB_REPOSITORY || '';
   const postSlug = process.env.POST_SLUG;
   const postPathEnv = process.env.POST_PATH;
   const baseBranch = process.env.BASE_BRANCH || 'main';
+
+  console.log(`[regen-image] repo=${repoFull} baseBranch=${baseBranch} postSlug=${postSlug || ''} postPath=${postPathEnv || ''}`);
 
   if (!githubToken || !repoFull) {
     throw new Error('Missing required env (GH_TOKEN, GITHUB_REPOSITORY).');
@@ -98,21 +103,25 @@ async function run() {
 
   async function tryReadLocal(p) {
     try {
+      console.log(`[regen-image] try local: ${p}`);
       const raw = await fs.promises.readFile(p, 'utf8');
       return raw;
     } catch {
+      console.log(`[regen-image] local miss: ${p}`);
       return null;
     }
   }
 
   async function tryReadRemote(p) {
     try {
+      console.log(`[regen-image] try remote: ${p}@${baseBranch}`);
       const res = await octokit.repos.getContent({ owner, repo, path: p, ref: baseBranch });
       if (Array.isArray(res.data)) return null;
       const b64 = res.data.content || '';
       const buff = Buffer.from(b64, 'base64');
       return buff.toString('utf8');
     } catch {
+      console.log(`[regen-image] remote miss: ${p}@${baseBranch}`);
       return null;
     }
   }
@@ -130,6 +139,7 @@ async function run() {
     );
   }
 
+  console.log(`[regen-image] candidates: ${candidates.join(', ')}`);
   for (const rel of candidates) {
     // Try local first
     const localPath = path.join(process.cwd(), rel);
