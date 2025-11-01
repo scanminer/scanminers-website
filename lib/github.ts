@@ -17,7 +17,7 @@ export async function createContentPR(opts: {
   body?: string; // PR body
 }) {
   const [owner, repo] = opts.repo.split("/");
-  const base = opts.base || process.env.GIT_DEFAULT_BRANCH || "main";
+  const base = opts.base || process.env.GIT_DEFAULT_BRANCH || process.env.CONTENT_DEFAULT_BRANCH || "main";
   const octokit = getOctokit();
 
   // Get base sha
@@ -34,6 +34,12 @@ export async function createContentPR(opts: {
     branch: opts.branchName,
     message: opts.commitMessage,
     content: Buffer.from(opts.content, "utf8").toString("base64"),
+    committer: (process.env.CONTENT_AUTHOR_NAME && process.env.CONTENT_AUTHOR_EMAIL)
+      ? { name: process.env.CONTENT_AUTHOR_NAME, email: process.env.CONTENT_AUTHOR_EMAIL }
+      : undefined,
+    author: (process.env.CONTENT_AUTHOR_NAME && process.env.CONTENT_AUTHOR_EMAIL)
+      ? { name: process.env.CONTENT_AUTHOR_NAME, email: process.env.CONTENT_AUTHOR_EMAIL }
+      : undefined,
   });
 
   // Open PR
@@ -91,6 +97,12 @@ export async function commitFile(
     content: encoded,
     branch,
     sha,
+    committer: (process.env.CONTENT_AUTHOR_NAME && process.env.CONTENT_AUTHOR_EMAIL)
+      ? { name: process.env.CONTENT_AUTHOR_NAME, email: process.env.CONTENT_AUTHOR_EMAIL }
+      : undefined,
+    author: (process.env.CONTENT_AUTHOR_NAME && process.env.CONTENT_AUTHOR_EMAIL)
+      ? { name: process.env.CONTENT_AUTHOR_NAME, email: process.env.CONTENT_AUTHOR_EMAIL }
+      : undefined,
   });
   return data;
 }

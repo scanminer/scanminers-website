@@ -27,11 +27,11 @@ export async function POST(req: Request) {
   const mdx = toFrontmatterMDX(draft);
 
     if (createPR) {
-      const repo = process.env.GH_REPO;
+      const repo = process.env.GH_REPO || process.env.CONTENT_REPO;
       const token = process.env.CONTENT_BOT_TOKEN;
       if (!repo || !token) {
         return NextResponse.json(
-          { ok: false, error: "Missing GH_REPO or CONTENT_BOT_TOKEN for PR creation.", mdx },
+          { ok: false, error: "Missing GH_REPO/CONTENT_REPO or CONTENT_BOT_TOKEN for PR creation.", mdx },
           { status: 400 }
         );
       }
