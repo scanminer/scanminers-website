@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RegenerateCoverButton } from "@/components/RegenerateCoverButton";
 import { allInsights, allCaseStudies, allBriefs } from "contentlayer/generated";
 import { ApprovePublishButton } from "@/components/ApprovePublishButton";
 
@@ -103,6 +104,9 @@ export default function AdminReviewQueuePage() {
                     ) : (
                       <span className="text-gray-400">No slug</span>
                     )}
+                    {item.slug ? (
+                      <RegenerateCoverButton slug={item.slug} path={item.sourcePath || undefined} />
+                    ) : null}
                   </td>
                 </tr>
               );
