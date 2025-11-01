@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Search } from "@/components/Search";
 import { Suspense } from "react";
 import { SentryInit } from "@/components/SentryInit";
+import { Toaster } from "@/components/Toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
           </nav>
         </header>
         <main>{children}</main>
+        <Toaster />
         {cfAnalyticsToken ? (
           <script
             defer

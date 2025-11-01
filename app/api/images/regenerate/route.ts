@@ -31,10 +31,11 @@ export async function POST(req: Request) {
     if (!ADMIN_ACTION_TOKEN) return new Response('Server not configured', { status: 500 });
     if (adminHeader !== ADMIN_ACTION_TOKEN) return new Response('Unauthorized', { status: 401 });
 
-    const { slug, prompt } = await req.json().catch(() => ({}));
+    const { slug, prompt, branch } = await req.json().catch(() => ({}));
     if (!slug || typeof slug !== 'string' || !/^[a-z0-9-]{1,100}$/.test(slug)) {
       return new Response('Invalid slug', { status: 400 });
     }
+    const ref = typeof branch === 'string' && /^(?:[A-Za-z0-9._\/-]{1,100})$/.test(branch) ? branch : 'main';
 
     const repoFull = process.env.GITHUB_REPOSITORY || 'scanminer/scanminers-website';
     const [owner, repo] = repoFull.split('/');
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        ref: 'main',
+        ref,
         inputs: {
           post_slug: slug,
           ...(prompt ? { prompt } : {}),

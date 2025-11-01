@@ -1,8 +1,10 @@
 // components/Search.tsx
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import type { PagefindUI } from '@pagefind/default-ui';
+import { useState, useEffect, useCallback } from "react";
+import type { PagefindUI } from "@pagefind/default-ui";
+// Load default UI CSS from the package to avoid 404s in dev
+import "@pagefind/default-ui/css/ui.css";
 
 export const Search = () => {
   const [pagefind, setPagefind] = useState<PagefindUI | null>(null);
@@ -32,17 +34,7 @@ export const Search = () => {
     initPagefind();
   }, [pagefind]);
 
-  useEffect(() => {
-    // Add CSS for Pagefind
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '/pagefind/pagefind-ui.css';
-    document.head.appendChild(link);
-
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, []);
+  // External CSS link injection removed; package CSS is imported above.
 
   return (
     <div>

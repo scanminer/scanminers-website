@@ -11,12 +11,18 @@ const ENV_KEYS = [
   "NEXT_PUBLIC_SENTRY_DSN",
   "ADMIN_USER",
   "ADMIN_PASS",
+  "ALLOW_ADMIN_WITHOUT_AUTH",
+  "ADMIN_ACTION_TOKEN",
+  "WORKFLOW_DISPATCH_TOKEN",
+  "CONTENT_BOT_TOKEN",
   "GH_REPO",
 ] as const;
 
 export default function SystemPage() {
   const entries = ENV_KEYS.map((k) => ({ key: k, present: Boolean(process.env[k]) }));
   const repo = process.env.GH_REPO ?? "";
+  const authEnabled = Boolean(process.env.ADMIN_USER && process.env.ADMIN_PASS);
+  const bypass = process.env.ALLOW_ADMIN_WITHOUT_AUTH === 'true';
 
   const actions = [
     { label: "Insights RSS", href: "/insights/rss.xml" },
@@ -28,6 +34,22 @@ export default function SystemPage() {
   return (
     <div>
       <h2 className="mb-4 text-xl font-medium">System</h2>
+
+      <div className="mb-6 rounded-md border p-3 text-sm">
+        <div className="mb-1 font-medium">Admin access</div>
+        {!authEnabled && !bypass && (
+          <p className="text-gray-700">No basic auth configured for /admin (local dev default). Set ADMIN_USER and ADMIN_PASS to enable protection.</p>
+        )}
+        {authEnabled && !bypass && (
+          <p className="text-gray-700">Basic auth is enabled for /admin. Use your ADMIN_USER and ADMIN_PASS to sign in.</p>
+        )}
+        {bypass && (
+          <p className="text-amber-700">Bypass enabled: ALLOW_ADMIN_WITHOUT_AUTH=true. This skips auth locally; don’t use in production.</p>
+        )}
+        {!bypass && (
+          <p className="mt-2 text-xs text-gray-600">Tip: For local dev, you can set <code className="font-mono">ALLOW_ADMIN_WITHOUT_AUTH=true</code> in <code className="font-mono">.env.local</code> and restart the server to bypass auth.</p>
+        )}
+      </div>
       <div className="mb-6 overflow-x-auto">
         <table className="min-w-[480px] text-left text-sm">
           <thead>

@@ -12,6 +12,11 @@ export function middleware(req: NextRequest) {
   // Only guard /admin, allow everything else
   if (!pathname.startsWith('/admin')) return NextResponse.next();
 
+  // Optional local bypass for development
+  if (process.env.ALLOW_ADMIN_WITHOUT_AUTH === 'true') {
+    return NextResponse.next();
+  }
+
   const user = process.env.ADMIN_USER;
   const pass = process.env.ADMIN_PASS;
 

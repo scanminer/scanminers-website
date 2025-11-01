@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AdminQueueClient } from "@/components/AdminQueueClient";
 import { allInsights, allCaseStudies, allBriefs } from "contentlayer/generated";
 
 type QueueItem = {
@@ -38,27 +38,9 @@ function getQueue(): QueueItem[] {
   return [...pendingInsights, ...pendingCaseStudies, ...pendingBriefs];
 }
 
-function previewUrlFor(item: QueueItem): string | null {
-  if (!item.slug) return null;
-  switch (item.type) {
-    case "insight":
-      return `/insights/${item.slug}`;
-    case "case-study":
-      return `/case-studies/${item.slug}`;
-    case "brief":
-      return null; // Briefs may not have public pages
-    default:
-      return null;
-  }
-}
+// preview/edit helpers moved client-side within AdminQueueClient
 
-function editUrlFor(item: QueueItem): string | null {
-  const repo = process.env.GH_REPO;
-  if (!repo || !item.sourcePath) return null;
-  return `https://github.com/${repo}/edit/main/${item.sourcePath}`;
-}
-
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 
 export default function AdminReviewQueuePage() {
   const queue = getQueue();
@@ -70,39 +52,7 @@ export default function AdminReviewQueuePage() {
       {queue.length === 0 ? (
         <p className="text-sm text-gray-600">No items with review_status: &quot;needs-review&quot;.</p>
       ) : (
-        <table className="w-full text-left text-sm">
-          <thead>
-            <tr className="border-b">
-              <th className="py-2">Type</th>
-              <th className="py-2">Title</th>
-              <th className="py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {queue.map((item, idx) => {
-              const preview = previewUrlFor(item);
-              const edit = editUrlFor(item);
-              return (
-                <tr key={idx} className="border-b last:border-0">
-                  <td className="py-2 capitalize">{item.type.replace("-", " ")}</td>
-                  <td className="py-2">{item.title}</td>
-                  <td className="py-2 flex gap-3">
-                    {preview ? (
-                      <Link className="text-blue-600 hover:underline" href={preview} target="_blank">Preview</Link>
-                    ) : (
-                      <span className="text-gray-400">No preview</span>
-                    )}
-                    {edit ? (
-                      <a className="text-blue-600 hover:underline" href={edit} target="_blank" rel="noreferrer">Edit on GitHub</a>
-                    ) : (
-                      <span className="text-gray-400">Set GH_REPO</span>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <AdminQueueClient items={queue} repo={repo ?? null} />
       )}
 
       {!repo && (

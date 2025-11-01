@@ -1,0 +1,5 @@
+
+===== ENV =====
+v20.19.5
+! Corepack is about to download https://registry.npmjs.org/pnpm/-/pnpm-10.20.0.tgz
+? Do you want to continue? [Y/n] 
