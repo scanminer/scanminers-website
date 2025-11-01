@@ -88,7 +88,6 @@ async function run() {
   try {
     const githubToken = process.env.GH_TOKEN;
     const perplexityKey = process.env.PERPLEXITY_KEY;
-  const stabilityKey = process.env.STABILITY_API_KEY; // Optional
     const newBriefFile = process.env.BRIEF_FILE_PATH;
     const repoFull = process.env.GITHUB_REPOSITORY || '';
 

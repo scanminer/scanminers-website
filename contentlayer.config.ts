@@ -4,6 +4,22 @@ import { getPlaiceholder } from 'plaiceholder'
 import path from 'path'
 import fs from 'fs'
 
+// Define the schema for a "Brief" document (content/briefs/*.md)
+export const Brief = defineDocumentType(() => ({
+  name: 'Brief',
+  filePathPattern: `briefs/**/*.md`,
+  contentType: 'markdown',
+  fields: {
+    title: { type: 'string', required: false },
+    context: { type: 'string', required: false },
+    status: {
+      type: 'enum',
+      options: ['New Brief', 'Generating Draft', 'Draft Ready'],
+      required: false,
+    },
+  },
+}));
+
 // Define the schema for a "CaseStudy" document
 export const CaseStudy = defineDocumentType(() => ({
   name: 'CaseStudy',
@@ -184,6 +200,6 @@ export const Insight = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: 'content', // The root folder for all content
-  documentTypes: [Insight, CaseStudy],   // Register both content types
+  documentTypes: [Insight, CaseStudy, Brief],   // Register all content types
   disableImportAliasWarning: true,
 });

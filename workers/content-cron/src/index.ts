@@ -165,7 +165,7 @@ async function processScheduledPublishes(env: Env): Promise<{ merged: number; ch
   return { merged, checked };
 }
 
-export default {
+const handlers = {
   async scheduled(controller: ScheduledController, env: Env, ctx: ExecutionContext): Promise<void> {
     console.log(`Cron job triggered: ${controller.cron}`);
     const topic = 'Weekly Update: Advancements in Satellite-based Mineral Prospectivity';
@@ -174,7 +174,7 @@ export default {
       console.log(`Scheduled publish check: merged=${merged}, checked=${checked}`);
     }));
   },
-  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     console.log('Manual trigger received.');
     const url = new URL(request.url);
     const action = url.searchParams.get('action');
@@ -187,3 +187,5 @@ export default {
     return runContentWorkflow(env, topic);
   },
 };
+
+export default handlers;

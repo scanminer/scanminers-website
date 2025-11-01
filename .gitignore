@@ -12,6 +12,11 @@
 
 # testing
 /coverage
+/test-results
+/playwright-report
+
+# ignore nested node_modules from workers subproject(s)
+/workers/**/node_modules
 
 # next.js
 /.next/
