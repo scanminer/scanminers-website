@@ -12,6 +12,11 @@
 
 # testing
 /coverage
+/test-results
+/playwright-report
+
+# ignore nested node_modules from workers subproject(s)
+/workers/**/node_modules
 
 # next.js
 /.next/
@@ -39,6 +44,7 @@ yarn-error.log*
 # env files (allow example, ignore real)
 .env*
 !.env.example
+!.env.local.example
 
 # vercel
 .vercel

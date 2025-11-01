@@ -1,0 +1,9 @@
+# Code owners for automatic review requests
+# Use valid GitHub usernames or teams (e.g., @scanminer/maintainers)
+
+* @moodyguyhub
+
+# Prioritize reviews for content and app changes
+content/ @moodyguyhub
+app/ @moodyguyhub
+workers/** @moodyguyhub

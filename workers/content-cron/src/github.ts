@@ -46,7 +46,7 @@ export class GitHubClient {
     try {
       await this.request(`/git/ref/heads/${branchName}`);
       return true;
-    } catch (_) {
+    } catch {
       return false;
     }
   }

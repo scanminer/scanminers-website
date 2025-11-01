@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Search } from "@/components/Search";
 import { Suspense } from "react";
 import { SentryInit } from "@/components/SentryInit";
-import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

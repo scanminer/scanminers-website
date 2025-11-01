@@ -2,7 +2,6 @@
 const fs = require('fs');
 const path = require('path');
 const globby = require('globby');
-const sharp = require('sharp');
 let fail = 0;
 
 async function checkImages() {

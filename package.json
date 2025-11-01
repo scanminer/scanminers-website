@@ -8,12 +8,18 @@
   "scripts": {
     "preinstall": "npm config set legacy-peer-deps true",
     "dev": "next dev",
-    "build": "npm run contentlayer || true && next build && node scripts/generate-feeds.mjs && npx pagefind --site .next/server/app --output-subdir ../../public/pagefind",
+    "build": "npm run contentlayer && next build && node scripts/generate-feeds.mjs && npx pagefind --site .next/server/app --output-subdir ../../public/pagefind",
     "cf:pack": "npx @cloudflare/next-on-pages -o .cf-nop -c",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "contentlayer": "contentlayer build"
+    "contentlayer": "node scripts/contentlayer-build.js",
+    "build:content": "npm run contentlayer && node scripts/generate-feeds.mjs",
+    "content:check": "node scripts/content-check.js",
+    "test": "vitest --run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "prepare": "husky"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
@@ -33,6 +39,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@pagefind/default-ui": "^1.4.0",
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -42,8 +49,19 @@
     "eslint-config-next": "15.5.4",
     "globby": "^11.1.0",
     "gray-matter": "^4.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "pagefind": "^1.4.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,md,mdx}": [
+      "eslint --fix"
+    ],
+    "content/**/*.{mdx,md}": [
+      "node scripts/content-check.js --staged || true"
+    ]
   }
 }

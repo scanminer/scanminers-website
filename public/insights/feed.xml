@@ -4,7 +4,7 @@
         <description><![CDATA[Insights from Scanminers]]></description>
         <link>https://scanminers.com/insights</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sun, 12 Oct 2025 21:10:07 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 01 Nov 2025 06:25:40 GMT</lastBuildDate>
         <atom:link href="https://scanminers.com/insights/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
         <item>
@@ -13,6 +13,13 @@
             <link>https://scanminers.com/insights/bauxite-mapping-advances</link>
             <guid isPermaLink="false">/insights/bauxite-mapping-advances</guid>
             <pubDate>Wed, 15 Oct 2025 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Cobalt in Battery Supply Chains]]></title>
+            <description><![CDATA[A brief summary of the key findings. Please review and edit.]]></description>
+            <link>https://scanminers.com/insights/cobalt-in-battery-supply-chains</link>
+            <guid isPermaLink="false">/insights/cobalt-in-battery-supply-chains</guid>
+            <pubDate>Mon, 13 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Using LiDAR for Tailing Dam Monitoring]]></title>
