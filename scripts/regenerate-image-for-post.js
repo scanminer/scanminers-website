@@ -198,7 +198,8 @@ async function run() {
   await upsertFile(repoMdxPath, Buffer.from(mdxOut), `feat(image): regenerate cover for '${title}'`);
 
   // Add/Update the image binary on branch
-  const imagePathRel = imageResult.imageUrl.slice(1);
+  // Commit under the repo's public/ directory so the image is served at /images/uploads/* in production
+  const imagePathRel = path.posix.join('public', imageResult.imageUrl.replace(/^\//, ''));
   await upsertFile(imagePathRel, imageResult.imageBuffer, `feat(image): add regenerated cover for '${title}'`);
 
   // Open PR
