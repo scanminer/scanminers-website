@@ -58,8 +58,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,md,mdx}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "content/**/*.{mdx,md}": [
       "node scripts/content-check.js --staged || true"
