@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Configure npm (CI-friendly)
+        run: |
+          echo "legacy-peer-deps=true" >> .npmrc
+          echo "loglevel=error" >> .npmrc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Contentlayer types
+        run: npm run contentlayer
+
+      - name: Build site (Next + feeds + search)
+        env:
+          NEXT_PUBLIC_SITE_URL: https://example.com
+        run: npm run build
+
+      - name: Package build artifact
+        run: tar czf next-build.tgz .next
+
+      - name: Create GitHub Release and upload artifact
+        uses: softprops/action-gh-release@v2
+        with:
+          files: next-build.tgz
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
