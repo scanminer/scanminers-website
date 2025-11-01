@@ -11,12 +11,24 @@ on:
         description: 'Optional prompt override to use for generation'
         required: false
         type: string
+      branch:
+        description: 'Target branch to operate on (dispatch ref)'
+        required: false
+        type: string
+      post_path:
+        description: 'Optional explicit MDX path (e.g. content/case-studies/foo.mdx)'
+        required: false
+        type: string
 
 jobs:
   regenerate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Always run the latest workflow/script from the default branch codebase,
+          # while targeting the desired content branch via BASE_BRANCH env below.
+          ref: ${{ github.event.repository.default_branch }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -28,5 +40,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
           POST_SLUG: ${{ inputs.post_slug }}
+          POST_PATH: ${{ inputs.post_path }}
+          BASE_BRANCH: ${{ inputs.branch || github.ref_name }}
           PROMPT_OVERRIDE: ${{ inputs.prompt }}
         run: node scripts/regenerate-image-for-post.js
