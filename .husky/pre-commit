@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Fail fast
+set -e
+
+# Run lint-staged to format/lint and run light content checks
+npx --no-install lint-staged

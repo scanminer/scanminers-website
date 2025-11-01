@@ -18,7 +18,8 @@
     "content:check": "node scripts/content-check.js",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "prepare": "husky"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
@@ -48,9 +49,20 @@
     "eslint-config-next": "15.5.4",
     "globby": "^11.1.0",
     "gray-matter": "^4.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "pagefind": "^1.4.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,md,mdx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "content/**/*.{mdx,md}": [
+      "node scripts/content-check.js --staged || true"
+    ]
   }
 }
