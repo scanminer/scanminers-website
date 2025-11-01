@@ -9,14 +9,23 @@ const ENV_KEYS = [
   "RESEND_TO",
   "SENTRY_DSN",
   "NEXT_PUBLIC_SENTRY_DSN",
+  // Drafting / GitHub automation
+  "PERPLEXITY_KEY",
+  "PERPLEXITY_MODEL",
+  "CONTENT_BOT_TOKEN",
+   "GIT_DEFAULT_BRANCH",
+   "CONTENT_DEFAULT_BRANCH",
   "ADMIN_USER",
   "ADMIN_PASS",
-  "GH_REPO",
+   "GH_REPO",
+   "CONTENT_REPO",
+   "CONTENT_AUTHOR_NAME",
+   "CONTENT_AUTHOR_EMAIL",
 ] as const;
 
 export default function SystemPage() {
   const entries = ENV_KEYS.map((k) => ({ key: k, present: Boolean(process.env[k]) }));
-  const repo = process.env.GH_REPO ?? "";
+  const repo = process.env.GH_REPO ?? process.env.CONTENT_REPO ?? "";
 
   const actions = [
     { label: "Insights RSS", href: "/insights/rss.xml" },
@@ -56,7 +65,9 @@ export default function SystemPage() {
       </div>
 
       {!repo && (
-        <p className="mt-4 text-xs text-amber-700">Set GH_REPO to enable links to GitHub Actions and Releases.</p>
+        <p className="mt-4 text-xs text-amber-700">
+          Set GH_REPO (or CONTENT_REPO) to enable links to GitHub Actions and Releases.
+        </p>
       )}
     </div>
   );

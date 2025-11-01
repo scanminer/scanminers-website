@@ -16,6 +16,8 @@ const matter = require('gray-matter');
 const sharp = require('sharp');
 const { Octokit } = require('@octokit/rest');
 
+const SCRIPT_VERSION = '2025-11-01-b';
+
 function slugify(input) {
   return input
     .toLowerCase()
@@ -77,10 +79,14 @@ function defaultPrompt(title) {
 }
 
 async function run() {
+  console.log(`[regen-image] script version: ${SCRIPT_VERSION}`);
   const githubToken = process.env.GH_TOKEN;
   const repoFull = process.env.GITHUB_REPOSITORY || '';
   const postSlug = process.env.POST_SLUG;
   const postPathEnv = process.env.POST_PATH;
+  const baseBranch = process.env.BASE_BRANCH || 'main';
+
+  console.log(`[regen-image] repo=${repoFull} baseBranch=${baseBranch} postSlug=${postSlug || ''} postPath=${postPathEnv || ''}`);
 
   if (!githubToken || !repoFull) {
     throw new Error('Missing required env (GH_TOKEN, GITHUB_REPOSITORY).');
@@ -89,20 +95,73 @@ async function run() {
   const [owner, repo] = repoFull.split('/');
   if (!owner || !repo) throw new Error(`Invalid GITHUB_REPOSITORY: ${repoFull}`);
 
-  // Resolve file path
-  let filePath = postPathEnv;
-  if (!filePath) {
-    if (!postSlug) throw new Error('Provide POST_SLUG or POST_PATH');
-    filePath = path.join(process.cwd(), 'content', 'insights', `${postSlug}.mdx`);
+  const octokit = new Octokit({ auth: githubToken });
+
+  // Resolve content either from local checkout or directly from GitHub (base branch)
+  let repoMdxPath = null;
+  let rawContent = null;
+
+  async function tryReadLocal(p) {
+    try {
+      console.log(`[regen-image] try local: ${p}`);
+      const raw = await fs.promises.readFile(p, 'utf8');
+      return raw;
+    } catch {
+      console.log(`[regen-image] local miss: ${p}`);
+      return null;
+    }
   }
-  const raw = await fs.promises.readFile(filePath, 'utf8');
-  const parsed = matter(raw);
+
+  async function tryReadRemote(p) {
+    try {
+      console.log(`[regen-image] try remote: ${p}@${baseBranch}`);
+      const res = await octokit.repos.getContent({ owner, repo, path: p, ref: baseBranch });
+      if (Array.isArray(res.data)) return null;
+      const b64 = res.data.content || '';
+      const buff = Buffer.from(b64, 'base64');
+      return buff.toString('utf8');
+    } catch {
+      console.log(`[regen-image] remote miss: ${p}@${baseBranch}`);
+      return null;
+    }
+  }
+
+  const candidates = [];
+  if (postPathEnv) {
+    const rel = postPathEnv.replace(/^\/+/, '');
+    candidates.push(rel);
+  } else {
+    if (!postSlug) throw new Error('Provide POST_SLUG or POST_PATH');
+    candidates.push(
+      path.posix.join('content', 'insights', `${postSlug}.mdx`),
+      path.posix.join('content', 'case-studies', `${postSlug}.mdx`),
+      path.posix.join('content', 'briefs', `${postSlug}.md`),
+    );
+  }
+
+  console.log(`[regen-image] candidates: ${candidates.join(', ')}`);
+  for (const rel of candidates) {
+    // Try local first
+    const localPath = path.join(process.cwd(), rel);
+    rawContent = await tryReadLocal(localPath);
+    if (rawContent) { repoMdxPath = rel; break; }
+    // Try remote on baseBranch
+    rawContent = await tryReadRemote(rel);
+    if (rawContent) { repoMdxPath = rel; break; }
+  }
+
+  if (!rawContent || !repoMdxPath) {
+    throw new Error(`Could not resolve file for slug/path. Tried (ref=${baseBranch}): ${candidates.join(', ')}`);
+  }
+
+  const parsed = matter(rawContent);
   const fm = parsed.data || {};
 
-  const title = fm.title || postSlug || path.basename(filePath, path.extname(filePath));
+  const baseName = path.basename(repoMdxPath, path.extname(repoMdxPath));
+  const title = fm.title || postSlug || baseName;
   const promptOverride = process.env.PROMPT_OVERRIDE;
   const prompt = promptOverride || fm.imagePrompt || defaultPrompt(title);
-  const slug = slugify(postSlug || fm.slug || path.basename(filePath, path.extname(filePath)));
+  const slug = slugify(postSlug || fm.slug || baseName);
 
   const imageResult = await generateAndSaveImage(prompt, slug);
   if (!imageResult) {
@@ -117,8 +176,7 @@ async function run() {
 
   const mdxOut = matter.stringify(parsed.content, fm);
 
-  const octokit = new Octokit({ auth: githubToken });
-  const baseBranch = process.env.BASE_BRANCH || 'main';
+  // Octokit already initialized; baseBranch already computed
 
   console.log(`Fetching base branch ref: ${baseBranch}`);
   const baseRef = await octokit.git.getRef({ owner, repo, ref: `heads/${baseBranch}` });
@@ -147,11 +205,11 @@ async function run() {
   }
 
   // Update the MDX on branch
-  const repoMdxPath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
   await upsertFile(repoMdxPath, Buffer.from(mdxOut), `feat(image): regenerate cover for '${title}'`);
 
   // Add/Update the image binary on branch
-  const imagePathRel = imageResult.imageUrl.slice(1);
+  // Commit under the repo's public/ directory so the image is served at /images/uploads/* in production
+  const imagePathRel = path.posix.join('public', imageResult.imageUrl.replace(/^\//, ''));
   await upsertFile(imagePathRel, imageResult.imageBuffer, `feat(image): add regenerated cover for '${title}'`);
 
   // Open PR

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { RegenerateCoverButton } from "@/components/RegenerateCoverButton";
 import { allInsights, allCaseStudies, allBriefs } from "contentlayer/generated";
+import { ApprovePublishButton } from "@/components/ApprovePublishButton";
 
 type QueueItem = {
   type: "insight" | "case-study" | "brief";
@@ -97,6 +99,14 @@ export default function AdminReviewQueuePage() {
                     ) : (
                       <span className="text-gray-400">Set GH_REPO</span>
                     )}
+                    {item.slug ? (
+                      <ApprovePublishButton kind={item.type} slug={item.slug} />
+                    ) : (
+                      <span className="text-gray-400">No slug</span>
+                    )}
+                    {item.slug ? (
+                      <RegenerateCoverButton slug={item.slug} path={item.sourcePath || undefined} />
+                    ) : null}
                   </td>
                 </tr>
               );

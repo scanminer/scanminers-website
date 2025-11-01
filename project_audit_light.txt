@@ -1,0 +1,480 @@
+
+===== ENV =====
+v20.19.5
+10.20.0
+1.22.22
+11.6.2
+.nvmrc:
+20
+===== GIT =====
+remote(s):
+origin git@github.com:scanminer/scanminers-website.git
+branch: main
+commit: ec5e4bc
+status:
+## main...origin/main
+ M .gitignore
+?? audit-light.sh
+?? audit.sh
+?? project_audit_light.txt
+
+===== TOP-LEVEL FILES =====
+ - .
+ - ..
+ - app
+ - audit-light.sh
+ - audit.sh
+ - CHANGELOG.md
+ - components
+ - content
+ - .contentlayer
+ - contentlayer.config.ts
+ - .cursor
+ - docs
+ - .editorconfig
+ - emails
+ - .env.example
+ - .env.local.example
+ - eslint.config.mjs
+ - .git
+ - .gitattributes
+ - .github
+ - .gitignore
+ - .husky
+ - images
+ - instrumentation-client.ts
+ - instrumentation.ts
+ - lib
+ - .lighthouserc.json
+ - .next
+ - next.config.ts
+ - next-env.d.ts
+ - node_modules
+ - .node-version
+ - .npmrc
+ - .nvmrc
+ - package.json
+ - package-lock.json
+ - playwright.config.ts
+ - postcss.config.mjs
+ - project_audit_light.txt
+ - project_audit.txt
+ - public
+ - README.md
+ - renovate.json
+ - scripts
+ - sentry.client.config.ts
+ - sentry.edge.config.ts
+ - sentry.server.config.ts
+ - test-results
+ - tests
+ - tsconfig.json
+ - tsconfig.tsbuildinfo
+ - types
+ - vitest.config.ts
+ - .vscode
+ - workers
+ - wrangler.toml
+
+===== APP ROUTER STRUCTURE (depth 2) =====
+ - app
+ - app/api
+ - app/api/contact
+ - app/api/decap-auth
+ - app/api/env
+ - app/api/health
+ - app/api/images
+ - app/api/ping
+ - app/case-studies
+ - app/case-studies/rss.xml
+ - app/case-studies/[slug]
+ - app/case-studies/tags
+ - app/contact
+ - app/insights
+ - app/insights/rss.xml
+ - app/insights/[slug]
+ - app/insights/tags
+ - app/technologies
+
+===== KEY CONFIG FILES =====
+ - package.json
+ - next.config.ts
+ - tsconfig.json
+ - contentlayer.config.ts
+ - wrangler.toml
+ - postcss.config.mjs
+ - .github/workflows
+
+===== PACKAGE.JSON EXCERPT =====
+{
+  name: 'scanminers-website',
+  scripts: [
+    'preinstall',    'dev',
+    'build',         'cf:pack',
+    'start',         'lint',
+    'typecheck',     'contentlayer',
+    'build:content', 'content:check',
+    'test',          'test:watch',
+    'test:e2e',      'prepare'
+  ],
+  deps: [
+    '@octokit/rest',
+    '@sentry/browser',
+    'contentlayer',
+    'next',
+    'next-contentlayer',
+    'plaiceholder',
+    'react',
+    'react-dom',
+    'react-email',
+    'resend',
+    'rss',
+    'sharp',
+    'zod'
+  ],
+  devDeps: [
+    '@eslint/eslintrc', '@pagefind/default-ui',
+    '@playwright/test', '@tailwindcss/postcss',
+    '@types/node',      '@types/react',
+    '@types/react-dom', '@types/rss',
+    'eslint',           'eslint-config-next',
+    'globby',           'gray-matter',
+    'husky',            'lint-staged',
+    'pagefind',         'tailwindcss',
+    'typescript',       'vitest'
+  ]
+}
+
+===== CHECK: Next.js / Contentlayer / shadcn / MDX / Plausible =====
+app/layout.tsx:2:import { Geist, Geist_Mono } from "next/font/google";
+app/insights/[slug]/metadata.ts:2:import { allInsights } from "contentlayer/generated";
+app/insights/[slug]/page.tsx:3:import type { Insight } from "contentlayer/generated";
+app/insights/[slug]/page.tsx:4:import { allInsights } from "contentlayer/generated";
+app/insights/[slug]/page.tsx:6:import { notFound } from "next/navigation";
+app/insights/tags/[tag]/page.tsx:3:import { allInsights } from "contentlayer/generated";
+app/insights/tags/[tag]/page.tsx:4:import type { Insight } from "contentlayer/generated";
+app/insights/tags/[tag]/page.tsx:7:import { notFound } from "next/navigation";
+app/insights/tags/page.tsx:4:import { allInsights } from "contentlayer/generated";
+app/insights/page.tsx:2:// importing type from path configured in tsconfig; will be available after contentlayer generates
+app/insights/page.tsx:3:import type { Insight } from "contentlayer/generated";
+app/insights/page.tsx:4:import { allInsights } from "contentlayer/generated";
+app/sitemap.ts:2:import { allInsights, allCaseStudies } from "contentlayer/generated";
+app/page.tsx:4:import type { Insight, CaseStudy } from "contentlayer/generated";
+app/page.tsx:5:import { allInsights, allCaseStudies } from "contentlayer/generated";
+app/case-studies/[slug]/metadata.ts:2:import { allCaseStudies } from "contentlayer/generated";
+app/case-studies/[slug]/page.tsx:3:import type { CaseStudy } from "contentlayer/generated";
+app/case-studies/[slug]/page.tsx:4:import { allCaseStudies } from "contentlayer/generated";
+app/case-studies/[slug]/page.tsx:6:import { notFound } from "next/navigation";
+app/case-studies/tags/[tag]/page.tsx:3:import { allCaseStudies } from "contentlayer/generated";
+app/case-studies/tags/[tag]/page.tsx:4:import type { CaseStudy } from "contentlayer/generated";
+app/case-studies/tags/[tag]/page.tsx:7:import { notFound } from "next/navigation";
+app/case-studies/tags/page.tsx:3:import { allCaseStudies } from "contentlayer/generated";
+app/case-studies/page.tsx:4:import type { CaseStudy } from "contentlayer/generated";
+app/case-studies/page.tsx:5:import { allCaseStudies } from "contentlayer/generated";
+components/mdx-content-server.tsx:2:import { useMDXComponent } from "next-contentlayer/hooks";
+components/mdx-content.tsx:4:import { useMDXComponent } from "next-contentlayer/hooks";
+scripts/generate-feeds.mjs:5:import { allInsights, allCaseStudies } from '../.contentlayer/generated/index.mjs';
+scripts/content-check.js:23:    // 1) Build contentlayer artifacts
+scripts/content-check.js:24:    await run(process.execPath, [path.join(root, 'scripts', 'contentlayer-build.js')]);
+scripts/contentlayer-build.js:10:  const cli = path.join(process.cwd(), 'node_modules', 'contentlayer', 'bin', 'cli.cjs');
+scripts/contentlayer-build.js:19:    const indexPath = path.join(process.cwd(), '.contentlayer', 'generated', 'index.mjs');
+scripts/contentlayer-build.js:22:      console.log('[contentlayer] Build succeeded (artifacts present).');
+scripts/generate-feeds.js:5:import { allInsights, allCaseStudies } from 'contentlayer/generated';
+
+===== CHECK: Components we discussed =====
+content/insights/advancements-in-using-sar-data-for-geological-mapp.mdx:5:review_status: "needs-review"
+content/insights/advancements-in-using-sar-data-for-geological-mapp.mdx:6:ai_generated: true
+content/insights/cobalt-in-battery-supply-chains.mdx:5:review_status: "needs-review"
+content/insights/cobalt-in-battery-supply-chains.mdx:6:ai_generated: true
+content/insights/bauxite-mapping-advances.mdx:8:review_status: approved
+content/insights/bauxite-mapping-advances.mdx:9:ai_generated: false
+content/insights/using-lidar-for-tailing-dam-monitoring.mdx:5:review_status: "needs-review"
+content/insights/using-lidar-for-tailing-dam-monitoring.mdx:6:ai_generated: true
+content/case-studies/payas-islahiye-pilot.mdx:16:review_status: approved
+content/case-studies/payas-islahiye-pilot.mdx:17:ai_generated: false
+content/case-studies/bauxite-payas-islahiye.mdx:17:review_status: approved
+content/case-studies/bauxite-payas-islahiye.mdx:18:ai_generated: false
+scripts/semantic-qa.js:24:    const isDraft = fm.draft === true || fm.review_status === 'needs-review';
+scripts/generate-draft-from-brief.js:146:      `review_status: "needs-review"\n` +
+scripts/generate-draft-from-brief.js:147:      `ai_generated: true\n` +
+scripts/generate-draft-from-brief.js:236:        body: `This PR adds an AI-generated draft for '${topic}'.\n\n- Source brief: ${newBriefFile}\n- Image: ${imageResult ? imageResult.imageUrl : 'none'}\n- Review status: needs-review\n\nPlease review content, citations, and scheduling fields (publishedAt, review_status).`,
+scripts/ensure-citations.js:15:    if (frontmatter.ai_generated === true) {
+workers/content-cron/src/index.ts:46:Once approved, set \`review_status: approved\` and merge.`;
+workers/content-cron/src/index.ts:58:review_status: "needs-review"
+workers/content-cron/src/index.ts:59:ai_generated: true
+workers/content-cron/src/index.ts:143:      const reviewStatus = (fm.review_status || '').toLowerCase();
+workers/content-cron/README.md:14:2.  Formats the response into an MDX file with the required frontmatter (`review_status: 'needs-review'`).
+workers/content-cron/README.md:25:- When `review_status: approved` and `publishedAt` is a valid date-time in the past (or now), the worker will attempt to merge the PR automatically.
+workers/content-cron/README.md:36:- Use branch protection with required reviews to keep a human-in-the-loop; editors set `review_status: approved` when ready.
+
+===== CHECK: CI WORKFLOWS =====
+ - checks.yml
+ - ci.yml
+ - content-qa.yml
+ - generate-draft.yml
+ - qa-status.yml
+ - regenerate-image.yml
+ - release.yml
+ - sentry-smoke.yml
+
+===== CHECK: Cloudflare / Turnstile / Analytics =====
+app/api/contact/route.ts:76:    return NextResponse.json({ success: false, message: 'Invalid Turnstile token.' }, { status: 400 });
+components/contact-form.tsx:47:  const renderTurnstile = useCallback(() => {
+components/contact-form.tsx:71:      renderTurnstile();
+components/contact-form.tsx:73:  }, [scriptReady, renderTurnstile]);
+components/contact-form.tsx:85:      setError("Please complete the Turnstile check before submitting.");
+components/contact-form.tsx:183:        {/* Turnstile */}
+components/contact-form.tsx:186:            {/* Load the Turnstile script explicitly once */}
+components/contact-form.tsx:198:            Turnstile is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable submissions.
+workers/content-cron/src/github.ts:55:    // Base64 encode UTF-8 string (Cloudflare Workers support atob/btoa)
+workers/content-cron/src/index.ts:13:// Local type shims for CF runtime to satisfy TS without installing @cloudflare/workers-types
+workers/content-cron/README.md:3:This Cloudflare Worker is the heart of the automated content engine for the Scanminers website.
+workers/content-cron/README.md:9:1.  **Scheduled (Cron):** Runs automatically based on the schedule defined in `wrangler.toml`. It uses a pre-defined topic to generate a weekly draft.
+workers/content-cron/README.md:41:- `npm install -g wrangler`
+workers/content-cron/README.md:42:- `wrangler login`
+workers/content-cron/README.md:48:npx wrangler secret put GH_TOKEN
+workers/content-cron/README.md:49:npx wrangler secret put PERPLEXITY_KEY
+workers/content-cron/README.md:57:npx wrangler deploy
+workers/content-cron/wrangler.toml:1:# workers/content-cron/wrangler.toml
+
+===== CHECK: Routes that should exist =====
+ - missing: app/how-it-works
+ - missing: app/solutions
+ - missing: app/admin
+ - present: app/insights
+
+===== MDX CONTENT INVENTORY =====
+mdx files: 6
+ - content/insights/advancements-in-using-sar-data-for-geological-mapp.mdx
+ - content/insights/cobalt-in-battery-supply-chains.mdx
+ - content/insights/bauxite-mapping-advances.mdx
+ - content/insights/using-lidar-for-tailing-dam-monitoring.mdx
+ - content/case-studies/payas-islahiye-pilot.mdx
+ - content/case-studies/bauxite-payas-islahiye.mdx
+
+===== FRONT-MATTER FIELDS CHECK (sample 5 mdx) =====
+--- content/insights/advancements-in-using-sar-data-for-geological-mapp.mdx ---
+---
+title: "Advancements in using SAR data for geological mapping"
+summary: "A brief summary of the key findings will go here. Please update."
+publishedAt: "2025-10-11"
+review_status: "needs-review"
+ai_generated: true
+tags: ["AI", "Mining", "Maintenance"]
+citations:
+  - "https://www.mrcy.com/company/blogs/seeing-unseen-synthetic-aperture-radar"
+  - "https://www.esri.com/about/newsroom/blog/sar-satellite-revolution"
+  - "https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2023RG000821"
+  - "https://appliedsciences.nasa.gov/get-involved/training/english/arset-crop-mapping-using-synthetic-aperture-radar-sar-and-optical-0"
+  - "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2023RG000821"
+---
+
+## Executive Summary
+
+Synthetic Aperture Radar (SAR), an active remote sensing technology, has transformed geological mapping by delivering high-resolution, all-weather imaging, overcoming traditional optical methods' limitations like cloud cover and darkness[1][2]. SAR systems simulate large antenna apertures using small, moving antennas, enabling detailed 2D and 3D surface mapping even through foliage and atmospheric obstructions[1]. This resilience is crucial for mineral exploration and geoscience applications—areas often hampered by persistent cloud cover or lack of persistent sunlight.
+
+Traditional geological mapping relied heavily on optical satellite imagery and field sampling, which were constrained by environmental conditions, temporal gaps, and scale. SAR addresses these pain points by providing continuous, large-scale, multi-temporal data, allowing for rapid change detection, mineral signature identification, and terrain deformation analysis[3]. The advent of AI and machine learning has further enhanced SAR's utility, automating image interpretation, reducing noise, and improving feature extraction for more precise geological characterization[1][5].
+
+Recent case studies demonstrate SAR's capacity to map landslide risk, monitor ground deformation, and assess mineral resources—tasks impossible with optical data alone. However, SAR also presents challenges, including complex data processing, high costs for ultra-high resolution imagery, and limited spectral information compared to hyperspectral sensors. Integrating SAR with optical data, GPS, and AI-driven analytics is emerging as a best practice for robust, real-time geological monitoring[4].
+
+As SAR satellite constellations proliferate and AI-driven analytics mature, the technology is poised to become even more central to resource exploration, environmental monitoring, and disaster risk management, reducing both costs and response times for critical geological analysis.
+
+## Key Data Points
+
+- **Synthetic Aperture Radar (SAR)** is an active remote sensing system that uses microwave signals to create high-resolution images of the Earth’s surface, independent of daylight and weather conditions[1][2].
+- **Geological mapping** involves identifying and characterizing Earth’s surface materials, structures, and processes for resource exploration, hazard assessment, and environmental monitoring[3].
+- **SAR overcomes traditional limitations** of optical remote sensing, such as cloud cover, darkness, and atmospheric scattering, enabling year-round, large-area monitoring[1][2].
+- **Integration with AI/ML** enhances SAR data interpretation, enabling automated feature detection, noise reduction, and real-time analysis—critical for rapid geological assessments[1][5].
+- **SAR’s all-weather capability** is especially valuable in tropical and polar regions, where persistent cloud cover and long periods of darkness hinder optical sensors[2][3].
+- **Multi-temporal SAR analysis** allows detection of subtle ground deformations (e.g., subsidence, landslides) and monitoring of dynamic geological processes[3].
+- **Synergy with optical data**—combining SAR’s structural and moisture information with optical data’s spectral signatures—improves classification accuracy for mineral and vegetation mapping[4].
+- **Cost and complexity** of SAR data processing remain barriers, though cloud computing and open data policies (e.g., Sentinel-1) are reducing these hurdles[4].
+- **SAR is increasingly used in industry** for mineral exploration, oil/gas infrastructure monitoring, and geohazard assessment, with documented reductions in field survey costs and improved safety[3].
+
+## Recent Findings & Case Studies
+
+**Case Study 1: Landslide Mapping with Machine Learning (2023)**  
+A comprehensive review in *Reviews of Geophysics* (2023) synthesized advances in applying machine learning (ML) and deep learning (DL) to SAR data for landslide mapping. Techniques such as Support Vector Machines (SVM), Convolutional Neural Networks (CNNs), and Long Short-Term Memory (LSTM) networks demonstrated high accuracy in identifying landslide-prone areas, even in challenging environments. These methods leverage multi-temporal SAR datasets to detect precursor ground movements, offering early warning capabilities not possible with traditional optical imagery[5].
+
+**Case Study 2: Crop Mapping and Mineral Proxy Monitoring (2023–2024, NASA ARSET)**  
+A NASA-led training initiative highlighted the use of polarimetric time-series SAR data (Sentinel-1) for advanced crop monitoring, which also has applications in identifying soil moisture variations and surface mineral proxies. By integrating SAR with optical data (Sentinel-2), the program demonstrated improved classification of land cover and mineralogical features, showcasing SAR’s complementary role in geochemical mapping. The use of Python-based machine learning workflows further improved the efficiency and accuracy of these analyses[4].
+
+**Case Study 3: Terrain Deformation Monitoring for Resource Exploration (Industry, 2024)**  
+Industry reports and technical blogs emphasize SAR’s growing role in monitoring ground deformation for mining and oil/gas operations. For example, subtle surface movements indicative of underground resource extraction or natural gas migration can be detected using differential interferometric SAR (DInSAR), enabling safer, more efficient resource management. The integration of real-time SAR analytics with AI-driven anomaly detection is now reducing the need for hazardous field inspections, lowering operational costs, and improving safety protocols[1].
+
+## Challenges & Future Trends
+
+--- content/insights/cobalt-in-battery-supply-chains.mdx ---
+---
+title: "Cobalt in Battery Supply Chains"
+summary: "A brief summary of the key findings. Please review and edit."
+publishedAt: "2025-10-13"
+review_status: "needs-review"
+ai_generated: true
+tags: ["AI", "Geoscience", "Draft"]
+image: "/images/uploads/cobalt-in-battery-supply-chains.webp"
+imageAlt: "Illustrative image for Cobalt in Battery Supply Chains"
+citations:
+   - "https://www.cobaltinstitute.org/wp-content/uploads/2025/02/Cobalt-Market-Report-2023.pdf"
+   - "https://www.eia.gov/todayinenergy/detail.php?id=65305"
+   - "https://www.cobaltinstitute.org/wp-content/uploads/2025/02/Cobalt-Market-Report-2023-Infographic.pdf"
+   - "https://www.faircobaltalliance.org/blog/2023-annual-report/"
+   - "https://www.wilsoncenter.org/sites/default/files/media/uploads/documents/TenSteps-CobaltChains.pdf"
+---
+
+## Executive Summary
+
+Cobalt plays a crucial role in the global battery supply chain, particularly for electric vehicles and renewable energy technologies. As demand for these technologies increases, so does the need for responsible cobalt sourcing and exploration. Remote sensing technologies, such as hyperspectral and synthetic aperture radar (SAR), are increasingly important for locating cobalt deposits, monitoring artisanal mining activities, and ensuring environmental, social, and governance (ESG) compliance. In 2023, global cobalt demand grew by 10% year-over-year, driven mainly by battery chemistries like mid and high nickel NCM[1]. Challenges in the cobalt supply chain include risks associated with artisanal mining, market volatility, and the need for diversified supply sources.
+
+Key contributors to the cobalt market include China, which dominates the global trade of battery minerals, and the Democratic Republic of Congo (DRC), which supplies a significant portion of the world's cobalt[2]. As the energy transition accelerates, maintaining a stable and sustainable cobalt supply chain is critical for supporting the growth of electric vehicles and renewable energy systems.
+
+## Key Data Points
+- **Global Cobalt Supply**: Rose by 17% in 2023, with the DRC maintaining a 76% market share[1].
+- **Cobalt Demand**: 55% of total battery demand in 2023 was for cobalt-containing chemistries, despite growth in cobalt-free LFP[1].
+- **China's Role**: Imported 20% of the world's processed battery minerals and exported 58% of battery materials in 2023[2].
+- **Indonesia's Growth**: Became the second-largest cobalt producer with an 86% increase in output in 2023[1].
+- **Artisanal Mining Impact**: Impacted by weak cobalt prices and increasing global mined supply[3].
+
+## Recent Findings & Case Studies
+
+1. **Remote Sensing in Cobalt Exploration**
+   - Remote sensing technologies can be instrumental in identifying potential cobalt deposits by analyzing spectral signatures and geological structures. While there isn't specific recent data on cobalt-focused efforts, these technologies are crucial for modern mineral exploration[5].
+   
+2. **Artisanal Mining Detection**
+   - Artisanal mining of cobalt poses significant environmental and social risks. Remote sensing can help track these activities, ensuring compliance with regulations and reducing the risk of supply chain disruptions[4].
+
+3. **ESG Monitoring**
+   - Remote sensing can also support ESG monitoring by detecting deforestation and monitoring mine expansion, helping companies adhere to sustainability standards in their supply chains[5].
+
+## Challenges & Future Trends
+
+The cobalt supply chain faces challenges such as market volatility, artisanal mining risks, and the need for diversified supply sources. Future trends include the expansion of nickel-rich battery chemistries and increased investment in responsible sourcing practices. As remote sensing technologies continue to advance, they will play a vital role in addressing these challenges by facilitating more efficient exploration and better monitoring of extraction activities.
+
+## Full Citations
+
+1. Cobalt Institute. (2024). Cobalt Market Report 2023. Retrieved from https://www.cobaltinstitute.org/wp-content/uploads/2025/02/Cobalt-Market-Report-2023.pdf
+2. U.S. Energy Information Administration. (n.d.). China dominates global trade of battery minerals. Retrieved from https://www.eia.gov/todayinenergy/detail.php?id=65305
+3. Cobalt Institute. (2024). COBALT MARKET REPORT - Infographic. Retrieved from https://www.cobaltinstitute.org/wp-content/uploads/2025/02/Cobalt-Market-Report-2023-Infographic.pdf
+--- content/insights/bauxite-mapping-advances.mdx ---
+---
+title: "Advances in AI-Powered Bauxite Prospectivity Mapping"
+publishedAt: 2025-10-15
+summary: "A look into how modern AI techniques are revolutionizing the discovery of bauxite deposits, with a focus on our proprietary analysis in the Payas–İslahiye region."
+citations:
+  - "USGS Mineral Commodity Summaries 2024"
+  - "Pour, A. B., & Hashim, M. (2021). ASTER and Landsat..."
+review_status: approved
+ai_generated: false
+---
+
+## The Challenge in Bauxite Exploration
+
+Traditional methods for bauxite exploration are often time-consuming and costly. They rely heavily on extensive fieldwork and sample analysis, which can be challenging in remote or inaccessible regions.
+
+## Our AI-MPM Approach
+
+At Scanminers, we leverage a fusion of multispectral and radar satellite imagery. Our process involves several key steps outlined in our execution plan:
+
+1.  **Ingest & Harmonize**: We use data from Landsat, ASTER, and PALSAR.
+2.  **AI & Statistical Fusion**: Techniques like AIG-DHA and MF/ANN are employed.
+3.  **Rank & Validate**: We deliver prospectivity maps with clear, actionable target zones.
+
+This method allows us to identify high-potential zones with greater accuracy and speed, significantly reducing the initial exploration footprint. 
+
+In practice, we also derive spectral indices (e.g., band ratios and NDVI for masking) and texture features (GLCM) to enhance separability prior to modeling.
+
+{/* qa: noop smoke */}
+--- content/insights/using-lidar-for-tailing-dam-monitoring.mdx ---
+---
+title: "Using LiDAR for Tailing Dam Monitoring"
+summary: "A brief summary of the key findings will go here. Please update."
+publishedAt: "2025-10-12"
+review_status: "needs-review"
+ai_generated: true
+tags: ["AI", "Mining", "Maintenance"]
+citations:
+   - "https://beeroon.com/mining/tailings-dam-monitoring"
+   - "https://www.imwa.info/docs/imwa_2023/IMWA2023_Morton_69.pdf"
+   - "https://growthmarketreports.com/report/tailings-dam-stability-monitoring-market"
+   - "https://stacks.cdc.gov/view/cdc/208183/cdc_208183_DS1.pdf"
+   - "https://me.smenet.org/drone-based-applications-for-tailings-dam-monitoring/"
+   - "https://dataintelo.com/report/tailings-dam-monitoring-system-market"
+---
+
+**Executive Summary:**
+
+LiDAR (Light Detection and Ranging) is increasingly vital for the precise, real-time monitoring of **tailings dams**—engineered embankments that store mining waste—by offering high-resolution, three-dimensional surface data. The traditional, labor-intensive approaches to tailings dam surveillance, often reliant on periodic visual inspections and ground-based instruments, have struggled to detect early-stage deformations or subsidence with sufficient spatial and temporal coverage. LiDAR addresses these limitations by delivering rapid, remotely-sensed data that enable continuous monitoring and detailed change detection across extensive, hazardous, or inaccessible areas. Integrating LiDAR with other remote sensing modalities (e.g., multispectral, thermal) and data management platforms substantially improves risk assessment, supports proactive maintenance, and enhances safety for both workers and surrounding communities.
+
+Emerging research and industry deployments show LiDAR’s capabilities in monitoring topography, detecting subtle surface movement, and supporting volume calculation for both tailings and water, optimizing operational efficiency and compliance with international standards like the Global Industry Standard on Tailings Management (GISTM). Recent case studies demonstrate successful synergies with AI/ML for anomaly detection and automation with IoT infrastructure—yielding productivity gains and earlier warnings of potential failures. However, challenges remain, particularly around data processing, cost, and the need to combine LiDAR data with traditional monitoring for comprehensive safety outcomes. As LiDAR technology becomes more accessible and integrated, the future of tailings dam monitoring is shifting toward holistic, data-driven strategies, with increasing regulatory, operational, and reputational benefits.
+
+---
+
+**Key Data Points:**
+
+- **LiDAR enables sub-centimeter level accuracy** in topographic mapping, deformation analysis, and volume estimation of tailings facilities, substantially outperforming manual or purely in situ approaches[1].
+- **Global tailings dam monitoring system market reached $1.38 billion in 2024** and is expected to expand due to regulatory and safety imperatives[6].
+- **Drone-mounted LiDAR systems** improve regularity and frequency of scans, reducing safety risks for personnel and enabling more timely detection of anomalies[5].
+- **Integrated remote sensing platforms** (LiDAR + multispectral + thermal data) support early anomaly detection, efficient data collection, and improved environmental sustainability of operations[1][2].
+- **Real-time data integration** with IoT and cloud-based dashboards allows automatic recalculation of safety factors and supports more responsive, data-driven interventions[2].
+
+---
+
+**Recent Findings & Case Studies:**
+
+1. **IMWA 2023—Advanced Monitoring of Tailings Storage Facilities (El Soldado HDS demonstration, Chile):**  
+   - Combined 9 sensor types (including LiDAR and drone surveys) with edge/cloud computing, monitoring 500+ points in real time.
+   - Delivered early warnings, continuous recalculation of safety factors, and supported autonomous remote operation using solar-powered infrastructure.
+   - Highlighted integration with satellite communication for remote sites and practical risk reduction for tailings management[2].
+
+2. **SME 2022/2023—Drone-based LiDAR Monitoring:**  
+   - UAVs equipped with miniaturized LiDAR, RGB, and thermal sensors tailored for dynamic, rapid data acquisition over tailings facilities.
+   - Enabled repeat mapping and change detection with minimal site entry, lowering operational hazards and improving frequency of monitoring[5].
+
+3. **Beeroon Industry Review (2024):**  
+   - LiDAR used for high-resolution topographic surveying, deformation detection, and volumetric analysis in multiple global mining operations.
+   - Demonstrated synergy with multispectral and thermal imaging to uncover seepage, erosion, and environmental impacts, streamlining both operational and environmental compliance processes[1].
+
+---
+--- content/case-studies/payas-islahiye-pilot.mdx ---
+---
+title: "Payas–İslahiye Pilot: Targeting High-Potential Zones"
+publishedAt: 2025-09-10
+summary: "How our AI-MPM workflow shortlisted actionable target zones in the Payas–İslahiye region."
+provenance:
+  - "Landsat 8/9, ASTER L1T imagery (USGS)"
+  - "PALSAR-2 HH/HV polarization data (JAXA)"
+citations:
+  - "USGS Mineral Commodity Summaries 2024"
+image: "/og-default.svg"
+imageAlt: "Prospectivity map preview"
+tags:
+  - Turkey
+  - Bauxite
+  - Pilot
+review_status: approved
+ai_generated: false
+---
+
+## Executive Summary
+
+We applied our AI-MPM workflow to rapidly prioritize exploration targets. The process integrated spectral and radar indicators, yielding a ranked shortlist with field-ready candidates.
+
+## Approach
+
+1. Ingested and harmonized multi-sensor data
+2. Applied AIG-DHA and MF/ANN fusion techniques
+3. Calibrated thresholds against known occurrences
+4. Produced prospectivity layers and confidence bands
+
+Feature engineering included key spectral indices (e.g., NDVI, BSI, band ratios) and texture metrics (e.g., GLCM variance and entropy) derived from multispectral and SAR inputs to strengthen class separability.
+
+## Outcome
+
+- 4 top-ranked zones spanning ~120 km²
+- Confidence bands and rationale layers for auditability
+- Field planning package for rapid ground truthing
+
+===== TYPECHECK / LINT (dry info) =====
+tsconfig present
+
+===== DONE =====

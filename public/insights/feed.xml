@@ -4,9 +4,16 @@
         <description><![CDATA[Insights from Scanminers]]></description>
         <link>https://scanminers.com/insights</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sat, 01 Nov 2025 06:25:40 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 01 Nov 2025 18:11:33 GMT</lastBuildDate>
         <atom:link href="https://scanminers.com/insights/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
+        <item>
+            <title><![CDATA[Advanced Machine Learning for REE Prospectivity Mapping in Carbonatite-Alkaline Complexes]]></title>
+            <description><![CDATA[This article details how Scanminer can deploy Random Forest and XGBoost algorithms—integrated with multispectral and hyperspectral data from ASTER, Sentinel-2, Landsat 8/9, and PRISMA—to map rare earth element (REE) mineralization in carbonatite-alkaline complexes. The approach combines spectral indices, structural analysis, explainability techniques (SHAP), and uncertainty quantification, with rigorous preprocessing and expert review by Dr. Amin Beiranvand Pour. The discussion highlights screening-level outputs, limitations, and comparisons to industry reporting standards (NI 43-101/JORC).]]></description>
+            <link>https://scanminers.com/insights/advanced-ml-ree-prospectivity-carbonatite-alkaline-complexes</link>
+            <guid isPermaLink="false">/insights/advanced-ml-ree-prospectivity-carbonatite-alkaline-complexes</guid>
+            <pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate>
+        </item>
         <item>
             <title><![CDATA[Advances in AI-Powered Bauxite Prospectivity Mapping]]></title>
             <description><![CDATA[A look into how modern AI techniques are revolutionizing the discovery of bauxite deposits, with a focus on our proprietary analysis in the Payas–İslahiye region.]]></description>

@@ -31,31 +31,36 @@ export async function POST(req: Request) {
     if (!ADMIN_ACTION_TOKEN) return new Response('Server not configured', { status: 500 });
     if (adminHeader !== ADMIN_ACTION_TOKEN) return new Response('Unauthorized', { status: 401 });
 
-    const { slug, prompt } = await req.json().catch(() => ({}));
+  const { slug, prompt, branch } = await req.json().catch(() => ({}));
     if (!slug || typeof slug !== 'string' || !/^[a-z0-9-]{1,100}$/.test(slug)) {
       return new Response('Invalid slug', { status: 400 });
     }
 
-    const repoFull = process.env.GITHUB_REPOSITORY || 'scanminer/scanminers-website';
+  const repoFull = process.env.GITHUB_REPOSITORY || 'scanminer/scanminers-website';
     const [owner, repo] = repoFull.split('/');
     const WORKFLOW_DISPATCH_TOKEN = process.env.WORKFLOW_DISPATCH_TOKEN || process.env.CONTENT_BOT_TOKEN || '';
     if (!WORKFLOW_DISPATCH_TOKEN) return new Response('Server missing dispatch token', { status: 500 });
 
-    const ghResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/regenerate-image.yml/dispatches`, {
+  const defaultBranch = process.env.CONTENT_DEFAULT_BRANCH || process.env.GIT_DEFAULT_BRANCH || 'main';
+  // Prefer running workflow on the requested branch so github.ref_name matches content base
+  const ref = branch && typeof branch === 'string' && branch.length <= 120 ? branch : defaultBranch;
+    const url = `https://api.github.com/repos/${owner}/${repo}/actions/workflows/regenerate-image.yml/dispatches`;
+    const headers = {
+      Authorization: `Bearer ${WORKFLOW_DISPATCH_TOKEN}`,
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+      'content-type': 'application/json',
+    } as const;
+
+    // Use minimal inputs for maximum compatibility with older workflow versions on target ref
+    const minimalInputs = {
+      post_slug: slug,
+      ...(prompt ? { prompt } : {}),
+    };
+    const ghResp = await fetch(url, {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${WORKFLOW_DISPATCH_TOKEN}`,
-        Accept: 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28',
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        ref: 'main',
-        inputs: {
-          post_slug: slug,
-          ...(prompt ? { prompt } : {}),
-        },
-      }),
+      headers,
+      body: JSON.stringify({ ref, inputs: minimalInputs }),
     });
 
     if (!ghResp.ok) {

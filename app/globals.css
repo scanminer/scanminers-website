@@ -1,22 +1,70 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  Tailwind v4 tokens and utilities
+  - We expose semantic colors via CSS vars (--bg, --fg, etc.)
+  - Then map them to Tailwind tokens with @theme so classes like bg-bg, text-fg work
+*/
 
-/* Theme tokens are provided via CSS variables; Tailwind classes reference them directly. */
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Light tokens — SpaceX-inspired: crisp white, deep blue accents */
+    --bg: 255 255 255;             /* white */
+    --fg: 15 23 42;                /* slate-900-ish */
+    --muted: 71 85 105;            /* slate-600 */
+    --primary: 0 82 136;           /* deep aerospace blue (#005288) */
+    --primary-fg: 255 255 255;     /* white */
+    --card: 248 250 252;           /* slate-50 */
+    --border: 226 232 240;         /* slate-200 */
+    --ring: 0 82 136;              /* same as primary */
+    --radius: 12px;
+  }
+
+  .dark {
+    /* Dark tokens — SpaceX-inspired: pure black canvas, brighter blue */
+    --bg: 0 0 0;                   /* black */
+    --fg: 243 244 246;             /* gray-100 */
+    --muted: 156 163 175;          /* gray-400 */
+    --primary: 59 130 246;         /* blue-500 for contrast */
+    --primary-fg: 255 255 255;     /* white */
+    --card: 17 24 39;              /* slate-900 */
+    --border: 51 65 85;            /* slate-700 */
+    --ring: 59 130 246;            /* blue-500 */
+    --radius: 12px;
+  }
+
+  html, body {
+    @apply bg-bg text-fg antialiased;
+  }
+
+  * {
+    @apply border-border;
   }
 }
 
+/* Map CSS variables to Tailwind v4 tokens */
+@theme {
+  /* Colors */
+  --color-bg: rgb(var(--bg) / <alpha-value>);
+  --color-fg: rgb(var(--fg) / <alpha-value>);
+  --color-muted: rgb(var(--muted) / <alpha-value>);
+  --color-primary: rgb(var(--primary) / <alpha-value>);
+  --color-primary-fg: rgb(var(--primary-fg) / <alpha-value>);
+  --color-card: rgb(var(--card) / <alpha-value>);
+  --color-border: rgb(var(--border) / <alpha-value>);
+  --color-ring: rgb(var(--ring) / <alpha-value>);
+
+  /* Shadows and radius */
+  --shadow-soft: 0 8px 30px rgba(0,0,0,0.08);
+  --radius: var(--radius);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 12px);
+}
+
+/* Preserve system fonts as fallback; Geist fonts are loaded in layout */
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -49,7 +97,7 @@ body {
 .mdx li { margin: 0.25rem 0; }
 
 .mdx a {
-  color: #2563eb; /* blue-600 */
+  color: rgb(var(--primary));
   text-underline-offset: 3px;
 }
 .mdx a:hover { text-decoration: underline; }
@@ -106,7 +154,7 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  .mdx a { color: #60a5fa; /* blue-400 */ }
+  .mdx a { color: rgb(var(--primary)); }
   .mdx code:not(pre code) { background: rgba(255,255,255,0.08); }
   .mdx blockquote { border-left-color: rgba(255,255,255,0.2); color: #a3a3a3; }
   .mdx hr { border-top-color: rgba(255,255,255,0.12); }
