@@ -38,53 +38,157 @@ export async function generateDraftWithPerplexity(input: {
 }): Promise<DraftJSON> {
   const apiKey = process.env.PERPLEXITY_KEY;
   if (!apiKey) throw new Error("Missing PERPLEXITY_KEY");
+  const envModel = input.model || process.env.PERPLEXITY_MODEL;
 
-  const model =
-    input.model || process.env.PERPLEXITY_MODEL || "llama-3.1-sonar-large-128k-online";
-
-  const r = await fetch("https://api.perplexity.ai/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      temperature: input.temperature ?? 0.3,
-      max_tokens: input.maxTokens ?? 2000,
-      messages: [
-        { role: "system", content: systemPrompt(input.type) },
-        {
-          role: "user",
-          content: [
-            `TOPIC: ${input.topic}`,
-            input.context ? `CONTEXT: ${input.context}` : "",
-            "",
-            "Return JSON ONLY. Do not include code fences or commentary.",
-          ].join("\n"),
-        },
-      ],
-    }),
-  });
-
-  if (!r.ok) {
-    const t = await r.text().catch(() => "");
-    throw new Error(`Perplexity error ${r.status}: ${t}`);
+  // Try to discover permitted models for this key; if it fails, fall back to static list.
+  async function listModels(): Promise<string[]> {
+    try {
+      const endpoints = [
+        "https://api.perplexity.ai/v1/models",
+        "https://api.perplexity.ai/models",
+      ];
+      for (const url of endpoints) {
+        const r = await fetch(url, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        });
+        if (!r.ok) continue;
+        const j = (await r.json()) as { data?: Array<{ id?: string }> };
+        const ids = (j.data || []).map((m) => m.id!).filter(Boolean);
+        if (ids.length) return ids;
+      }
+      return [];
+    } catch {
+      return [];
+    }
   }
 
-  const data = await r.json();
-  const text = data?.choices?.[0]?.message?.content ?? data?.choices?.[0]?.text ?? "";
+  const available = await listModels();
+  const preference = [
+    // Current official Sonar model IDs (per docs)
+    "sonar-reasoning-pro",
+    "sonar-reasoning",
+    "sonar-pro",
+    "sonar",
+    "sonar-deep-research",
+    // Older/alternative families
+    "sonar-large-online",
+    "sonar-medium-online",
+    "sonar-small-online",
+    "sonar-large-chat",
+    "sonar-medium-chat",
+    "sonar-small-chat",
+    "sonar-large",
+    "sonar-medium",
+    "sonar-small",
+  ];
+
+  const discovered = available.length
+    ? preference.filter((m) => available.includes(m))
+    : [];
+
+  const candidates = Array.from(
+    new Set(
+      [
+        envModel,
+        ...discovered,
+        // Static safety net (in case /models endpoint is unavailable)
+        ...preference,
+        // Older naming kept last as a final fallback
+        "llama-3.1-sonar-large-128k-online",
+      ].filter(Boolean) as string[]
+    )
+  );
+
+  let lastErrorText = "";
+  let data: unknown;
+  // Helpful debug in dev to see what we'll try
+  if (process.env.NODE_ENV !== "production") {
+    console.warn(`[perplexity] Candidate models: ${candidates.join(", ")}`);
+  }
+  for (const model of candidates) {
+    const r = await fetch("https://api.perplexity.ai/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        temperature: input.temperature ?? 0.3,
+        max_tokens: input.maxTokens ?? 2000,
+        messages: [
+          { role: "system", content: systemPrompt(input.type) },
+          {
+            role: "user",
+            content: [
+              `TOPIC: ${input.topic}`,
+              input.context ? `CONTEXT: ${input.context}` : "",
+              "",
+              "Return JSON ONLY. Do not include code fences or commentary.",
+            ].join("\n"),
+          },
+        ],
+      }),
+    });
+
+    if (r.ok) {
+      data = await r.json();
+      break;
+    } else {
+      const t = await r.text().catch(() => "");
+      lastErrorText = `Perplexity error ${r.status}: ${t}`;
+      // If invalid model (or not found), try next candidate
+      if (
+        (r.status === 400 && /invalid_model|Invalid model/i.test(t)) ||
+        (r.status === 404 && /model|not\s*found/i.test(t)) ||
+        (r.status === 422 && /model|unsupported/i.test(t))
+      ) {
+        console.warn(`[perplexity] Model '${model}' invalid, trying next fallback...`);
+        continue;
+      }
+      throw new Error(lastErrorText);
+    }
+  }
+
+  if (!data) {
+    throw new Error(
+      (lastErrorText || "Perplexity request failed (no valid model)") +
+        ` | tried models: ${candidates.join(", ")}`
+    );
+  }
+
+  // Narrow minimal shape for reading message content
+  const resp = data as {
+    choices?: Array<{ message?: { content?: string }; text?: string }>;
+  };
+  const text = resp?.choices?.[0]?.message?.content ?? resp?.choices?.[0]?.text ?? "";
 
   // Strip code fences if present
-  const cleaned = text.replace(/^```(json)?/i, "").replace(/```$/i, "").trim();
+  let cleaned = text.replace(/^```(json)?/i, "").replace(/```$/i, "").trim();
+
+  // Sanitize common JSON-breaking artifacts from LLMs
+  // - Replace smart quotes with straight quotes
+  // - Remove zero-width and BOM
+  // - Replace ASCII control chars (including raw newlines in strings) with spaces
+  cleaned = cleaned
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
+    .replace(/[\u0000-\u001F\u007F]/g, " ");
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(cleaned);
   } catch {
+    // Try to recover by extracting the first top-level JSON object
     const match = cleaned.match(/\{[\s\S]*\}$/);
     if (!match) throw new Error("Model did not return valid JSON");
-    parsed = JSON.parse(match[0]);
+    const candidate = match[0]
+      .replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[\u200B-\u200D\u2060\uFEFF]/g, "")
+      .replace(/[\u0000-\u001F\u007F]/g, " ");
+    parsed = JSON.parse(candidate);
   }
 
   const draft = DraftSchema.parse(parsed);
@@ -92,22 +196,30 @@ export async function generateDraftWithPerplexity(input: {
 }
 
 export function toFrontmatterMDX(
-  d: DraftJSON,
-  meta: {
-    type: "insight" | "case" | "brief";
-    slug?: string;
-  }
+  d: DraftJSON
 ): string {
+  // Convert structured citations to simple strings for rendering
+  const citationStrings = Array.isArray(d.citations)
+    ? d.citations.map((c) => {
+        const title = c.title?.trim();
+        const url = c.url.trim();
+        const note = c.note?.trim();
+        return [title, url, note].filter(Boolean).join(" — ");
+      })
+    : [];
+
+  // Drafts must include a valid date for Contentlayer; use today's date
+  const today = new Date().toISOString().slice(0, 10);
+
   const fm = [
     "---",
     `title: ${JSON.stringify(d.title)}`,
     `summary: ${JSON.stringify(d.summary)}`,
     `tags: ${JSON.stringify(d.tags)}`,
-    `citations: ${JSON.stringify(d.citations)}`,
+    `citations: ${JSON.stringify(citationStrings)}`,
     `review_status: "needs-review"`,
     `ai_generated: true`,
-    `publishedAt: null`,
-    `type: ${meta.type}`,
+    `publishedAt: ${today}`,
     "---",
     "",
   ].join("\n");

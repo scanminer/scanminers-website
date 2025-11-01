@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     const draft = await generateDraftWithPerplexity({ topic, context, type });
     const slug = `${slugify(draft.title || topic)}`;
-    const mdx = toFrontmatterMDX(draft, { type, slug });
+  const mdx = toFrontmatterMDX(draft);
 
     if (createPR) {
       const repo = process.env.GH_REPO;

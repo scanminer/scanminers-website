@@ -9,6 +9,11 @@ const ENV_KEYS = [
   "RESEND_TO",
   "SENTRY_DSN",
   "NEXT_PUBLIC_SENTRY_DSN",
+  // Drafting / GitHub automation
+  "PERPLEXITY_KEY",
+  "PERPLEXITY_MODEL",
+  "CONTENT_BOT_TOKEN",
+  "GIT_DEFAULT_BRANCH",
   "ADMIN_USER",
   "ADMIN_PASS",
   "GH_REPO",
