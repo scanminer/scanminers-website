@@ -71,6 +71,34 @@ Image generation & admin actions:
 Local development:
 - Copy `.env.example` → `.env.local` and fill values
 
+### 3.1 Decap CMS login (GitHub OAuth)
+
+This project uses Decap CMS at `/admin` with a custom GitHub OAuth flow implemented at `app/api/decap-auth/auth/route.ts` (Edge runtime). It does NOT use NextAuth/Auth.js.
+
+Cloudflare Pages → Environment variables (set for both Production and Preview):
+
+- `GITHUB_OAUTH_CLIENT_ID` — GitHub OAuth App Client ID (plaintext)
+- `GITHUB_OAUTH_CLIENT_SECRET` — GitHub OAuth App Client Secret (secret)
+
+GitHub OAuth App (github.com → Settings → Developer settings → OAuth Apps):
+
+- Homepage URL: `https://scanminers.com/admin` (or `https://scanminers.com`)
+- Authorization callback URLs (add both):
+  - Production: `https://scanminers.com/api/decap-auth/auth`
+  - Preview: `https://scanminers.pages.dev/api/decap-auth/auth`
+  - (Optional) Local dev: `http://localhost:3000/api/decap-auth/auth`
+
+Notes:
+- The Decap config points to the custom endpoint: `public/admin/config.yml` → `backend.auth_endpoint: api/decap-auth/auth`. The static `base_url` in that file is overridden at runtime by `public/admin/index.html` to the current origin.
+- If `backend.app_id` is present in `config.yml`, keep it in sync with your OAuth App Client ID for clarity. The custom endpoint uses `GITHUB_OAUTH_CLIENT_ID` from env when constructing the authorize URL.
+- Since NextAuth is not used here, you do not need `NEXTAUTH_URL` or `NEXTAUTH_SECRET`.
+
+Test login:
+1. Deploy with the env vars above set in Cloudflare Pages.
+2. Visit `/admin` and click “Login with GitHub”. A popup should open and close automatically, then Decap loads the collections.
+3. If you see “redirect URI mismatch,” add/update the exact callback URL(s) in the GitHub OAuth App.
+4. If you see state/CSRF issues, ensure the site is on HTTPS and that you are using the correct domain (Pages preview vs production). Cookies are `SameSite=Lax` and `Secure` on HTTPS.
+
 ---
 
 ## 4. Deployment (Cloudflare Pages)
