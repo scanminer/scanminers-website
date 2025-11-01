@@ -214,7 +214,59 @@ git tag -a v0.1.0 -m "Baseline: stable content build, QA checks, tests, and CI c
 git push origin v0.1.0
 ```
 
----
+### 10.3 Solo maintainer mode
+
+If only one maintainer has write access (no second reviewer), you can keep strict quality without approvals by enforcing checks and setting required approvals to 0.
+
+Policy (recommended for solo):
+- Keep required status checks: `build`, `content:check`, `lint`, `test`, `test:e2e` (strict/up-to-date)
+- Set “required approving reviews” = 0
+- Keep “enforce admins” enabled so rules apply to admins too
+
+CLI example to toggle:
+
+```
+# Set approvals to 0 (solo mode)
+gh api -X PUT repos/<owner>/<repo>/branches/main/protection -H "Accept: application/vnd.github+json" --input - <<'JSON'
+{
+  "required_status_checks": {
+    "strict": true,
+    "checks": [
+      {"context": "build"},
+      {"context": "content:check"},
+      {"context": "lint"},
+      {"context": "test"},
+      {"context": "test:e2e"}
+    ]
+  },
+  "enforce_admins": true,
+  "required_pull_request_reviews": {"required_approving_review_count": 0},
+  "restrictions": null
+}
+JSON
+
+# Restore to 1 approval when a second reviewer is available
+gh api -X PUT repos/<owner>/<repo>/branches/main/protection -H "Accept: application/vnd.github+json" --input - <<'JSON'
+{
+  "required_status_checks": {
+    "strict": true,
+    "checks": [
+      {"context": "build"},
+      {"context": "content:check"},
+      {"context": "lint"},
+      {"context": "test"},
+      {"context": "test:e2e"}
+    ]
+  },
+  "enforce_admins": true,
+  "required_pull_request_reviews": {"required_approving_review_count": 1},
+  "restrictions": null
+}
+JSON
+```
+
+Note: Even with 0 approvals, merges are still blocked until all required checks pass. This preserves build and content quality when you’re solo.
+
 
 ## 11. Next steps (optional)
 
