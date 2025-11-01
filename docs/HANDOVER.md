@@ -184,6 +184,36 @@ Incident: Excessive spam through contact
 - CI runs on every push/PR
 - Releases can be tagged in Git as needed (no strict versioning required for this site)
 
+### 10.1 Branch protection and required checks
+
+Protect `main` via GitHub → Settings → Branches → Add rule:
+
+- Require pull request reviews (at least 1)
+- Require status checks to pass before merging
+- Require branches to be up to date before merging
+- Restrict who can push (disable direct pushes)
+
+Required checks to select (provided by `.github/workflows/checks.yml`):
+
+- `build`
+- `content:check`
+- `lint`
+- `test`
+- `test:e2e`
+
+Husky + lint-staged run locally to prevent low-quality commits. If you need to bypass hooks for emergency fixes, use `--no-verify` and follow up with a quality pass.
+
+### 10.2 Tagging a baseline release
+
+After merging significant changes, create a lightweight tag:
+
+```
+git checkout main
+git pull --ff-only
+git tag -a v0.1.0 -m "Baseline: stable content build, QA checks, tests, and CI checks"
+git push origin v0.1.0
+```
+
 ---
 
 ## 11. Next steps (optional)
