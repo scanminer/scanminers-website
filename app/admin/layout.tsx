@@ -5,6 +5,9 @@ export const metadata = {
   title: "Admin",
 };
 
+// Ensure the entire /admin subtree runs on the Edge runtime for Cloudflare Pages
+export const runtime = "edge";
+
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
