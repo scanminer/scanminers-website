@@ -31,6 +31,16 @@ async function writeFileAtomic(filePath: string, content: string) {
 
 export async function POST(req: NextRequest) {
   try {
+    if (
+      process.env.NODE_ENV === "production" &&
+      process.env.ENABLE_INITIATE_API !== "true"
+    ) {
+      return NextResponse.json(
+        { ok: false, error: "Disabled in production" },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const { title, context, tags } = InputSchema.parse(body);
 

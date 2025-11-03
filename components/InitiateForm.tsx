@@ -41,6 +41,10 @@ export default function InitiateForm() {
 
   const briefPath =
     res && "ok" in res && res.ok ? res.filePath : undefined;
+  const ghRepo = process.env.NEXT_PUBLIC_GITHUB_REPO;
+  const workflowUrl = ghRepo
+    ? `https://github.com/${ghRepo}/actions/workflows/generate-draft-with-gpt.yml`
+    : undefined;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -105,6 +109,14 @@ export default function InitiateForm() {
                 <pre className="mt-1 whitespace-pre-wrap break-all rounded bg-gray-100 p-2">
                   {`node scripts/generate-draft-with-gpt.mjs ${briefPath}`}
                 </pre>
+                {workflowUrl && (
+                  <div className="text-sm">
+                    Or trigger in CI: {" "}
+                    <a className="underline" href={workflowUrl} target="_blank" rel="noreferrer">
+                      Generate LiDAR Draft (GPT)
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
