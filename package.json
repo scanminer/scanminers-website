@@ -19,7 +19,8 @@
     "test": "vitest --run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate:draft:gpt": "node scripts/generate-draft-with-gpt.mjs"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
@@ -51,7 +52,12 @@
     "gray-matter": "^4.0.3",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
+    "js-yaml": "^4.1.0",
+    "openai": "^4.73.0",
     "pagefind": "^1.4.0",
+    "prettier": "^3.3.3",
+    "simple-git": "^3.25.0",
+    "@mermaid-js/mermaid-cli": "^10.9.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.6"
