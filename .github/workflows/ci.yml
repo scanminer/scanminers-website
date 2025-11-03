@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Verify Edge routes are safe
+        run: npm run verify:edge-routes
+
       - name: Generate contentlayer types
         run: npm run contentlayer
 
