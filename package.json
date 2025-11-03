@@ -20,7 +20,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "prepare": "husky",
-    "generate:draft:gpt": "node scripts/generate-draft-with-gpt.mjs"
+    "generate:draft:gpt": "node scripts/generate-draft-with-gpt.mjs",
+    "verify:edge-routes": "node scripts/verify-edge-routes.js"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
