@@ -9,6 +9,7 @@ import prettier from "prettier";
 import { execSync } from "child_process";
 import simpleGit from "simple-git";
 import OpenAI from "openai";
+import { optimize } from "svgo";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -60,9 +61,16 @@ if (MOCK && fs.existsSync(MOCK)) {
 
 if (!payload) {
   const client = new OpenAI({ apiKey: OPENAI_API_KEY });
+  async function withBackoff(fn, { tries = 3, base = 500 } = {}) {
+    let lastErr;
+    for (let i = 0; i < tries; i++) {
+      try { return await fn(); } catch (e) { lastErr = e; await new Promise(r => setTimeout(r, base * Math.pow(2, i))); }
+    }
+    throw lastErr;
+  }
   let completion;
   try {
-    completion = await client.chat.completions.create({
+    completion = await withBackoff(() => client.chat.completions.create({
       model: OPENAI_MODEL,
       temperature: 0.2,
       response_format: { type: "json_object" },
@@ -70,7 +78,7 @@ if (!payload) {
         { role: "system", content: systemMsg },
         { role: "user", content: userMsg }
       ],
-    });
+    }));
   } catch (err) {
     console.error("OpenAI API error:", err?.response?.data || err.message || err);
     process.exit(1);
@@ -101,6 +109,18 @@ fs.mkdirSync(imagesDir, { recursive: true });
 // 5) Render figures
 // Initialize MDX so we can append fallbacks/placeholders during rendering
 let mdxOut = article_mdx || "";
+function figAlt(f) { return (f && (f.alt || f.title)) || (f && f.id) || "figure"; }
+function shrinkSVG(svgPath) {
+  try {
+    const raw = fs.readFileSync(svgPath, "utf8");
+    const { data } = optimize(raw, { multipass: true });
+    fs.writeFileSync(svgPath, data);
+    const kb = Buffer.byteLength(data) / 1024;
+    if (kb > 1024) console.warn(`SVG >1MB: ${svgPath} (${kb | 0} KB)`);
+  } catch (e) {
+    console.warn("SVGO optimization failed for", svgPath, e?.message || e);
+  }
+}
 for (const fig of figures) {
   try {
     if (fig.type === "mermaid") {
@@ -109,6 +129,7 @@ for (const fig of figures) {
       const outSvg = path.join(imagesDir, `${fig.id}.svg`);
       writeText(tmpMmd, fig.code);
       execSync(`npx --yes @mermaid-js/mermaid-cli -i "${tmpMmd}" -o "${outSvg}"`, { stdio: "inherit" });
+      shrinkSVG(outSvg);
     } else if (fig.type === "python") {
       // Run python to produce an SVG with the expected name
       const tmpPy = path.join(imagesDir, `${fig.id}.py`);
@@ -120,6 +141,8 @@ for (const fig of figures) {
       const env = { ...process.env };
       if (!env.MPLBACKEND) env.MPLBACKEND = "Agg"; // headless-safe
       execSync(`python3 "${tmpPy}"`, { stdio: "inherit", env });
+      const outSvg = path.join(imagesDir, `${fig.id}.svg`);
+      if (fs.existsSync(outSvg)) shrinkSVG(outSvg);
     } else if (fig.type === "table") {
       // No render; will embed Markdown directly later
     }
@@ -135,14 +158,16 @@ for (const fig of figures) {
 }
 
 // 6) Inject images into MDX (replace <!--FIG:id--> placeholders if present)
-mdxOut = mdxOut.replace(/<!--FIG:([\w-]+)-->/g, (_m, id) =>
-  `![${id}](\/images\/generated\/${slug}\/${id}.svg)`);
+mdxOut = mdxOut.replace(/<!--FIG:([\w-]+)-->/g, (_m, id) => {
+  const f = figures.find(x => x.id === id);
+  return `![${figAlt(f)}](\/images\/generated\/${slug}\/${id}.svg)`;
+});
 
 // If no placeholders, gently append figures at end:
 const usedIds = [...article_mdx.matchAll(/<!--FIG:([\w-]+)-->/g)].map(m => m[1]);
 for (const f of figures) {
   if ((f.type === "mermaid" || f.type === "python") && !usedIds.includes(f.id)) {
-    mdxOut += `\n\n![${f.title || f.id}](\/images\/generated\/${slug}\/${f.id}.svg)\n`;
+    mdxOut += `\n\n![${figAlt(f)}](\/images\/generated\/${slug}\/${f.id}.svg)\n`;
   }
   if (f.type === "table" && f.markdown) {
     mdxOut += `\n\n**${f.title || "Table"}**\n\n${f.markdown}\n`;

@@ -25,6 +25,25 @@ npm run dev
 
 Open http://localhost:3000
 
+### Glossary (Scanminers content flow)
+- **Decap CMS** – Headless CMS at `/admin` for Briefs/edits.
+- **Brief** – Short spec (frontmatter + notes) that seeds a draft.
+- **Worker merges** – Auto-merge when `review_status: approved` and `publishedAt <= now`.
+- **Insight / Case Study** – Long-form article types (different frontmatter).
+- **Figures** – Mermaid (workflow) + Matplotlib (conceptual heatmaps), rendered to SVG.
+- **Cover** – 16:9 WEBP via Stability AI, stored in `/public/images/uploads/`.
+
+### Content flow (side-by-side)
+
+| Step | Insight | Case Study | Brief |
+|---|---|---|---|
+| Create | CMS “New Brief” or `content/briefs/<slug>.md` | CMS “New Brief (case)” | CMS “New Brief” |
+| Generate | `generate-draft-with-gpt.mjs` → `content/insights/<slug>/index.mdx` | same script → `content/case-studies/<slug>/index.mdx` | (A) publish short note OR (B) promote to Insight/Case via generator |
+| Figures | Mermaid + Matplotlib SVGs | Mermaid timelines, optional Matplotlib | Optional (usually none) |
+| Cover | Stability AI WEBP | Stability AI WEBP | Optional |
+| Review/QA | PR + section/citation checks | PR + section/citation checks | Light review |
+| Publish | Approve → auto-merge | Approve → auto-merge | Publish directly or promote |
+
 ## Environment variables
 
 See `.env.example` for the full list. These same keys should be added in Cloudflare Pages → Project settings → Environment variables (Production and Preview environments).
@@ -108,6 +127,47 @@ If a secret is exposed or you wish to rotate periodically:
 Additional docs:
 - Handover: `docs/HANDOVER.md`
 - Changelog: `CHANGELOG.md`
+
+## Case Study specifics
+
+Frontmatter template:
+
+```yaml
+---
+title: "<Case Study: <Project/Asset>>"
+slug: "<kebab-slug>"
+client: "<redacted or name>"
+provenance: "<internal/external/public>"
+outcomes:
+	- "<metric or qualitative outcome>"
+	- "<e.g., earlier warnings or saved inspections>"
+confidentiality: "public|client-approved|internal"
+publishedAt: "YYYY-MM-DD"
+tags: ["TSF","LiDAR","GISTM"]
+review_status: "needs-review"
+ai_generated: true
+---
+```
+
+Prompt delta (add to the case-study user prompt):
+
+```
+Emphasize problem→approach→results→lessons learned. Include “Context, Objectives, Approach, Results, Lessons, Next Steps” sections. Use neutral tone; no vendor claims. Respect confidentiality and provenance.
+```
+
+## Generator troubleshooting
+
+- Invalid JSON from GPT → re-run; for fast tests set `GENERATOR_MOCK_JSON=scripts/fixtures/lidar-mock.json`.
+- PR not created → locally ensure `GH_TOKEN` has repo `contents` + `pull_requests`; in CI use `GITHUB_TOKEN` with `permissions: contents: write, pull-requests: write`.
+- Mermaid CLI fails in CI → relies on fenced Mermaid fallback (client-side render).
+- Matplotlib display error → set `MPLBACKEND=Agg` and pin versions (see CI workflow).
+- Rate limit / 5xx → backoff retries are built-in; try again later if exhausted.
+- Brief misrouted → ensure `status: New Brief` and your action filters avoid re-triggers.
+
+### When to pick Brief A vs B
+
+- A (publish brief as-is): quick research notes, link roundups, short updates.
+- B (promote to long-form): stable outline + Source Pack ready → run the generator for full draft + figures/SEO.
 
 ## Image generation and regeneration
 

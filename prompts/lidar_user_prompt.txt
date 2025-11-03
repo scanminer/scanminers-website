@@ -18,3 +18,5 @@ In `article_mdx`, insert these placeholders at sensible spots to be replaced by 
 Use this frontmatter to adapt title, date, tags, and any topic context:
 {{BRIEF_FRONTMATTER}}
 {{BRIEF_BODY}}
+
+For each figure in the `figures` array, include descriptive `title` and `alt` fields (accessibility). The generator will use `alt` (or `title`) as the image alt text.
