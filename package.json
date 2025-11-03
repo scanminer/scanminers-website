@@ -28,6 +28,7 @@
     "contentlayer": "^0.3.4",
     "next": "15.5.4",
     "next-contentlayer": "^0.3.4",
+    "react-hook-form": "^7.53.0",
     "plaiceholder": "^3.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
