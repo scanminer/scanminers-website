@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = process.env.NODE_ENV === "development" ? "nodejs" : "edge";
+// Must be a literal for Next.js; this route is dev-only but built on Pages (Edge)
+export const runtime = "edge";
 export const revalidate = 0;
 
 function kebab(s: string) {
@@ -24,11 +25,11 @@ export async function POST(req: NextRequest) {
 
     // Dynamically import Node-only modules to avoid bundling issues for Edge builds
     const [{ default: matter }, { default: simpleGit }, path, fs, { z }] = await Promise.all([
-      import("gray-matter"),
-      import("simple-git"),
-      import("path"),
-      import("fs"),
-      import("zod"),
+      import(/* webpackIgnore: true */ "gray-matter"),
+      import(/* webpackIgnore: true */ "simple-git"),
+      import(/* webpackIgnore: true */ "path"),
+      import(/* webpackIgnore: true */ "fs"),
+      import(/* webpackIgnore: true */ "zod"),
     ]);
 
     const InputSchema = z.object({

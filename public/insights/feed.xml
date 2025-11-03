@@ -4,9 +4,16 @@
         <description><![CDATA[Insights from Scanminers]]></description>
         <link>https://scanminers.com/insights</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Mon, 03 Nov 2025 18:12:44 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 03 Nov 2025 18:35:44 GMT</lastBuildDate>
         <atom:link href="https://scanminers.com/insights/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
+        <item>
+            <title><![CDATA[Using LiDAR for Tailings Dam Monitoring]]></title>
+            <description><![CDATA[Practitioner-grade guide to LiDAR-based tailings dam monitoring with a GISTM-aligned operations playbook, integration steps, and illustrative figures for decision-makers.]]></description>
+            <link>https://scanminers.com/insights/using-lidar-for-tailings-dam-monitoring</link>
+            <guid isPermaLink="false">/insights/using-lidar-for-tailings-dam-monitoring</guid>
+            <pubDate>Mon, 03 Nov 2025 17:55:07 GMT</pubDate>
+        </item>
         <item>
             <title><![CDATA[Advances in AI-Powered Bauxite Prospectivity Mapping]]></title>
             <description><![CDATA[A look into how modern AI techniques are revolutionizing the discovery of bauxite deposits, with a focus on our proprietary analysis in the Payas–İslahiye region.]]></description>
