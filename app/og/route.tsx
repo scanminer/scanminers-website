@@ -1,19 +1,30 @@
 export const runtime = 'edge';
 
 import { ImageResponse } from 'next/og';
-import tokens from '../../design/brand.tokens.json' assert { type: 'json' };
+
+// Minimal inline brand palette to avoid external JSON dependency in this minimal PR
+const brand = {
+  colors: {
+    bg: '#0b1120', // slate-950
+    fg: '#e5e7eb', // gray-200
+    primary: '#f97316', // orange-500
+    accent: '#14b8a6', // teal-500
+    muted: '#9ca3af', // gray-400
+    stroke: '#334155', // slate-700
+  },
+};
 
 // Quick colorway mapping derived from tokens
 const colorways = {
   'slate-orange': {
-    bg: tokens.colors.bg,
-    fg: tokens.colors.fg,
-    accent: tokens.colors.primary,
+    bg: brand.colors.bg,
+    fg: brand.colors.fg,
+    accent: brand.colors.primary,
   },
   'slate-teal': {
-    bg: tokens.colors.bg,
-    fg: tokens.colors.fg,
-    accent: tokens.colors.accent,
+    bg: brand.colors.bg,
+    fg: brand.colors.fg,
+    accent: brand.colors.accent,
   },
 } as const;
 
@@ -49,7 +60,7 @@ export async function GET(req: Request) {
           }}
         />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 1280 }}>
-          <div style={{ fontSize: 28, letterSpacing: 2, textTransform: 'uppercase', color: tokens.colors.muted }}>
+          <div style={{ fontSize: 28, letterSpacing: 2, textTransform: 'uppercase', color: brand.colors.muted }}>
             {kicker}
           </div>
           <div style={{ fontSize: 80, fontWeight: 700, lineHeight: 1.1 }}>{title}</div>
@@ -63,7 +74,7 @@ export async function GET(req: Request) {
                 boxShadow: `0 0 40px ${accent}66`,
               }}
             />
-            <div style={{ fontSize: 26, color: tokens.colors.muted }}>scanminers.com</div>
+            <div style={{ fontSize: 26, color: brand.colors.muted }}>scanminers.com</div>
           </div>
         </div>
         {/* Corner mark */}
@@ -72,11 +83,11 @@ export async function GET(req: Request) {
             position: 'absolute',
             right: 80,
             bottom: 80,
-            border: `2px solid ${tokens.colors.stroke}`,
+            border: `2px solid ${brand.colors.stroke}`,
             borderRadius: 16,
             padding: '10px 14px',
             fontSize: 24,
-            color: tokens.colors.muted,
+            color: brand.colors.muted,
           }}
         >
           On-Brand Cover

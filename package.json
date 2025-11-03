@@ -19,7 +19,8 @@
     "test": "vitest --run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "og:fetch": "node scripts/fetch-og-covers.mjs"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
