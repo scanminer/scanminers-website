@@ -10,6 +10,7 @@ export const Brief = defineDocumentType(() => ({
   filePathPattern: `briefs/**/*.md`,
   contentType: 'markdown',
   fields: {
+    slug: { type: 'string', required: false },
     title: { type: 'string', required: false },
     context: { type: 'string', required: false },
     status: {
