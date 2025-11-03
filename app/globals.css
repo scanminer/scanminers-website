@@ -11,12 +11,13 @@
 
 /* Theme tokens are provided via CSS variables; Tailwind classes reference them directly. */
 
+/* Lock the site to a light theme regardless of OS prefers-color-scheme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --muted-foreground: #d1d5db; /* gray-300 */
-    --border-color: rgba(255,255,255,0.10);
+    --background: #ffffff;
+    --foreground: #171717;
+    --muted-foreground: #525252; /* neutral-600 */
+    --border-color: rgba(0,0,0,0.1);
   }
 }
 
@@ -111,12 +112,4 @@ body {
   margin: 1rem 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  .mdx a { color: #60a5fa; /* blue-400 */ }
-  .mdx code:not(pre code) { background: rgba(255,255,255,0.08); }
-  .mdx blockquote { border-left-color: rgba(255,255,255,0.2); color: #a3a3a3; }
-  .mdx hr { border-top-color: rgba(255,255,255,0.12); }
-  .mdx th,
-  .mdx td { border-color: rgba(255,255,255,0.12); }
-  .mdx thead th { background: rgba(255,255,255,0.05); }
-}
+/* Remove dark-mode overrides to keep consistent light styling */
