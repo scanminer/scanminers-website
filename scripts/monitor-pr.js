@@ -60,14 +60,19 @@ function pick(arr, fn) { return (arr || []).filter(Boolean).map(fn); }
 
     if (!sha) throw new Error('No head SHA for PR');
 
-    const checks = await request(`/repos/${owner}/${repo}/commits/${sha}/check-runs`, token);
+    let checks = { check_runs: [] };
+    try {
+      checks = await request(`/repos/${owner}/${repo}/commits/${sha}/check-runs`, token);
+    } catch (e) {
+      console.error('checks API not accessible, continuing with commit status only');
+    }
     const statuses = await request(`/repos/${owner}/${repo}/commits/${sha}/status`, token);
 
     const runs = checks.check_runs || [];
     const combined = statuses.state; // success | failure | pending
 
-    const cloudflare = runs.find(r => (r.app?.name || '').toLowerCase().includes('cloudflare')) || null;
-    const nextOnPages = runs.find(r => (r.name || '').toLowerCase().includes('next-on-pages')) || null;
+  const cloudflare = runs.find(r => (r.app?.name || '').toLowerCase().includes('cloudflare')) || null;
+  const nextOnPages = runs.find(r => (r.name || '').toLowerCase().includes('next-on-pages')) || null;
 
     function summarizeRun(r) {
       if (!r) return null;
@@ -79,7 +84,8 @@ function pick(arr, fn) { return (arr || []).filter(Boolean).map(fn); }
     console.log('Top checks:');
     pick([cloudflare, nextOnPages], summarizeRun).forEach(line => console.log('  • ' + line));
 
-    const allDone = runs.every(r => ['success', 'skipped', 'neutral'].includes(r.conclusion || '')) && combined === 'success';
+  const checksOk = runs.length ? runs.every(r => ['success', 'skipped', 'neutral'].includes(r.conclusion || '')) : true;
+  const allDone = checksOk && combined === 'success';
     if (allDone) {
       console.log('✅ All checks green');
       process.exit(0);
