@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  /* Muted foreground for secondary text */
+  --muted-foreground: #525252; /* neutral-600 */
+  /* Border color token if needed */
+  --border-color: rgba(0,0,0,0.1);
 }
 
 /* Theme tokens are provided via CSS variables; Tailwind classes reference them directly. */
@@ -11,6 +15,8 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --muted-foreground: #d1d5db; /* gray-300 */
+    --border-color: rgba(255,255,255,0.10);
   }
 }
 

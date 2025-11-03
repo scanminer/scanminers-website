@@ -22,7 +22,7 @@ export default function Home() {
         {/* Hero */}
         <section className="py-8 sm:py-12">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">AI-Powered Mineral Prospectivity Mapping for the Critical Materials Transition</h1>
-          <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">We fuse remote sensing, geophysics, geochemistry, and geology with AI to reveal high-potential zones of critical minerals—at regional to global scale.</p>
+          <p className="mt-4 text-lg text-[color:var(--muted-foreground)]">We fuse remote sensing, geophysics, geochemistry, and geology with AI to reveal high-potential zones of critical minerals—at regional to global scale.</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/contact" className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">
               Request a Prospectivity Demo
@@ -36,7 +36,7 @@ export default function Home() {
         {/* Why Now */}
         <section className="py-8 sm:py-12 border-t border-black/10 dark:border-white/10">
           <h2 className="text-2xl font-semibold">Why Now</h2>
-          <div className="mt-4 space-y-3 text-gray-700 dark:text-gray-300">
+          <div className="mt-4 space-y-3 text-[color:var(--muted-foreground)]">
             <p>Energy-transition demand lifted lithium materially in 2024; nickel, cobalt, graphite, and rare earths also grew.</p>
             <p>Supply concentration and export controls keep risks elevated.</p>
             <p>Faster targeting · Lower cost per discovery · Smaller environmental footprint</p>
@@ -66,7 +66,7 @@ export default function Home() {
                     <h3 className="text-xl font-semibold group-hover:text-blue-600">{s.title}</h3>
                   </Link>
                   <time className="block text-sm text-gray-500 mt-1">{formatDate(s.publishedAt)}</time>
-                  {s.summary && <p className="mt-2 text-gray-700 dark:text-gray-300">{s.summary}</p>}
+                  {s.summary && <p className="mt-2 text-[color:var(--muted-foreground)]">{s.summary}</p>}
                 </li>
               ))}
             </ul>
@@ -88,7 +88,7 @@ export default function Home() {
                     <h3 className="text-xl font-semibold group-hover:text-blue-600">{p.title}</h3>
                   </Link>
                   <time className="block text-sm text-gray-500 mt-1">{formatDate(p.publishedAt)}</time>
-                  {p.summary && <p className="mt-2 text-gray-700 dark:text-gray-300">{p.summary}</p>}
+                  {p.summary && <p className="mt-2 text-[color:var(--muted-foreground)]">{p.summary}</p>}
                 </li>
               ))}
             </ul>
