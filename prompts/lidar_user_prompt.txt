@@ -1,0 +1,13 @@
+Return a single JSON with keys: article_mdx, seo, figures, citations.
+
+Constraints:
+- Words: 1,400–1,900.
+- Header: H1 title, date line "October 12, 2025", author "Scanminers Editorial Team".
+- Sections: TL;DR; a shaded Executive Summary (<aside> okay); Why continuous monitoring; How LiDAR works; Operations Playbook (GISTM-aligned); Case Evidence & Performance; Systems Integration; Costs/Risks/Limitations; Future Trends; Actionable Recommendations (maturity ladder, minimal stack, pairing, cadences, acceptance, reporting templates); Conclusion + exact CTA.
+- SEO: meta_title (≤60 chars), meta_description (≤155), 8–12 keywords.
+- Figures:
+  - table-1 (Markdown table): UAV vs Terrestrial vs Aerial (point density, typical accuracy, coverage, constraints, use cases).
+  - fig-1 (Mermaid): capture → QC/QA → registration → DEM/DSM → DoD → thresholds → alerts → reporting.
+  - fig-2 (Python/matplotlib): synthetic DoD heatmap (crest settlement + downstream movement). Caption must include “Illustrative—no site data.”
+- Hard rules: Include the $1.38B (2024) market size [Dataintelo, 2024] and the IMWA specifics: 9 sensor types, 500+ points, solar-powered, satellite comms, continuous safety-factor recalculation [Stanley et al., 2023].
+- Use only the Source Pack; remove or rewrite any claim without support.
