@@ -1,18 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import fs from "fs";
-import { z } from "zod";
-import matter from "gray-matter";
-import simpleGit from "simple-git";
 
-export const runtime = "nodejs";
+export const runtime = process.env.NODE_ENV === "development" ? "nodejs" : "edge";
 export const revalidate = 0;
-
-const InputSchema = z.object({
-  title: z.string().min(5),
-  context: z.string().optional().default(""),
-  tags: z.array(z.string()).optional().default([]),
-});
 
 function kebab(s: string) {
   return s
@@ -24,16 +13,29 @@ function kebab(s: string) {
     .replace(/^-|-$/g, "");
 }
 
-async function writeFileAtomic(filePath: string, content: string) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  await fs.promises.writeFile(filePath, content, "utf8");
-}
-
 export async function POST(req: NextRequest) {
   try {
     if (process.env.NODE_ENV !== "development") {
-      return NextResponse.json({ ok: false, error: "initiate-local is for local development only" }, { status: 403 });
+      return NextResponse.json(
+        { ok: false, error: "initiate-local is disabled (dev-only). Use /admin/initiate locally or the GitHub Action in prod." },
+        { status: 403 }
+      );
     }
+
+    // Dynamically import Node-only modules to avoid bundling issues for Edge builds
+    const [{ default: matter }, { default: simpleGit }, path, fs, { z }] = await Promise.all([
+      import("gray-matter"),
+      import("simple-git"),
+      import("path"),
+      import("fs"),
+      import("zod"),
+    ]);
+
+    const InputSchema = z.object({
+      title: z.string().min(5),
+      context: z.string().optional().default(""),
+      tags: z.array(z.string()).optional().default([]),
+    });
 
     const body = await req.json();
     const { title, context, tags } = InputSchema.parse(body);
@@ -58,7 +60,8 @@ export async function POST(req: NextRequest) {
     };
     const md = matter.stringify(context || "", fm);
 
-    await writeFileAtomic(absPath, md);
+    fs.mkdirSync(path.dirname(absPath), { recursive: true });
+    await fs.promises.writeFile(absPath, md, "utf8");
 
     let branch = `brief/${slug}`;
     try {
