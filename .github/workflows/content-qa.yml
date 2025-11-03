@@ -35,6 +35,26 @@ jobs:
       - run: npm ci
         if: steps.content-changes.outputs.has_content_changes == 'true'
 
+      - name: Determine changed MDX files
+        if: steps.content-changes.outputs.has_content_changes == 'true'
+        id: diff
+        run: |
+          set -euo pipefail
+          base="${{ github.base_ref }}"
+          git fetch --no-tags --depth=2 origin "$base"
+          files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -E '^content/.+/index\.mdx$' || true)
+          echo "changed=$files" >> $GITHUB_OUTPUT
+
+      - name: Required sections check
+        if: steps.content-changes.outputs.has_content_changes == 'true' && steps.diff.outputs.changed != ''
+        run: |
+          node scripts/required-sections.js ${{ steps.diff.outputs.changed }}
+
+      - name: Citation whitelist check
+        if: steps.content-changes.outputs.has_content_changes == 'true' && steps.diff.outputs.changed != ''
+        run: |
+          node scripts/ensure-citations.js ${{ steps.diff.outputs.changed }}
+
       - name: Contentlayer Validation
         if: steps.content-changes.outputs.has_content_changes == 'true'
         run: npx contentlayer build

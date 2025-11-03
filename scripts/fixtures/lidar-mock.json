@@ -1,0 +1,39 @@
+{
+  "article_mdx": "# Using LiDAR for Tailings Dam Monitoring\n\nOctober 12, 2025 — Scanminers Editorial Team\n\n## TL;DR\nShort TL;DR.\n\n<aside>Executive Summary block</aside>\n\n<!--FIG:table-1-->\n\n## Why continuous monitoring\nA paragraph with context [Beeroon, 2024].\n\n## How LiDAR works\nBasics and modalities [SME, 2023].\n\n<!--FIG:fig-1-->\n\n## Operations Playbook (GISTM-aligned)\nPractical steps.\n\n## Case Evidence & Performance\nIMWA specifics: 9 sensor types, 500+ points, solar-powered, satellite comms, continuous safety-factor recalculation [Stanley et al., 2023].\n\n## Systems Integration\nPipelines and alerts.\n\n## Costs/Risks/Limitations\nInclude $1.38B (2024) market size [Dataintelo, 2024].\n\n<!--FIG:fig-2-->\n\n## Future Trends\nMarket and tech [Growth Market Reports, 2024].\n\n## Actionable Recommendations\nMaturity ladder, minimal stack, cadences.\n\n## Conclusion\nClear CTA.\n",
+  "seo": {
+    "meta_title": "LiDAR for Tailings Dam Monitoring",
+    "meta_description": "Practitioner-grade guide to using LiDAR for TSF monitoring, with figures and GISTM-aligned playbook.",
+    "keywords": ["LiDAR","TSF","GISTM","remote sensing","DoD","UAV","DEM","mining safety","survey","monitoring"]
+  },
+  "figures": [
+    {
+      "id": "table-1",
+      "type": "table",
+      "title": "Acquisition options",
+      "alt": "Table comparing UAV, terrestrial, and aerial LiDAR options.",
+      "markdown": "| Platform | Point density | Typical accuracy | Coverage | Constraints | Use cases |\n|---|---|---|---|---|---|\n| UAV | High | ~2–5 cm | Site-scale | Weather, flight regs | frequent DoD |\n| Terrestrial | Very high | ~1–2 cm | Localized | Line-of-sight | detailed scans |\n| Aerial | Moderate | ~10–30 cm | Region-scale | Cost, logistics | regional screening |"
+    },
+    {
+      "id": "fig-1",
+      "type": "mermaid",
+      "title": "Processing pipeline",
+      "alt": "Mermaid diagram of LiDAR processing from capture to reporting.",
+      "code": "flowchart LR\n  A[capture]-->B(QC/QA)-->C[registration]-->D[DEM/DSM]-->E[DoD]-->F[thresholds]-->G[alerts]-->H[reporting]"
+    },
+    {
+      "id": "fig-2",
+      "type": "python",
+      "title": "Synthetic DoD heatmap",
+      "alt": "Illustrative heatmap showing crest settlement and slight downstream movement.",
+      "code": "import numpy as np\nimport matplotlib.pyplot as plt\nnp.random.seed(0)\nx = np.linspace(-3,3,200)\ny = np.linspace(-3,3,200)\nX,Y = np.meshgrid(x,y)\nZ = -0.2*np.exp(-(X**2+(Y-1)**2)) + 0.05*np.exp(-((X+1.5)**2+(Y+1.2)**2)) + 0.01*np.random.normal(size=X.shape)\nplt.figure(figsize=(6,4))\nim = plt.imshow(Z, cmap='RdBu_r', origin='lower', extent=[x.min(),x.max(),y.min(),y.max()])\nplt.colorbar(im,label='DoD (m)')\nplt.title('Synthetic DoD heatmap — Illustrative—no site data.')\n"
+    }
+  ],
+  "citations": [
+    "Beeroon, 2024",
+    "Stanley et al., 2023",
+    "SME, 2023",
+    "CDC Stacks, 2023",
+    "Dataintelo, 2024",
+    "Growth Market Reports, 2024"
+  ]
+}
