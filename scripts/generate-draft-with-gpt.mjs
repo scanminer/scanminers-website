@@ -11,6 +11,16 @@ import simpleGit from "simple-git";
 import OpenAI from "openai";
 import { optimize } from "svgo";
 
+// Load brand tokens for figure theming
+const tokensPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "design", "brand.tokens.json");
+let BRAND = {
+  colors: { bg: "#0B1220", fg: "#E6EEF7", muted: "#93A4B3" },
+  fonts: { sans: "Inter, system-ui" },
+};
+try {
+  BRAND = JSON.parse(fs.readFileSync(tokensPath, "utf8"));
+} catch {}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -133,7 +143,9 @@ for (const fig of figures) {
     } else if (fig.type === "python") {
       // Run python to produce an SVG with the expected name
       const tmpPy = path.join(imagesDir, `${fig.id}.py`);
-      writeText(tmpPy, fig.code + `\n# ensure output path`);
+      // Inject minimal rcParams defaults for brand cohesion
+      const rc = `\nimport matplotlib as mpl\nmpl.rcParams.update({\n  "font.family": "Inter",\n  "axes.facecolor": "${BRAND.colors.bg}",\n  "text.color": "${BRAND.colors.fg}",\n  "axes.labelcolor": "${BRAND.colors.fg}",\n  "xtick.color": "${BRAND.colors.muted}",\n  "ytick.color": "${BRAND.colors.muted}"\n})\n`;
+      writeText(tmpPy, fig.code + rc + `\n# ensure output path`);
       // If no explicit savefig to .svg, append one
       if (!/savefig\(.+\.svg/.test(fig.code)) {
         fs.appendFileSync(tmpPy, `\nimport matplotlib.pyplot as plt\nplt.savefig("${path.join(imagesDir, fig.id + ".svg").replace(/\\/g, "/")}")\n`);
@@ -182,7 +194,8 @@ const fm = {
   ai_generated: true,
   tags: ["LiDAR","TSF","GISTM","remote sensing","HSE"],
   seo,
-  citations
+  citations,
+  brand: { colorway: "slate-orange", layout: "left-title" }
 };
 const mdxWithFm = matter.stringify(mdxOut, fm);
 const pretty = await prettier.format(mdxWithFm, { parser: "markdown" });

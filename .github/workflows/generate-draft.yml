@@ -12,6 +12,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: generate-brief-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
   pull-requests: write

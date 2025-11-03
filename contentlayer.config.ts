@@ -90,6 +90,15 @@ export const CaseStudy = defineDocumentType(() => ({
         keywords: z.array(z.string()).optional(),
       }).optional().parse(value),
     },
+    // Optional brand overrides for cover/canvas templates
+    brand: {
+      type: 'json',
+      required: false,
+      validate: (value: unknown) => z.object({
+        colorway: z.enum(['slate-orange','slate-teal']).optional(),
+        layout: z.enum(['left-title','center-title']).optional(),
+      }).optional().parse(value),
+    },
   },
   computedFields: {
     slug: {
@@ -177,6 +186,15 @@ export const Insight = defineDocumentType(() => ({
         })).optional().parse(value),
       },
       required: false,
+    },
+    // Optional brand overrides for cover/canvas templates
+    brand: {
+      type: 'json',
+      required: false,
+      validate: (value: unknown) => z.object({
+        colorway: z.enum(['slate-orange','slate-teal']).optional(),
+        layout: z.enum(['left-title','center-title']).optional(),
+      }).optional().parse(value),
     },
   },
   computedFields: {

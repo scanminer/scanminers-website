@@ -7,6 +7,10 @@ on:
         description: Path to Brief markdown
         required: true
 
+concurrency:
+  group: generate-gpt-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
   pull-requests: write

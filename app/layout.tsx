@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { Search } from "@/components/Search";
@@ -7,15 +7,8 @@ import { Suspense } from "react";
 import { SentryInit } from "@/components/SentryInit";
 import { Toaster } from "@/components/Toaster";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ variable: "--font-brand-sans", subsets: ["latin"] });
+const jetmono = JetBrains_Mono({ variable: "--font-brand-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Scanminers",
@@ -36,7 +29,7 @@ export default function RootLayout({
   const cfAnalyticsToken = process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN;
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+  <body className={`${inter.variable} ${jetmono.variable} antialiased font-sans`}>
   <Suspense fallback={null}><SentryInit /></Suspense>
         <header className="border-b border-black/10 dark:border-white/10">
           <nav className="max-w-5xl mx-auto flex items-center justify-between p-4">

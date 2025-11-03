@@ -128,6 +128,42 @@ Additional docs:
 - Handover: `docs/HANDOVER.md`
 - Changelog: `CHANGELOG.md`
 
+## Brand Kit MVP
+
+Tokens live in `design/brand.tokens.json` and are wired into Tailwind and utilities. This gives you consistent covers, figures, and UI without waiting on a full design system.
+
+- Colors: bg, fg, primary (orange), accent (teal), muted, stroke
+- Fonts: Inter (sans), JetBrains Mono (mono)
+- Radii: sm/md/lg; Shadow: card
+
+Usage:
+- Tailwind: `bg-bg`, `text-fg`, `text-primary`, `shadow-card`, `rounded-mdx` (via `tailwind.config.ts`)
+- CSS vars: `--brand-*` are defined in `app/globals.css`
+- OG covers: Edge route `/og?title=...&kicker=Insights&colorway=slate-orange`
+
+Frontmatter (optional):
+
+```yaml
+brand:
+	colorway: "slate-orange"   # or "slate-teal"
+	layout: "left-title"
+```
+
+Figure defaults (Matplotlib): generator injects `rcParams` so charts use brand bg/fg/muted by default.
+
+### Voice & imagery
+
+Voice: Clear, neutral, practitioner-first. Define acronyms on first use. Avoid hype; state uncertainty plainly.
+
+Imagery:
+- Prefer technical conceptual visuals (workflows, DoD heatmaps, change maps) over glossy marketing.
+- If using generative art, keep it subtle (abstract geology textures, isometric tech motifs). Avoid photoreal mines without rights.
+- Label conceptual figures: “Illustrative—no site data.”
+
+Accessibility:
+- Body text ≥ 16px; button/primary text contrast ≥ 4.5:1 on backgrounds.
+- Don’t encode meaning by color alone; use shapes/labels in charts.
+
 ## Case Study specifics
 
 Frontmatter template:

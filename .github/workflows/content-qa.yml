@@ -85,6 +85,11 @@ jobs:
         if: steps.content-changes.outputs.has_content_changes == 'true'
         run: npm run build
 
+      - name: OG image size check (<=1MB)
+        if: steps.content-changes.outputs.has_content_changes == 'true'
+        run: node scripts/check-og-size.mjs
+        continue-on-error: true
+
       - name: Lighthouse CI
         if: steps.content-changes.outputs.has_content_changes == 'true'
         uses: treosh/lighthouse-ci-action@v11

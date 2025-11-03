@@ -21,7 +21,8 @@
     "test:e2e": "playwright test",
     "prepare": "husky",
     "generate:draft:gpt": "node scripts/generate-draft-with-gpt.mjs",
-    "verify:edge-routes": "node scripts/verify-edge-routes.js"
+    "verify:edge-routes": "node scripts/verify-edge-routes.js",
+    "og:fetch": "node scripts/fetch-og-covers.mjs"
   },
   "dependencies": {
     "@octokit/rest": "^21.0.2",
@@ -39,6 +40,8 @@
     "zod": "4.1.12"
   },
   "devDependencies": {
+  "@resvg/resvg-js": "^2.6.2",
+  "satori": "^0.11.2",
     "@eslint/eslintrc": "^3",
     "@mermaid-js/mermaid-cli": "^10.9.1",
     "@pagefind/default-ui": "^1.4.0",
