@@ -34,12 +34,12 @@ export default function RootLayout({
   <Suspense fallback={null}><SentryInit /></Suspense>
         <header className="border-b border-black/10 dark:border-white/10">
           <nav className="max-w-5xl mx-auto flex items-center justify-between p-4">
-            <Link href="/" className="font-semibold">Scanminers</Link>
+            <Link href="/" className="font-semibold text-[color:var(--foreground)]">Scanminers</Link>
             <div className="flex items-center gap-4 text-sm">
-              <Link href="/insights" className="hover:underline">Insights</Link>
-              <Link href="/case-studies" className="hover:underline">Case Studies</Link>
-              <Link href="/technologies" className="hover:underline">Technologies</Link>
-              <Link href="/contact" className="hover:underline">Contact</Link>
+              <Link href="/insights" className="hover:underline text-[color:var(--foreground)]">Insights</Link>
+              <Link href="/case-studies" className="hover:underline text-[color:var(--foreground)]">Case Studies</Link>
+              <Link href="/technologies" className="hover:underline text-[color:var(--foreground)]">Technologies</Link>
+              <Link href="/contact" className="hover:underline text-[color:var(--foreground)]">Contact</Link>
               <Search />
             </div>
           </nav>
