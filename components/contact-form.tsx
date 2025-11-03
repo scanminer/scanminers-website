@@ -121,12 +121,12 @@ export function ContactForm() {
   };
 
   return (
-    <div className="rounded-md border border-black/10 dark:border-white/10 p-4">
+    <div className="rounded-md border border-[color:var(--border-color)] bg-white p-4 shadow-sm">
       <h2 className="text-xl font-semibold">Contact</h2>
       <p className="mt-2">Team Lead: <strong>Dr. Amin Beiranvand Pour</strong></p>
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
+          <label htmlFor="name" className="block text-sm font-medium mb-1 text-[color:var(--muted-foreground)]">Full Name</label>
           <input
             id="name"
             name="name"
@@ -134,13 +134,13 @@ export function ContactForm() {
             value={form.name}
             onChange={onChange}
             required
-            className="w-full rounded-md border border-black/10 dark:border-white/10 bg-transparent px-3 py-2"
+            className="w-full rounded-md border border-[color:var(--border-color)] bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/10"
             placeholder="Jane Doe"
             autoComplete="name"
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium mb-1 text-[color:var(--muted-foreground)]">Email</label>
           <input
             id="email"
             name="email"
@@ -148,26 +148,26 @@ export function ContactForm() {
             value={form.email}
             onChange={onChange}
             required
-            className="w-full rounded-md border border-black/10 dark:border-white/10 bg-transparent px-3 py-2"
+            className="w-full rounded-md border border-[color:var(--border-color)] bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/10"
             placeholder="jane@company.com"
             autoComplete="email"
           />
         </div>
         <div>
-          <label htmlFor="company" className="block text-sm font-medium mb-1">Company</label>
+          <label htmlFor="company" className="block text-sm font-medium mb-1 text-[color:var(--muted-foreground)]">Company</label>
           <input
             id="company"
             name="company"
             type="text"
             value={form.company}
             onChange={onChange}
-            className="w-full rounded-md border border-black/10 dark:border-white/10 bg-transparent px-3 py-2"
+            className="w-full rounded-md border border-[color:var(--border-color)] bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/10"
             placeholder="Acme Exploration"
             autoComplete="organization"
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium mb-1">Message</label>
+          <label htmlFor="message" className="block text-sm font-medium mb-1 text-[color:var(--muted-foreground)]">Message</label>
           <textarea
             id="message"
             name="message"
@@ -175,7 +175,7 @@ export function ContactForm() {
             onChange={onChange}
             required
             rows={5}
-            className="w-full rounded-md border border-black/10 dark:border-white/10 bg-transparent px-3 py-2"
+            className="w-full rounded-md border border-[color:var(--border-color)] bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black/10"
             placeholder="Tell us a bit about your targets and timeline…"
           />
         </div>
@@ -194,19 +194,19 @@ export function ContactForm() {
             <div ref={widgetRef} className="cf-turnstile" />
           </div>
         ) : (
-          <p className="text-sm text-amber-600 dark:text-amber-400">
+          <p className="text-sm text-amber-600">
             Turnstile is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable submissions.
           </p>
         )}
 
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-        {success && <p className="text-sm text-green-700 dark:text-green-400">{success}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
+        {success && <p className="text-sm text-green-700">{success}</p>}
 
         <div className="pt-2">
           <button
             type="submit"
             disabled={submitting || !token}
-            className="inline-flex items-center justify-center rounded-md bg-black text-white dark:bg-white dark:text-black px-4 py-2 disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-md bg-black text-white px-4 py-2 disabled:opacity-60"
           >
             {submitting ? "Sending…" : "Send Message"}
           </button>

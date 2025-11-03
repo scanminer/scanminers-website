@@ -94,12 +94,12 @@ export default async function AdminEditPage({ params }: PageProps) {
 
       {/* Meta sidebar */}
       <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-md border border-black/10 dark:border-white/10 p-3 text-sm md:col-span-2">
+        <div className="rounded-md border border-[color:var(--border-color)] p-3 text-sm md:col-span-2 bg-white">
           <div className="mb-2 font-medium">Details</div>
           {tags && tags.length > 0 ? (
             <div className="mb-2 flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <span key={tag} className="rounded bg-black/5 px-2 py-0.5 text-xs dark:bg-white/10">
+                <span key={tag} className="rounded px-2 py-0.5 text-xs border border-[color:var(--chip-border)] bg-[color:var(--chip-bg)] text-[color:var(--chip-text)]">
                   {tag}
                 </span>
               ))}
@@ -128,7 +128,7 @@ export default async function AdminEditPage({ params }: PageProps) {
             </div>
           ) : null}
         </div>
-        <div className="rounded-md border border-black/10 dark:border-white/10 p-3 text-sm">
+        <div className="rounded-md border border-[color:var(--border-color)] p-3 text-sm bg-white">
           <div className="mb-2 font-medium">Actions</div>
           <div className="space-y-2 text-xs text-[color:var(--muted-foreground)]">
             <div>

@@ -55,17 +55,17 @@ export default async function TagsIndexPage({ searchParams }: PageProps) {
         <h1 className="text-3xl font-bold mb-6">All Tags</h1>
         <Link href="/case-studies" className="text-blue-600 hover:underline mb-6 inline-block">← Back to Case Studies</Link>
 
-        <div className="mb-4 flex items-center gap-2 text-sm text-gray-600">
+        <div className="mb-4 flex items-center gap-2 text-sm text-[color:var(--muted-foreground)]">
           <span>Sort:</span>
           <Link
             href={`/case-studies/tags${sort === "alpha" ? "" : "?sort=alpha"}`}
-            className={`px-2 py-1 rounded ${sort === "alpha" ? "bg-black/10 dark:bg-white/10" : "hover:bg-black/5 dark:hover:bg-white/10"}`}
+            className={`px-2 py-1 rounded ${sort === "alpha" ? "bg-[color:var(--chip-bg)]" : "hover:opacity-90"}`}
           >
             A → Z
           </Link>
           <Link
             href={`/case-studies/tags?sort=count`}
-            className={`px-2 py-1 rounded ${sort === "count" ? "bg-black/10 dark:bg-white/10" : "hover:bg-black/5 dark:hover:bg-white/10"}`}
+            className={`px-2 py-1 rounded ${sort === "count" ? "bg-[color:var(--chip-bg)]" : "hover:opacity-90"}`}
           >
             Most used
           </Link>
@@ -79,10 +79,10 @@ export default async function TagsIndexPage({ searchParams }: PageProps) {
               <li key={it.slug}>
                 <Link
                   href={`/case-studies/tags/${it.slug}`}
-                  className="px-3 py-2 rounded-md border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/10 flex items-center justify-between"
+                  className="px-3 py-2 rounded-md border border-[color:var(--border-color)] bg-white hover:bg-[color:var(--chip-bg)] flex items-center justify-between"
                 >
                   <span>{it.tag}</span>
-                  <span className="text-sm text-gray-500">{it.count}</span>
+                  <span className="text-sm text-[color:var(--muted-foreground)]">{it.count}</span>
                 </Link>
               </li>
             ))}

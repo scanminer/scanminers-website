@@ -6,7 +6,11 @@
   /* Muted foreground for secondary text */
   --muted-foreground: #525252; /* neutral-600 */
   /* Border color token if needed */
-  --border-color: rgba(0,0,0,0.1);
+  --border-color: rgba(0,0,0,0.15);
+  /* Chip/badge tokens for tags and pills */
+  --chip-bg: #f3f4f6; /* gray-100 */
+  --chip-text: #374151; /* gray-700 */
+  --chip-border: rgba(0,0,0,0.12);
 }
 
 /* Theme tokens are provided via CSS variables; Tailwind classes reference them directly. */
@@ -17,7 +21,10 @@
     --background: #ffffff;
     --foreground: #171717;
     --muted-foreground: #525252; /* neutral-600 */
-    --border-color: rgba(0,0,0,0.1);
+    --border-color: rgba(0,0,0,0.15);
+    --chip-bg: #f3f4f6;
+    --chip-text: #374151;
+    --chip-border: rgba(0,0,0,0.12);
   }
 }
 

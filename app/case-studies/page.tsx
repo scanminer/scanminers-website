@@ -42,13 +42,13 @@ export default function CaseStudiesIndexPage() {
         <h1 className="text-4xl font-bold mb-8">Case Studies</h1>
         {tags.length > 0 && (
           <div className="mb-8">
-            <div className="text-sm text-gray-500 mb-2">Browse by tag:</div>
+            <div className="text-sm text-[color:var(--muted-foreground)] mb-2">Browse by tag:</div>
             <div className="flex flex-wrap gap-2">
                   {tags.map((t) => (
                 <Link
                   key={t}
                       href={`/case-studies/tags/${slugifyTag(t)}`}
-                  className="px-3 py-1 rounded-full border border-black/10 dark:border-white/10 text-sm hover:bg-black/5 dark:hover:bg-white/10"
+                  className="px-3 py-1 rounded-full border text-sm bg-[color:var(--chip-bg)] text-[color:var(--chip-text)] border-[color:var(--chip-border)] hover:opacity-90"
                 >
                   {t}
                 </Link>
@@ -74,7 +74,7 @@ export default function CaseStudiesIndexPage() {
                       <Link
                         key={t}
                             href={`/case-studies/tags/${slugifyTag(t)}`}
-                        className="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-200 text-xs"
+                        className="px-2 py-0.5 rounded-full border border-[color:var(--chip-border)] bg-[color:var(--chip-bg)] text-[color:var(--chip-text)] text-xs"
                       >
                         {t}
                       </Link>
