@@ -45,24 +45,43 @@ const userMsg = readText(path.join(__dirname, "..", "prompts", "lidar_user_promp
   "\n\nBrief frontmatter:\n" + yaml.dump(briefData) +
   "\n\nBrief body:\n" + briefBody;
 
-// 3) Call OpenAI
-const client = new OpenAI({ apiKey: OPENAI_API_KEY });
-const completion = await client.chat.completions.create({
-  model: OPENAI_MODEL,
-  temperature: 0.2,
-  response_format: { type: "json_object" },
-  messages: [
-    { role: "system", content: systemMsg },
-    { role: "user", content: userMsg }
-  ],
-});
-
+// 3) Call OpenAI (with optional MOCK mode)
 let payload;
-try {
-  payload = JSON.parse(completion.choices[0].message.content);
-} catch (e) {
-  console.error("Model did not return valid JSON:", e);
-  process.exit(1);
+const MOCK = process.env.GENERATOR_MOCK_JSON;
+if (MOCK && fs.existsSync(MOCK)) {
+  try {
+    payload = JSON.parse(readText(MOCK));
+    console.log(`Loaded mock payload from ${MOCK}`);
+  } catch (e) {
+    console.error("Failed to parse mock JSON:", e);
+    process.exit(1);
+  }
+}
+
+if (!payload) {
+  const client = new OpenAI({ apiKey: OPENAI_API_KEY });
+  let completion;
+  try {
+    completion = await client.chat.completions.create({
+      model: OPENAI_MODEL,
+      temperature: 0.2,
+      response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: systemMsg },
+        { role: "user", content: userMsg }
+      ],
+    });
+  } catch (err) {
+    console.error("OpenAI API error:", err?.response?.data || err.message || err);
+    process.exit(1);
+  }
+
+  try {
+    payload = JSON.parse(completion.choices[0].message.content);
+  } catch (e) {
+    console.error("Invalid JSON from model. Enable mock mode or retry.", e);
+    process.exit(1);
+  }
 }
 
 const { article_mdx, seo, figures, citations } = payload;
@@ -80,31 +99,44 @@ fs.mkdirSync(articleDir, { recursive: true });
 fs.mkdirSync(imagesDir, { recursive: true });
 
 // 5) Render figures
+// Initialize MDX so we can append fallbacks/placeholders during rendering
+let mdxOut = article_mdx || "";
 for (const fig of figures) {
-  if (fig.type === "mermaid") {
-    // Render with Mermaid CLI
-    const tmpMmd = path.join(imagesDir, `${fig.id}.mmd`);
-    const outSvg = path.join(imagesDir, `${fig.id}.svg`);
-    writeText(tmpMmd, fig.code);
-    execSync(`npx --yes @mermaid-js/mermaid-cli -i "${tmpMmd}" -o "${outSvg}"`, { stdio: "inherit" });
-  } else if (fig.type === "python") {
-    // Run python to produce an SVG with the expected name
-    const tmpPy = path.join(imagesDir, `${fig.id}.py`);
-    writeText(tmpPy, fig.code + `\n# ensure output path`);
-    // If no explicit savefig to .svg, append one
-    if (!/savefig\(.+\.svg/.test(fig.code)) {
-      fs.appendFileSync(tmpPy, `\nimport matplotlib.pyplot as plt\nplt.savefig("${path.join(imagesDir, fig.id + ".svg").replace(/\\/g, "/")}")\n`);
+  try {
+    if (fig.type === "mermaid") {
+      // Render with Mermaid CLI
+      const tmpMmd = path.join(imagesDir, `${fig.id}.mmd`);
+      const outSvg = path.join(imagesDir, `${fig.id}.svg`);
+      writeText(tmpMmd, fig.code);
+      execSync(`npx --yes @mermaid-js/mermaid-cli -i "${tmpMmd}" -o "${outSvg}"`, { stdio: "inherit" });
+    } else if (fig.type === "python") {
+      // Run python to produce an SVG with the expected name
+      const tmpPy = path.join(imagesDir, `${fig.id}.py`);
+      writeText(tmpPy, fig.code + `\n# ensure output path`);
+      // If no explicit savefig to .svg, append one
+      if (!/savefig\(.+\.svg/.test(fig.code)) {
+        fs.appendFileSync(tmpPy, `\nimport matplotlib.pyplot as plt\nplt.savefig("${path.join(imagesDir, fig.id + ".svg").replace(/\\/g, "/")}")\n`);
+      }
+      const env = { ...process.env };
+      if (!env.MPLBACKEND) env.MPLBACKEND = "Agg"; // headless-safe
+      execSync(`python3 "${tmpPy}"`, { stdio: "inherit", env });
+    } else if (fig.type === "table") {
+      // No render; will embed Markdown directly later
     }
-    execSync(`python3 "${tmpPy}"`, { stdio: "inherit" });
-  } else if (fig.type === "table") {
-    // No render; will embed Markdown directly
+  } catch (e) {
+    console.error(`Figure render failed: ${fig.id}`, e);
+    if (fig.type === "mermaid" && fig.code) {
+      // Fallback to a Mermaid code block so client-side can render
+      mdxOut += `\n\n\`\`\`mermaid\n${fig.code}\n\`\`\`\n`;
+    } else {
+      mdxOut += `\n\n> Figure \"${fig.id}\" failed to render. Please re-run locally.\n`;
+    }
   }
 }
 
 // 6) Inject images into MDX (replace <!--FIG:id--> placeholders if present)
-let mdxOut = article_mdx
-  .replace(/<!--FIG:([\w-]+)-->/g, (_m, id) =>
-    `![${id}](\/images\/generated\/${slug}\/${id}.svg)`);
+mdxOut = mdxOut.replace(/<!--FIG:([\w-]+)-->/g, (_m, id) =>
+  `![${id}](\/images\/generated\/${slug}\/${id}.svg)`);
 
 // If no placeholders, gently append figures at end:
 const usedIds = [...article_mdx.matchAll(/<!--FIG:([\w-]+)-->/g)].map(m => m[1]);
@@ -123,7 +155,7 @@ const fm = {
   publishedAt: new Date().toISOString(),
   review_status: "needs-review",
   ai_generated: true,
-  tags: ["LiDAR","TSF","GISTM","UAV","DEM","DoD","Mining"],
+  tags: ["LiDAR","TSF","GISTM","remote sensing","HSE"],
   seo,
   citations
 };

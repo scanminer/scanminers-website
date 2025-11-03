@@ -1,6 +1,6 @@
 ---
 title: Using LiDAR for Tailings Dam Monitoring
-slug: lidar-tailings
+slug: using-lidar-for-tailings-dam-monitoring
 status: New Brief
 ---
-Key requirements and context for the article.
+Context: Write for ops leaders, geotechs, HSE, regulators. Use Source Pack only.

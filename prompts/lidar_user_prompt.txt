@@ -11,3 +11,10 @@ Constraints:
   - fig-2 (Python/matplotlib): synthetic DoD heatmap (crest settlement + downstream movement). Caption must include “Illustrative—no site data.”
 - Hard rules: Include the $1.38B (2024) market size [Dataintelo, 2024] and the IMWA specifics: 9 sensor types, 500+ points, solar-powered, satellite comms, continuous safety-factor recalculation [Stanley et al., 2023].
 - Use only the Source Pack; remove or rewrite any claim without support.
+
+In `article_mdx`, insert these placeholders at sensible spots to be replaced by the generator:
+<!--FIG:table-1-->, <!--FIG:fig-1-->, <!--FIG:fig-2-->
+
+Use this frontmatter to adapt title, date, tags, and any topic context:
+{{BRIEF_FRONTMATTER}}
+{{BRIEF_BODY}}
