@@ -48,6 +48,47 @@ export default function AdminReviewQueuePage() {
 
   return (
     <div>
+      {/* Create New CTA */}
+      <div className="mb-6 rounded-md border border-[color:var(--border-color)] bg-white p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold">Create New</h2>
+            <p className="text-sm text-[color:var(--muted-foreground)]">Start a new brief or article in the CMS.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href="/admin/index.html#/collections/briefs/new"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-2 rounded-md bg-black text-white text-sm"
+            >
+              New Brief (AI)
+            </a>
+            <a
+              href="/admin/index.html#/collections/insights/new"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-2 rounded-md border border-[color:var(--border-color)] text-sm hover:bg-[color:var(--chip-bg)]"
+            >
+              New Insight
+            </a>
+            <a
+              href="/admin/index.html#/collections/case_studies/new"
+              target="_blank"
+              rel="noreferrer"
+              className="px-3 py-2 rounded-md border border-[color:var(--border-color)] text-sm hover:bg-[color:var(--chip-bg)]"
+            >
+              New Case Study
+            </a>
+          </div>
+        </div>
+        <div className="mt-2 text-xs text-[color:var(--muted-foreground)]">
+          CMS opens in a new tab. If it doesn’t load here, try the full CMS link:
+          {" "}
+          <a href="/admin/index.html" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">/admin/index.html</a>
+        </div>
+      </div>
+
       <h2 className="mb-4 text-xl font-medium">Review Queue</h2>
       {queue.length === 0 ? (
         <p className="text-sm text-gray-600">No items with review_status: &quot;needs-review&quot;.</p>
