@@ -11,9 +11,8 @@ const OUT_DIR = path.join(process.cwd(), 'public', 'images', 'og');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
 function slugFrom(p) {
-  const parts = p.split(path.sep);
-  // content/<type>/<slug>/index.mdx
-  return parts[parts.length - 2];
+  // content/<type>/<slug>.mdx
+  return path.basename(p, path.extname(p));
 }
 
 function normalizeTitle(s, fallback) {
@@ -47,7 +46,7 @@ async function waitReady(url, tries = 30) {
 function changedMd() {
   try {
     const baseRef = process.env.GITHUB_BASE_REF ? `origin/${process.env.GITHUB_BASE_REF}` : 'HEAD~1';
-    const out = execSync(`git diff --name-only ${baseRef} HEAD -- content/insights/**/index.mdx content/case-studies/**/index.mdx`, { stdio: ['ignore','pipe','pipe'] }).toString().trim();
+    const out = execSync(`git diff --name-only ${baseRef} HEAD -- content/insights/*.mdx content/case-studies/*.mdx`, { stdio: ['ignore','pipe','pipe'] }).toString().trim();
     return out.split('\n').filter(Boolean);
   } catch {
     return [];
@@ -59,8 +58,8 @@ async function main() {
   try { await waitReady(`${SITE}/`); } catch (e) { console.warn(String(e)); }
 
   const patterns = [
-    'content/insights/*/index.mdx',
-    'content/case-studies/*/index.mdx',
+    'content/insights/*.mdx',
+    'content/case-studies/*.mdx',
   ];
   let files = await globby(patterns, { gitignore: true });
 
