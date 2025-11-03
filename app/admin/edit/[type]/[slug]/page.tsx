@@ -9,10 +9,10 @@ import { formatDate } from "@/lib/date";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: { type: string; slug: string } };
+type PageProps = { params: Promise<{ type: string; slug: string }> };
 
-export default function AdminEditPage({ params }: Props) {
-  const { type, slug } = params;
+export default async function AdminEditPage({ params }: PageProps) {
+  const { type, slug } = await params;
   const t = (type || "").toLowerCase();
   const isCaseStudy = t === "case-study";
 
@@ -30,7 +30,12 @@ export default function AdminEditPage({ params }: Props) {
   const repo = process.env.GH_REPO || null;
   const previewUrl = t === "insight" ? `/insights/${doc.slug}` : t === "case-study" ? `/case-studies/${doc.slug}` : null;
   const editUrl = repo ? `https://github.com/${repo}/edit/main/${doc._raw?.sourceFilePath ?? ""}` : null;
-  const coverSrc = (isCaseStudy ? (doc as CaseStudy).coverImage : undefined) || doc.image;
+  const galleryFirst = ((doc as Insight).images ?? (doc as CaseStudy).images ?? [])[0]?.src;
+  const coverSrc =
+    (isCaseStudy ? (doc as CaseStudy).coverImage : undefined) ||
+    doc.image ||
+    galleryFirst ||
+    "/og-default.svg";
   type MediaItem = { src: string; alt: string; caption?: string; license?: string };
   const gallery: MediaItem[] = (doc as Insight).images ?? (doc as CaseStudy).images ?? [];
   const tags = (doc as Insight).tags ?? (doc as CaseStudy).tags ?? [];

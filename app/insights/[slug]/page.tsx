@@ -26,20 +26,25 @@ export default async function InsightPage({ params }: PageProps) {
           ← Back to Insights
         </Link>
 
-  <article>
-          {post.image && (
-            <Image
-              src={post.image}
-              alt={post.imageAlt || post.title}
-              width={1200}
-              height={630}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-              className="w-full h-auto rounded-lg border border-black/10 dark:border-white/10 mb-6"
-              placeholder={post.imageBlurDataURL ? "blur" : undefined}
-              blurDataURL={post.imageBlurDataURL}
-              priority
-            />
-          )}
+        <article>
+          {(() => {
+            const firstGallery = (post.images?.[0]?.src) as string | undefined;
+            const cover = post.image || firstGallery || "/og-default.svg";
+            const alt = post.imageAlt || post.title;
+            return (
+              <Image
+                src={cover}
+                alt={alt}
+                width={1200}
+                height={630}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                className="w-full h-auto rounded-lg border border-black/10 dark:border-white/10 mb-6"
+                placeholder={post.imageBlurDataURL ? "blur" : undefined}
+                blurDataURL={post.imageBlurDataURL}
+                priority
+              />
+            );
+          })()}
           <h1 className="text-4xl font-bold mb-3">{post.title}</h1>
           <time className="text-sm text-gray-500">
             {formatDate(post.publishedAt)}

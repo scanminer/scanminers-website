@@ -24,19 +24,24 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </Link>
 
         <article>
-          {study.image && (
-            <Image
-              src={study.image}
-              alt={study.imageAlt || study.title}
-              width={1200}
-              height={630}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-              className="w-full h-auto rounded-lg border border-black/10 dark:border-white/10 mb-6"
-              placeholder={study.imageBlurDataURL ? "blur" : undefined}
-              blurDataURL={study.imageBlurDataURL}
-              priority
-            />
-          )}
+          {(() => {
+            const firstGallery = (study.images?.[0]?.src) as string | undefined;
+            const cover = study.image || (study as CaseStudy).coverImage || firstGallery || "/og-default.svg";
+            const alt = study.imageAlt || study.title;
+            return (
+              <Image
+                src={cover}
+                alt={alt}
+                width={1200}
+                height={630}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+                className="w-full h-auto rounded-lg border border-black/10 dark:border-white/10 mb-6"
+                placeholder={study.imageBlurDataURL ? "blur" : undefined}
+                blurDataURL={study.imageBlurDataURL}
+                priority
+              />
+            );
+          })()}
 
           <h1 className="text-4xl font-bold mb-3">{study.title}</h1>
           <time className="text-sm text-gray-500">{formatDate(study.publishedAt)}</time>
