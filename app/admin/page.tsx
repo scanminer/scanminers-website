@@ -41,6 +41,7 @@ function getQueue(): QueueItem[] {
 // preview/edit helpers moved client-side within AdminQueueClient
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default function AdminReviewQueuePage() {
   const queue = getQueue();
