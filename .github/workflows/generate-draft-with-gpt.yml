@@ -1,0 +1,32 @@
+name: Generate LiDAR Draft (GPT)
+
+on:
+  workflow_dispatch:
+    inputs:
+      brief_path:
+        description: Path to Brief markdown
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Install deps
+        run: |
+          npm ci || npm i
+          python3 -m pip install --user matplotlib numpy
+      - name: Run generator
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          OPENAI_MODEL: gpt-4o
+        run: |
+          node scripts/generate-draft-with-gpt.mjs "${{ github.event.inputs.brief_path }}"
