@@ -80,6 +80,16 @@ export const CaseStudy = defineDocumentType(() => ({
       },
       required: false,
     },
+    // Optional SEO metadata block
+    seo: {
+      type: 'json',
+      required: false,
+      validate: (value: unknown) => z.object({
+        meta_title: z.string().max(70).optional(),
+        meta_description: z.string().max(160).optional(),
+        keywords: z.array(z.string()).optional(),
+      }).optional().parse(value),
+    },
   },
   computedFields: {
     slug: {
