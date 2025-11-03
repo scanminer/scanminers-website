@@ -84,6 +84,14 @@ export function AdminQueueClient({ items, repo }: { items: QueueItem[]; repo?: s
                     ) : (
                       <span className="text-gray-400">No preview</span>
                     )}
+                    {item.slug ? (
+                      <Link
+                        className="text-blue-600 hover:underline"
+                        href={`/admin/edit/${item.type}/${item.slug}`}
+                      >
+                        Admin Edit
+                      </Link>
+                    ) : null}
                     {edit ? (
                       <a className="text-blue-600 hover:underline" href={edit} target="_blank" rel="noreferrer">
                         Edit on GitHub
