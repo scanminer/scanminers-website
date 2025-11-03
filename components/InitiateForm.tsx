@@ -18,7 +18,9 @@ export default function InitiateForm() {
     setLoading(true);
     setRes(null);
     try {
-      const r = await fetch("/api/initiate", {
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const endpoint = process.env.NEXT_PUBLIC_INITIATE_ENDPOINT || (isLocal ? "/api/initiate-local" : "/api/initiate");
+      const r = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -120,13 +122,11 @@ export default function InitiateForm() {
               </div>
             </div>
           ) : (
-            <div>
-              {(() => {
-                if (res && "ok" in res && !res.ok) {
-                  return `❌ ${res.error}`;
-                }
-                return "❌ Something went wrong.";
-              })()}
+            <div className="space-y-1">
+              <div>❌ {"ok" in res && !res.ok ? res.error : "Something went wrong."}</div>
+              <div className="text-xs text-gray-600">
+                Tip: This endpoint is disabled on production (Edge). Run locally, or trigger the GitHub Action below.
+              </div>
             </div>
           )}
         </div>

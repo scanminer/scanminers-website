@@ -8,6 +8,7 @@ import { PublishButton } from "@/components/PublishButton";
 import { formatDate } from "@/lib/date";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 type PageProps = { params: Promise<{ type: string; slug: string }> };
 
