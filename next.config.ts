@@ -13,6 +13,17 @@ const nextConfig = {
       },
     ];
   },
+
+  // Redirects for URL consistency
+  async redirects() {
+    return [
+      {
+        source: '/insights/using-lidar-for-tailings-dam-monitoring',
+        destination: '/insights/using-lidar-for-tailing-dam-monitoring',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 // Note: Sentry Webpack auto-wrapping of App Route handlers is disabled due to
