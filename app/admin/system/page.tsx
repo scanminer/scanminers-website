@@ -13,19 +13,22 @@ const ENV_KEYS = [
   "PERPLEXITY_KEY",
   "PERPLEXITY_MODEL",
   "CONTENT_BOT_TOKEN",
-   "GIT_DEFAULT_BRANCH",
-   "CONTENT_DEFAULT_BRANCH",
+  "GIT_DEFAULT_BRANCH",
+  "CONTENT_DEFAULT_BRANCH",
   "ADMIN_USER",
   "ADMIN_PASS",
-   "GH_REPO",
-   "CONTENT_REPO",
-   "CONTENT_AUTHOR_NAME",
-   "CONTENT_AUTHOR_EMAIL",
+  "ADMIN_ACTION_TOKEN",
+  "WORKFLOW_DISPATCH_TOKEN",
+  "GH_REPO",
+  "NEXT_PUBLIC_GITHUB_REPO",
+  "CONTENT_REPO",
+  "CONTENT_AUTHOR_NAME",
+  "CONTENT_AUTHOR_EMAIL",
 ] as const;
 
 export default function SystemPage() {
   const entries = ENV_KEYS.map((k) => ({ key: k, present: Boolean(process.env[k]) }));
-  const repo = process.env.GH_REPO ?? process.env.CONTENT_REPO ?? "";
+  const repo = process.env.GH_REPO || process.env.NEXT_PUBLIC_GITHUB_REPO || process.env.CONTENT_REPO || "";
 
   const actions = [
     { label: "Insights RSS", href: "/insights/rss.xml" },
