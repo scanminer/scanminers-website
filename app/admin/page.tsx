@@ -55,7 +55,7 @@ function previewUrlFor(item: QueueItem): string | null {
 }
 
 function editUrlFor(item: QueueItem): string | null {
-  const repo = process.env.GH_REPO;
+  const repo = process.env.GH_REPO || process.env.NEXT_PUBLIC_GITHUB_REPO;
   if (!repo || !item.sourcePath) return null;
   return `https://github.com/${repo}/edit/main/${item.sourcePath}`;
 }
@@ -64,7 +64,7 @@ export const dynamic = "force-static";
 
 export default function AdminReviewQueuePage() {
   const queue = getQueue();
-  const repo = process.env.GH_REPO;
+  const repo = process.env.GH_REPO || process.env.NEXT_PUBLIC_GITHUB_REPO;
 
   return (
     <div>
