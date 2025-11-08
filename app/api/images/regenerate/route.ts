@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 function json(status: number, body: unknown) {
   return new Response(JSON.stringify(body), {
     status,

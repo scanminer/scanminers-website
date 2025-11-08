@@ -1,12 +1,15 @@
 name = "scanminers-website"
-compatibility_date = "2024-06-10"
-# Enable Node.js built-in compatibility for Cloudflare Workers
+main = ".open-next/worker.js"
+compatibility_date = "2025-09-23"
 compatibility_flags = ["nodejs_compat"]
 
-# Next on Pages will generate the worker; we just provide flags/dates.
-# You can also set environment bindings here if needed later.
+# OpenNext Cloudflare adapter configuration
+# The adapter builds a Worker for dynamic routes/API and serves static assets
+# This is the recommended deployment method for full-stack Next.js on Cloudflare
 
-# Cloudflare Pages (Beta) configuration
-# This lets Pages pick up compatibility flags from wrangler.toml.
-# IMPORTANT: Do not set pages_build_output_dir for Next.js on Pages.
-# Let Next-on-Pages generate the worker/functions so API routes deploy.
+# Assets configuration
+# OpenNext generates static assets in .open-next/assets
+# run_worker_first=false (default) keeps asset hits off billed Worker - recommended
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"

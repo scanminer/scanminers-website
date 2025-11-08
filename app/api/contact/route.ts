@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { isRateLimited } from '@/lib/rate-limiter';
 
-export const runtime = 'edge';
-
 async function createGitHubIssue(formData: { name: string; email: string; company?: string; message: string; }) {
   const token = process.env.GH_TOKEN;
   const repo = process.env.NEXT_PUBLIC_GH_REPO || 'moodyguyhub/scanminers-website';
