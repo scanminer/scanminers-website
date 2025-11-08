@@ -58,3 +58,10 @@ next-env.d.ts
 # Local audit output
 project_audit.txt
 
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+*.pyc
+__pycache__/
