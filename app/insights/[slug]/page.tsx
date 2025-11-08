@@ -8,7 +8,6 @@ import { formatDate } from "@/lib/date";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-export const runtime = 'edge';
 export const dynamic = "force-dynamic";
 
 export default async function InsightPage({ params }: PageProps) {

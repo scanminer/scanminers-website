@@ -8,8 +8,6 @@ import { notFound } from "next/navigation";
 
 type PageProps = { params: Promise<{ tag: string }> };
 
-export const runtime = 'edge';
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { tag: tagParam } = await params;
   const title = `Case Studies tagged “${tagParam}” | Scanminers`;
