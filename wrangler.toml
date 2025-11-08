@@ -4,11 +4,12 @@ compatibility_date = "2025-09-23"
 compatibility_flags = ["nodejs_compat"]
 
 # OpenNext Cloudflare adapter configuration
-# The adapter builds a Worker for dynamic routes/API and a separate asset Worker
+# The adapter builds a Worker for dynamic routes/API and serves static assets
 # This is the recommended deployment method for full-stack Next.js on Cloudflare
 
-# Asset Worker service binding
-# The main worker delegates static asset requests to this service
-[[services]]
+# Assets configuration
+# OpenNext generates static assets in .open-next/assets
+# run_worker_first=false (default) keeps asset hits off billed Worker - recommended
+[assets]
+directory = ".open-next/assets"
 binding = "ASSETS"
-service = "scanminers-website-assets"
