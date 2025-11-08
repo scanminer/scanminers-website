@@ -9,7 +9,8 @@
     "preinstall": "npm config set legacy-peer-deps true",
     "dev": "next dev",
     "build": "npm run contentlayer && next build && node scripts/generate-feeds.mjs && npx pagefind --site .next/server/app --output-subdir ../../public/pagefind",
-    "cf:pack": "npx @cloudflare/next-on-pages -o .cf-nop -c",
+    "preview": "opennextjs-cloudflare",
+    "deploy": "opennextjs-cloudflare",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@opennextjs/cloudflare": "^1.11.1",
     "@pagefind/default-ui": "^1.4.0",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4",
@@ -66,7 +68,8 @@
     "pagefind": "^1.4.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.6"
+    "vitest": "^4.0.6",
+    "wrangler": "^4.46.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,md,mdx}": [
