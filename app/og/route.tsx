@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import { ImageResponse } from 'next/og';
 
 // Minimal inline brand palette to avoid external JSON dependency in this minimal PR

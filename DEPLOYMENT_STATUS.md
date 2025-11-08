@@ -1,7 +1,7 @@
-# OpenNext Workers Deployment - In Progress
+# OpenNext Workers Deployment - Ready for Dashboard Configuration
 
 **Date**: November 8, 2025  
-**Status**: ⏳ Awaiting Cloudflare configuration
+**Status**: ⏳ Awaiting Cloudflare Workers Builds configuration
 
 ## ✅ Completed
 
@@ -11,27 +11,55 @@
    - All API routes updated (removed edge runtime exports)
    - Documentation complete
 
-## 🔄 In Progress
+2. **PR #59 Merged** (commit: fbb1194)
+   - Deployment helper documents
+   - Dashboard configuration guides
+   - Critical alerts and instructions
 
-### Next: Configure Cloudflare Workers Builds
+**All code changes complete! 🎉**
+
+## 🔄 Next: Configure Cloudflare Dashboard
+
+### Step 1: Workers Builds Settings
 
 Navigate to: **Cloudflare Dashboard → Workers & Pages → scanminers-website → Settings → Builds**
 
-**Set these values:**
+Set:
 ```
-Build command: npx opennextjs-cloudflare build
+Build command:  npx opennextjs-cloudflare build
 Deploy command: npx opennextjs-cloudflare deploy
 ```
+
+### Step 2: Build-Time Variables
+
+Navigate to: **Workers & Pages → scanminers-website → Settings → Build → Build Variables**
+
+Add:
+```
+NEXT_PUBLIC_GITHUB_REPO = scanminer/scanminers-website
+```
+
+### Step 3: Runtime Variables
+
+Navigate to: **Workers & Pages → scanminers-website → Settings → Variables and Secrets**
+
+Add:
+- `ENABLE_INITIATE_API = false` (Variable)
+- `GH_TOKEN` (Secret)
+- `PERPLEXITY_API_KEY` (Secret)
+- `ANTHROPIC_API_KEY` (Secret)
 
 ## 📋 Remaining Steps
 
 1. ✅ Merge PR #58 → **DONE**
-2. ⏳ Configure Workers Builds → **IN PROGRESS**
-3. ⏹️ Set environment variables
-4. ⏹️ Test on *.workers.dev subdomain
-5. ⏹️ Cutover domain (Pages → Worker)
-6. ⏹️ Run smoke tests
-7. ⏹️ Merge PR #57 (LiDAR redirect)
+2. ✅ Merge PR #59 → **DONE**
+3. ⏳ Configure Workers Builds → **IN PROGRESS**
+4. ⏹️ Set build-time variables
+5. ⏹️ Set runtime variables
+6. ⏹️ Test on *.workers.dev subdomain
+7. ⏹️ Cutover domain (Pages → Worker)
+8. ⏹️ Verify production
+9. ⏹️ Merge PR #57 (LiDAR redirect)
 
 ## 🎯 Success Criteria
 

@@ -6,7 +6,6 @@ import { MDXContentServer } from "@/components/mdx-content-server";
 import { notFound } from "next/navigation";
 import { formatDate } from "@/lib/date";
 
-export const runtime = 'edge';
 export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ slug: string }> };
