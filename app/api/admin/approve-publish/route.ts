@@ -1,6 +1,5 @@
 // app/api/admin/approve-publish/route.ts
 import { NextResponse } from "next/server";
-export const runtime = "edge";
 
 import matter from "gray-matter";
 import { makeOctokit, getDefaultBranchSha, createBranchFrom, getFileContent, commitFile, openPr } from "@/lib/github";
