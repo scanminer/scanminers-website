@@ -120,12 +120,12 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section - Redesigned */}
-  <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/20 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
+  <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/15 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
         {/* Background Effects */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-[-200px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/30 blur-[200px]" />
-          <div className="absolute bottom-[-150px] right-[-60px] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[160px]" />
-          <div className="absolute left-[10%] top-[30%] h-[300px] w-[300px] rounded-full bg-secondary/15 blur-[120px]" />
+          <div className="absolute left-1/2 top-[-200px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/20 dark:bg-primary/30 blur-[200px]" />
+          <div className="absolute bottom-[-150px] right-[-60px] h-[400px] w-[400px] rounded-full bg-accent/10 dark:bg-accent/20 blur-[160px]" />
+          <div className="absolute left-[10%] top-[30%] h-[300px] w-[300px] rounded-full bg-secondary/10 dark:bg-secondary/20 blur-[120px]" />
         </div>
 
         <MSection className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
@@ -143,7 +143,7 @@ export default function Home() {
                 </span>
               </MDIV>
               {/* Headline - You-Oriented */}
-              <MH1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              <MH1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] sm:text-6xl lg:text-7xl">
                 Find critical minerals{" "}
                 <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
                   before your competition
@@ -151,7 +151,7 @@ export default function Home() {
               </MH1>
 
               {/* Subheadline with Urgency (SDG/IEA framing) */}
-              <MP className="text-xl leading-relaxed text-white/85 sm:text-2xl">
+              <MP className="text-xl leading-relaxed text-white/85 drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)] sm:text-2xl">
                 The energy transition demands <strong className="font-semibold text-white">3× more lithium, 7× more REE</strong> by 2040 (IEA).
                 Your next discovery starts with intelligence—not luck.
               </MP>
