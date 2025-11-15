@@ -16,6 +16,7 @@ npm ci
 - Required for local dev: `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`.
 - To enable email: `RESEND_API_KEY` (plus `RESEND_FROM`, `RESEND_TO`).
 - Optional: `NEXT_PUBLIC_SITE_URL` for absolute URLs in metadata/sitemap.
+- Funnels/analytics: set `CONSULT_BANK_*` for consultation receipts and `NEXT_PUBLIC_GA_MEASUREMENT_ID` if you want GA4 events locally.
 
 3) Run locally
 
@@ -36,6 +37,10 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 - RESEND_TO: One or more recipient emails (comma-separated), ex: founders@scanminers.com
 - NEXT_PUBLIC_SITE_URL: Your site’s base URL (e.g., https://example.com)
 	- Important: Set this in production so sitemap/OG URLs use your domain, not localhost.
+- NEXT_PUBLIC_GA_MEASUREMENT_ID: GA4 measurement ID used by `trackEvent`
+- NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN: Optional Cloudflare Web Analytics beacon token
+- CONSULT_BANK_ACCOUNT_NAME / CONSULT_BANK_ACCOUNT / CONSULT_BANK_IBAN / CONSULT_BANK_BIC / CONSULT_BANK_NOTE: Displayed in consultation confirmation emails
+- NEXT_PUBLIC_SENTRY_DSN / SENTRY_DSN: Client and server DSNs for Sentry error capture
 
 ## Contact form
 
@@ -68,6 +73,23 @@ Production wiring:
 - MDX content via Contentlayer in `content/`
 - RSS: `/insights/rss.xml`, `/case-studies/rss.xml`
 - Sitemap: `/sitemap.xml`, Robots: `/robots.txt`
+
+## Brand system
+
+Scanminers' brand book now lives in-version alongside the rest of the site.
+
+- **Content model** – `contentlayer.config.ts` defines a `BrandGuide` document type that loads every file under `content/brand/*.mdx`. Each file represents a section (foundation, messaging, voice, visual, evidence, playbooks) with structured fields for guardrails, prompts, palette, typography, proof points, etc.
+- **Source of truth** – Author/edit MDX directly under `content/brand/`. Run `npm run contentlayer` after adding new files so types regenerate.
+- **Admin portal** – Visit `/admin/brand` (same auth as other admin areas) to review sections, edit front matter/body, and copy the AI-ready system prompt. Saving from this UI writes back to the MDX file and revalidates Contentlayer data.
+- **Helper modules** – Shared helpers live under `lib/brand-*`:
+	- `lib/brand-content.ts`: loaders + typed aggregates (prompts, guardrails, palette, proof points).
+	- `lib/brand-core.ts`: mission, pillars, proof, and hero copy helpers.
+	- `lib/brand-voice.ts`: tone guardrails + reminder builder.
+	- `lib/brand-visual.ts`: color/typography exports.
+	- `lib/ai-brand.ts`: builds the canonical system prompt/context for AI workflows.
+- **AI integration** – Lead reply drafting (`lib/ai/lead-replies.ts`) now injects the brand prompt so outbound emails inherit the right tone, guardrails, and proof points. Reuse `buildBrandSystemPrompt()` anywhere else you need branded AI output.
+
+If you need a new brand section, create another MDX file under `content/brand/`, fill the front matter fields, run `npm run contentlayer`, and the admin portal will pick it up automatically.
 
 ## Deploy: Cloudflare Pages
 

@@ -13,12 +13,14 @@ This handover consolidates architecture, environment, deployment, operations, se
 - Content: MDX via Contentlayer (Insights, Case Studies)
 - SEO: Sitemap, robots, two RSS feeds
 - Contact: Cloudflare Turnstile + Edge API route + Resend (REST) email
+- Funnels: `/prospectivity-brief` (free lead magnet) and `/consultation` (paid intake) reuse the shared Turnstile + Resend stack and require billing vars for emails
 - Hosting: Cloudflare Pages (Next on Pages)
 - Observability: Sentry (client/server/edge)
 - Analytics: Optional Cloudflare Web Analytics (env-gated)
 
 Top-level paths:
 - Public pages: `/`, `/insights`, `/case-studies`, `/technologies`, `/contact`
+- Lead funnels: `/prospectivity-brief`, `/consultation`
 - Content detail: `/insights/[slug]`, `/case-studies/[slug]`, tag pages
 - SEO: `/sitemap.xml`, `/robots.txt`, `/insights/rss.xml`, `/case-studies/rss.xml`
 - API: `/api/contact` (Edge), `/api/health` (Edge), `/api/health/env` (Edge)
@@ -50,18 +52,23 @@ Top-level paths:
 
 Environment variables (Cloudflare Pages → Project settings → Environment variables; set for both Production and Preview):
 
-Required for contact form:
+Required for contact + prospectivity/consultation forms:
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — Cloudflare Turnstile (public)
 - `TURNSTILE_SECRET_KEY` — Cloudflare Turnstile (secret)
 - `RESEND_API_KEY` — Resend API key (secret)
 - `RESEND_FROM` — Verified sender, e.g. `contact@scanminers.com`
 - `RESEND_TO` — Comma-separated recipients, e.g. `founders@scanminers.com`
+- `CONSULT_BANK_ACCOUNT_NAME`, `CONSULT_BANK_ACCOUNT`, `CONSULT_BANK_IBAN`, `CONSULT_BANK_BIC`, `CONSULT_BANK_NOTE` — Included in consultation confirmation emails so buyers see wiring instructions
 
 Recommended for SEO and analytics:
 - `NEXT_PUBLIC_SITE_URL` — e.g. `https://scanminers.com` (prevents sitemap/OG localhost)
 - `NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN` — Cloudflare Web Analytics (optional)
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 measurement ID used by `lib/analytics.ts`
 
 Sentry:
+- `NEXT_PUBLIC_SENTRY_DSN` — Browser DSN (public)
+- `SENTRY_DSN` — Server/edge DSN (secret)
+- `SENTRY_ENVIRONMENT` — Optional label (e.g., production, preview)
 Image generation & admin actions:
 - `ADMIN_ACTION_TOKEN` — Required to authorize `/api/images/regenerate` from Decap. Use a strong random string and share with editors.
 - `WORKFLOW_DISPATCH_TOKEN` — Fine-grained PAT with repo/workflow scope used by the API to call GitHub `workflow_dispatch`. Alternatively set `CONTENT_BOT_TOKEN` and the API will reuse it.

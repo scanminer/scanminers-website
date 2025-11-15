@@ -164,3 +164,33 @@ wrangler tail scanminers --sampling-rate 0.1 --format=pretty
 ## 🚀 Your Worker is Production-Ready!
 
 All code changes are complete. The remaining tasks are just hardening and optimization. Your site is live and fully functional right now! 🎉
+
+---
+
+# ✅ Completed Tasks - November 14, 2025
+
+## Stage 1 Schema + Content Refresh
+
+- Added required metadata fields (`slug`, `region`, `commodity`, `imagePrompt`, `review_status`, `ai_generated`) to every Insight and Case Study MDX with consistent YAML fences.
+- Updated Payas–İslahiye case studies with richer summaries, multi-commodity coverage, and descriptive image prompts aligned with new Contentlayer validation.
+- Enforced consistent front matter delimiters across Insights to keep Contentlayer parsing stable and removed redundant inline "Image Prompt" sections.
+- Ran `npm run lint` to confirm the expanded schema and content edits compile cleanly (no warnings or errors).
+
+**Result:** Contentlayer Stage 1 requirements are now satisfied; all existing long-form content complies with the stricter schema and passes lint.
+
+## Stage 2 Narrative Refresh
+
+- Rebuilt `app/case-studies/page.tsx`, `app/insights/page.tsx`, `app/technologies/page.tsx`, and `app/contact/page.tsx` with the new voice, CTAs, and governance messaging requested in the roadmap.
+- Added stats tiles, process overviews, and richer copy so GTM, geology, and admin stakeholders can see what each experience delivers without leaving the browser.
+- Ensured every updated page remained lint-clean after the rewrites.
+
+**Result:** Marketing-facing surfaces now reflect the Notion-style CMS vision while showcasing proof points, processes, and governed lead flows (Stage 2 complete).
+
+## Stage 3 Critical Mineral Grid
+
+- Introduced canonical commodity helpers plus a blueprint that maps Bauxite, Cobalt, Rare Earths, SAR/Tailings, Lithium, and Nickel initiatives to display-ready data.
+- Aggregated live data from Contentlayer (insights + case studies) to auto-populate regions, asset counts, and latest links for minerals already in production, while showing "scoping" states for the next slots.
+- Added a new homepage section (`app/page.tsx`) featuring the critical mineral grid with status pills, coverage summaries, workflow descriptions, and CTAs that jump into the freshest asset or open the contact form.
+- Ran `npm run lint` after the grid launch to keep Stage 3 code quality verified.
+
+**Result:** The homepage now advertises the critical mineral coverage roadmap in one glance, meeting the Stage 3 requirement.
