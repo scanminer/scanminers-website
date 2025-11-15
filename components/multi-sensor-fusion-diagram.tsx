@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 
 // Animated diagram showing multi-sensor fusion flow (Phase 2)
@@ -70,27 +71,8 @@ export function MultiSensorFusionDiagram() {
               />
             )}
             {/* SHAP emphasis: subtle pulsing glow + badge */}
-            {i === shapIdx && !prefersReducedMotion && (
-              <>
-                <motion.div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-xl"
-                  initial={{ boxShadow: "0 0 0 0 rgba(245,158,11,0)" }}
-                  animate={{ boxShadow: [
-                    "0 0 0 0 rgba(245,158,11,0)",
-                    "0 0 0 10px rgba(245,158,11,0.15)",
-                    "0 0 0 0 rgba(245,158,11,0)"
-                  ] }}
-                  transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1.2, ease: [0.22,1,0.36,1] }}
-                />
-                <motion.span
-                  className="absolute right-2 top-2 rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-semibold text-white/90"
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0, transition: { delay: 0.6 } }}
-                >
-                  explainability
-                </motion.span>
-              </>
+            {i === shapIdx && (
+              <ShapEmphasis prefersReducedMotion={!!prefersReducedMotion} />
             )}
 
             {/* Targets emphasis: quick tick highlight once in view */}
@@ -125,5 +107,50 @@ export function MultiSensorFusionDiagram() {
         ASTER → Landsat → Sentinel → PRISMA → Fusion → XGBoost → SHAP → Targets
       </motion.div>
     </motion.div>
+  );
+}
+
+function ShapEmphasis({ prefersReducedMotion }: { prefersReducedMotion: boolean }) {
+  const [open, setOpen] = useState(false);
+  const tipId = "shap-tip";
+  return (
+    <>
+      {!prefersReducedMotion && (
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-xl"
+          initial={{ boxShadow: "0 0 0 0 rgba(245,158,11,0)" }}
+          animate={{
+            boxShadow: [
+              "0 0 0 0 rgba(245,158,11,0)",
+              "0 0 0 10px rgba(245,158,11,0.15)",
+              "0 0 0 0 rgba(245,158,11,0)",
+            ],
+          }}
+          transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
+      <button
+        type="button"
+        aria-label="Explainability help"
+        aria-describedby={open ? tipId : undefined}
+        onClick={() => setOpen((v) => !v)}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-white/20 bg-white/10 text-[10px] font-bold text-white/90 backdrop-blur"
+      >
+        ?
+      </button>
+      <motion.div
+        role="tooltip"
+        id={tipId}
+        initial={{ opacity: 0, y: -6 }}
+        animate={{ opacity: open ? 1 : 0, y: open ? 0 : -6 }}
+        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+        className="pointer-events-none absolute right-2 top-9 z-10 w-44 rounded-md border border-white/20 bg-black/80 p-2 text-[11px] text-white/90 shadow-lg"
+      >
+        Feature attributions (SHAP-like) explain each score.
+      </motion.div>
+    </>
   );
 }

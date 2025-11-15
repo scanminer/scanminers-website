@@ -178,3 +178,23 @@ body {
   .mdx td { border-color: rgba(255,255,255,0.12); }
   .mdx thead th { background: rgba(255,255,255,0.05); }
 }
+
+/* Consistent, reduced-motion-safe hover/tap micro-interactions */
+.pressable {
+  transition: transform .2s cubic-bezier(0.22,1,0.36,1), box-shadow .2s ease;
+  will-change: transform;
+}
+.pressable:hover {
+  transform: translateY(-2px);
+}
+.pressable:active {
+  transform: scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pressable,
+  .pressable:hover,
+  .pressable:active {
+    transition: none;
+    transform: none;
+  }
+}
