@@ -110,6 +110,11 @@ export default function RootLayout({
                           Technologies
                         </Link>
                       </li>
+                      <li>
+                        <Link href="/partners" className="text-sm text-muted-foreground hover:text-foreground">
+                          Partners
+                        </Link>
+                      </li>
                     </ul>
                   </div>
 
