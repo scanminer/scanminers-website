@@ -59,24 +59,31 @@ export default function RootLayout({
           <Providers>
             {/* Slim sticky top accent line */}
             <div className="fixed top-0 inset-x-0 h-0.5 bg-primary/80 z-50 pointer-events-none" />
-            <header className="sticky top-0 z-40 border-b border-border bg-bg/70 backdrop-blur supports-[backdrop-filter]:bg-bg/60">
-              <nav className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3 p-4">
-                <Link href="/" className="font-semibold">Scanminers</Link>
-                <div className="flex flex-1 flex-wrap items-center justify-end gap-3 text-xs font-semibold tracking-wide sm:text-sm">
-                  <Link href="/about" className="hover:underline uppercase">About</Link>
-                  <Link href="/technologies" className="hover:underline uppercase">Technologies</Link>
-                  <Link href="/insights" className="hover:underline uppercase">Insights</Link>
-                  <Link href="/case-studies" className="hover:underline uppercase">Case Studies</Link>
-                  <Link href="/contact" className="hover:underline uppercase">Contact</Link>
+            <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <nav className="max-w-7xl mx-auto flex items-center justify-between gap-4 px-4 py-3">
+                {/* Logo */}
+                <Link href="/" className="font-semibold text-lg">Scanminers</Link>
+                
+                {/* Main Navigation - Hidden on mobile */}
+                <div className="hidden md:flex items-center gap-6 text-sm font-medium">
+                  <Link href="/about" className="hover:text-primary transition-colors">About</Link>
+                  <Link href="/technologies" className="hover:text-primary transition-colors">Technologies</Link>
+                  <Link href="/insights" className="hover:text-primary transition-colors">Insights</Link>
+                  <Link href="/case-studies" className="hover:text-primary transition-colors">Case Studies</Link>
+                  <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
+                </div>
+                
+                {/* Right side: CTAs + Utilities */}
+                <div className="flex items-center gap-2">
                   <Link
                     href="/prospectivity-brief"
-                    className="rounded-lg border border-fg/40 px-3 py-2 text-[0.7rem] uppercase text-fg hover:bg-fg/5 sm:text-xs"
+                    className="hidden sm:inline-flex rounded-lg border border-input bg-background px-3 py-1.5 text-xs font-semibold hover:bg-accent hover:text-accent-foreground transition-colors"
                   >
-                    Prospectivity Brief
+                    Brief
                   </Link>
                   <Link
                     href="/consultation"
-                    className="rounded-lg bg-primary px-3 py-2 text-[0.7rem] uppercase text-primary-foreground shadow-sm hover:-translate-y-0.5 hover:bg-primary/90 sm:text-xs"
+                    className="hidden sm:inline-flex rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 transition-colors"
                   >
                     Consultation
                   </Link>
