@@ -22,6 +22,13 @@ export async function OPTIONS(req: Request) {
   return new Response(null, cors(req, { status: 204 }));
 }
 
+type RegenerateBody = {
+  slug?: string
+  prompt?: string
+  branch?: string
+  post_path?: string
+}
+
 export async function POST(req: Request) {
   try {
     const adminHeader = req.headers.get('x-admin-action-token') || '';
@@ -29,7 +36,8 @@ export async function POST(req: Request) {
     if (!ADMIN_ACTION_TOKEN) return new Response('Server not configured', { status: 500 });
     if (adminHeader !== ADMIN_ACTION_TOKEN) return new Response('Unauthorized', { status: 401 });
 
-  const { slug, prompt, branch } = await req.json().catch(() => ({}));
+    const body = (await req.json().catch(() => ({}))) as RegenerateBody;
+    const { slug, prompt, branch } = body;
     if (!slug || typeof slug !== 'string' || !/^[a-z0-9-]{1,100}$/.test(slug)) {
       return new Response('Invalid slug', { status: 400 });
     }
@@ -78,6 +86,6 @@ export async function POST(req: Request) {
         message = String(e);
       }
     }
-    return json(500, { error: message });
+    return json(500, { success: false, error: message });
   }
 }

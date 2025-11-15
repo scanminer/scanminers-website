@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ApiResponse } from "@/types/api";
 
 type GenType = "insight" | "case" | "brief";
+
+type ContentOption = { slug: string; title: string; path: string };
+type ErrorInfo = { error?: string };
+type RunStatusPayload = { hasRun?: boolean; status?: string; conclusion?: string | null; url?: string };
+type ListContentPayload = { insights: ContentOption[]; cases: ContentOption[]; briefs: ContentOption[] };
+type DraftPreviewPayload = { mdx: string; prUrl?: string; path?: string; branch?: string; slug?: string };
+type ImprovePreviewPayload = { mdx?: string; originalMdx?: string };
+type ImproveCommitPayload = { prUrl?: string; branch?: string };
 
 export default function DraftsPage() {
   const [topic, setTopic] = useState("");
@@ -33,12 +42,15 @@ export default function DraftsPage() {
   const [improveView, setImproveView] = useState<"mdx" | "diff">("mdx");
   const [diffContext, setDiffContext] = useState<number | "all">(3);
   const [improveCommitted, setImproveCommitted] = useState<string | null>(null);
-  const [options, setOptions] = useState<{ insights: Array<{ slug: string; title: string; path: string }>; cases: Array<{ slug: string; title: string; path: string }>; briefs: Array<{ slug: string; title: string; path: string }>; } | null>(null);
+  const [options, setOptions] = useState<ListContentPayload | null>(null);
   const [improveFilter, setImproveFilter] = useState("");
   const [regenBranch, setRegenBranch] = useState("main");
   const [regenPrompt, setRegenPrompt] = useState("");
   const [regenStatus, setRegenStatus] = useState<string>("");
-  const [runInfo, setRunInfo] = useState<{ status: string; conclusion?: string | null; url?: string } | null>(null);
+  const [runInfo, setRunInfo] = useState<RunStatusPayload | null>(null);
+
+  const getResponseError = (status: number, data?: ErrorInfo & { message?: string; errors?: string[] }) =>
+    data?.error || data?.message || data?.errors?.join(", ") || `HTTP ${status}`;
   // Load last used branch for selected slug (local memory)
   useEffect(() => {
     if (!improveSlug) return;
@@ -53,8 +65,14 @@ export default function DraftsPage() {
     async function load() {
       try {
         const r = await fetch(`/api/admin/image-run-status?branch=${encodeURIComponent(regenBranch || 'main')}`, { cache: 'no-store' });
-        const data = await r.json();
-        if (!cancelled && data?.ok && data.hasRun) setRunInfo({ status: data.status, conclusion: data.conclusion, url: data.url });
+        const data: ApiResponse<RunStatusPayload & ErrorInfo> = await r.json();
+        if (!cancelled) {
+          if (data.success && data.hasRun) {
+            setRunInfo({ status: data.status || "unknown", conclusion: data.conclusion, url: data.url });
+          } else {
+            setRunInfo(null);
+          }
+        }
       } catch {}
     }
     if (regenBranch) load();
@@ -105,9 +123,14 @@ export default function DraftsPage() {
     (async () => {
       try {
         const r = await fetch("/api/admin/list-content", { cache: "no-store" });
-        const data = await r.json();
-        if (!r.ok || !data.ok) return;
-        if (!aborted) setOptions({ insights: data.insights || [], cases: data.cases || [], briefs: data.briefs || [] });
+        const data: ApiResponse<ListContentPayload & ErrorInfo> = await r.json();
+        if (!data.success) return;
+        if (!aborted)
+          setOptions({
+            insights: data.insights || [],
+            cases: data.cases || [],
+            briefs: data.briefs || [],
+          });
       } catch {}
     })();
     return () => {
@@ -139,9 +162,9 @@ export default function DraftsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ topic, context, type, createPR }),
       });
-      const data = await r.json();
-      if (!r.ok || !data.ok) {
-        throw new Error(data?.error || `HTTP ${r.status}`);
+      const data: ApiResponse<DraftPreviewPayload & ErrorInfo> = await r.json();
+      if (!data.success) {
+        throw new Error(getResponseError(r.status, data));
       }
       setResult({ mdx: data.mdx, prUrl: data.prUrl });
     } catch (e) {
@@ -173,8 +196,8 @@ export default function DraftsPage() {
           createPR: true,
         }),
       });
-      const data = await r.json();
-      if (!r.ok || !data.ok) throw new Error(data?.error || `HTTP ${r.status}`);
+      const data: ApiResponse<DraftPreviewPayload & ErrorInfo> = await r.json();
+  if (!data.success) throw new Error(getResponseError(r.status, data));
   setNewResult({ prUrl: data.prUrl, path: data.path, slug: data.slug });
   if (data.branch) setRegenBranch(data.branch);
   // Also preselect the created slug/type for quicker follow-up actions
@@ -200,8 +223,8 @@ export default function DraftsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ kind: improveKind, slug: improveSlug, prompt: improvePrompt, confirm: false }),
       });
-  const data = await r.json();
-      if (!r.ok || !data.ok) throw new Error(data?.error || `HTTP ${r.status}`);
+  const data: ApiResponse<(DraftPreviewPayload & ImprovePreviewPayload) & ErrorInfo> = await r.json();
+  if (!data.success) throw new Error(getResponseError(r.status, data));
   setImprovePreview(data.mdx || "");
   setImproveOriginal(data.originalMdx || "");
   setImproveView("diff");
@@ -224,8 +247,8 @@ export default function DraftsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ kind: improveKind, slug: improveSlug, prompt: improvePrompt, confirm: true, mdx: improvePreview }),
       });
-      const data = await r.json();
-      if (!r.ok || !data.ok) throw new Error(data?.error || `HTTP ${r.status}`);
+  const data: ApiResponse<ImproveCommitPayload & ErrorInfo> = await r.json();
+  if (!data.success) throw new Error(getResponseError(r.status, data));
   setImproveCommitted(data.prUrl || null);
   if (data.branch) setRegenBranch(data.branch);
     } catch (e) {

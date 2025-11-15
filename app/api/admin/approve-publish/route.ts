@@ -30,19 +30,19 @@ export async function POST(req: Request) {
 
     if (!GH_REPO || !TOKEN) {
       return NextResponse.json(
-        { ok: false, error: "Missing GH_REPO or CONTENT_BOT_TOKEN." },
+        { success: false, ok: false, error: "Missing GH_REPO or CONTENT_BOT_TOKEN." },
         { status: 400 }
       );
     }
 
     const doc = findDoc(kind, slug);
     if (!doc) {
-      return NextResponse.json({ ok: false, error: "Doc not found in contentlayer." }, { status: 404 });
+      return NextResponse.json({ success: false, ok: false, error: "Doc not found in contentlayer." }, { status: 404 });
     }
 
     const path = docPathFromDoc(doc);
     if (!path) {
-      return NextResponse.json({ ok: false, error: "Unable to resolve file path for doc." }, { status: 400 });
+  return NextResponse.json({ success: false, ok: false, error: "Unable to resolve file path for doc." }, { status: 400 });
     }
 
     const octokit = makeOctokit(TOKEN);
@@ -83,9 +83,9 @@ export async function POST(req: Request) {
 
     const prUrl = await openPr(octokit, GH_REPO, branch, BASE, prTitle, prBody);
 
-    return NextResponse.json({ ok: true, prUrl });
+    return NextResponse.json({ success: true, ok: true, prUrl });
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json({ success: false, ok: false, error: message }, { status: 500 });
   }
 }

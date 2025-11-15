@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { isRateLimited } from '@/lib/rate-limiter';
+import { createLead } from '@/lib/lead-store';
 
 async function createGitHubIssue(formData: { name: string; email: string; company?: string; message: string; }) {
   const token = process.env.GH_TOKEN;
@@ -49,6 +50,14 @@ ${formData.message}
   }
 }
 
+type ContactPayload = {
+  name: string;
+  email: string;
+  company?: string;
+  message: string;
+  token: string;
+};
+
 export async function POST(req: NextRequest) {
   // Basic Edge-safe rate limiting by IP
   const ipForLimit = req.headers.get('cf-connecting-ip') || req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'anon'
@@ -56,7 +65,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: 'Too many requests.' }, { status: 429 })
   }
 
-  const { name, email, company, message, token } = await req.json();
+  const { name, email, company, message, token } = (await req.json()) as ContactPayload;
 
   const formData = new FormData();
   formData.append('secret', process.env.TURNSTILE_SECRET_KEY!);
@@ -69,9 +78,27 @@ export async function POST(req: NextRequest) {
     body: formData,
   });
 
-  const outcome = await turnstileResponse.json();
+  const outcome = (await turnstileResponse.json()) as { success?: boolean };
   if (!outcome.success) {
     return NextResponse.json({ success: false, message: 'Invalid Turnstile token.' }, { status: 400 });
+  }
+
+  // Persist lead details (best-effort)
+  try {
+    await createLead({
+      type: "contact",
+      source: 'contact-form',
+      name,
+      email,
+      company,
+      message,
+      metadata: {
+        ip,
+        userAgent: req.headers.get('user-agent') || undefined,
+      },
+    });
+  } catch (error) {
+    console.error('[CONTACT] Failed to persist lead', error);
   }
 
   // Existing Resend email send (kept from prior implementation)

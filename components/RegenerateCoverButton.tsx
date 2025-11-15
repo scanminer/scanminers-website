@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import type { ApiResponse } from "@/types/api";
+
+type RunStatusPayload = { hasRun?: boolean; status?: string; conclusion?: string | null; url?: string };
+type ErrorInfo = { error?: string };
 
 export function RegenerateCoverButton({ slug, path }: { slug: string; path?: string }) {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<string>("");
   const REPO = (process.env.GH_REPO as string) || (process.env.NEXT_PUBLIC_GH_REPO as string) || "scanminer/scanminers-website";
   const [lastBranch, setLastBranch] = useState<string>("");
-  const [run, setRun] = useState<{ status: string; conclusion?: string | null; url?: string } | null>(null);
+  const [run, setRun] = useState<RunStatusPayload | null>(null);
 
   // Load last used branch for this slug
   React.useEffect(() => {
@@ -22,8 +26,14 @@ export function RegenerateCoverButton({ slug, path }: { slug: string; path?: str
       const b = lastBranch || 'main';
       try {
         const r = await fetch(`/api/admin/image-run-status?branch=${encodeURIComponent(b)}`, { cache: 'no-store' });
-        const data = await r.json();
-        if (!cancelled && data?.ok && data.hasRun) setRun({ status: data.status, conclusion: data.conclusion, url: data.url });
+        const data: ApiResponse<RunStatusPayload & ErrorInfo> = await r.json();
+        if (!cancelled) {
+          if (data.success && data.hasRun) {
+            setRun({ status: data.status || "unknown", conclusion: data.conclusion, url: data.url });
+          } else if (data.success) {
+            setRun(null);
+          }
+        }
       } catch {}
     }
     if (lastBranch) load();

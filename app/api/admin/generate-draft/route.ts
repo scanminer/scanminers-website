@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       const token = process.env.CONTENT_BOT_TOKEN;
       if (!repo || !token) {
         return NextResponse.json(
-          { ok: false, error: "Missing GH_REPO/CONTENT_REPO or CONTENT_BOT_TOKEN for PR creation.", mdx },
+          { success: false, ok: false, error: "Missing GH_REPO/CONTENT_REPO or CONTENT_BOT_TOKEN for PR creation.", mdx },
           { status: 400 }
         );
       }
@@ -60,12 +60,12 @@ export async function POST(req: Request) {
         ].join("\n"),
       });
 
-      return NextResponse.json({ ok: true, mode: "pr", prUrl, path, mdx });
+      return NextResponse.json({ success: true, ok: true, mode: "pr", prUrl, path, mdx });
     }
 
-    return NextResponse.json({ ok: true, mode: "preview", mdx });
+    return NextResponse.json({ success: true, ok: true, mode: "preview", mdx });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json({ success: false, ok: false, error: message }, { status: 500 });
   }
 }

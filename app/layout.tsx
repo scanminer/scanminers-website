@@ -39,13 +39,25 @@ export default function RootLayout({
             {/* Slim sticky top accent line */}
             <div className="fixed top-0 inset-x-0 h-0.5 bg-primary/80 z-50 pointer-events-none" />
             <header className="sticky top-0 z-40 border-b border-border bg-bg/70 backdrop-blur supports-[backdrop-filter]:bg-bg/60">
-              <nav className="max-w-5xl mx-auto flex items-center justify-between p-4">
+              <nav className="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3 p-4">
                 <Link href="/" className="font-semibold">Scanminers</Link>
-                <div className="flex items-center gap-3 text-sm">
-                  <Link href="/insights" className="hover:underline uppercase tracking-wide">Insights</Link>
-                  <Link href="/case-studies" className="hover:underline uppercase tracking-wide">Case Studies</Link>
-                  <Link href="/technologies" className="hover:underline uppercase tracking-wide">Technologies</Link>
-                  <Link href="/contact" className="rounded-lg border border-fg/40 text-fg px-3 py-2 hover:bg-fg/5 uppercase tracking-wide">Contact</Link>
+                <div className="flex flex-1 flex-wrap items-center justify-end gap-3 text-xs font-semibold tracking-wide sm:text-sm">
+                  <Link href="/insights" className="hover:underline uppercase">Insights</Link>
+                  <Link href="/case-studies" className="hover:underline uppercase">Case Studies</Link>
+                  <Link href="/technologies" className="hover:underline uppercase">Technologies</Link>
+                  <Link href="/contact" className="hover:underline uppercase">Contact</Link>
+                  <Link
+                    href="/prospectivity-brief"
+                    className="rounded-lg border border-fg/40 px-3 py-2 text-[0.7rem] uppercase text-fg hover:bg-fg/5 sm:text-xs"
+                  >
+                    Prospectivity Brief
+                  </Link>
+                  <Link
+                    href="/consultation"
+                    className="rounded-lg bg-primary px-3 py-2 text-[0.7rem] uppercase text-primary-foreground shadow-sm hover:-translate-y-0.5 hover:bg-primary/90 sm:text-xs"
+                  >
+                    Consultation
+                  </Link>
                   <Search />
                   <ModeToggle />
                 </div>

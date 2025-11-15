@@ -1,17 +1,44 @@
 "use client"
 
 import Link from "next/link"
-import { Menu, PanelsTopLeft } from "lucide-react"
+import { Menu, PanelsTopLeft, LogOut } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { AdminThemeBoot } from "@/components/admin/admin-theme-boot"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 const nav = [
   { href: "/admin", label: "Review Queue" },
+  { href: "/admin/leads", label: "Leads" },
+  { href: "/admin/brand", label: "Brand" },
   { href: "/admin/drafts", label: "Drafts" },
   { href: "/admin/system", label: "System" },
 ]
+
+function LogoutButton() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
+  async function handleLogout() {
+    setLoading(true)
+    try {
+      await fetch("/api/admin/login", { method: "DELETE" })
+    } finally {
+      setLoading(false)
+      router.push("/admin/login")
+      router.refresh()
+    }
+  }
+
+  return (
+    <Button variant="outline" size="sm" onClick={handleLogout} disabled={loading} className="gap-1">
+      <LogOut className="h-4 w-4" />
+      {loading ? "Signing out" : "Sign out"}
+    </Button>
+  )
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -34,8 +61,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
           ))}
         </nav>
-        <div className="p-3 border-t">
+        <div className="p-3 border-t flex items-center justify-between gap-2">
           <ModeToggle />
+          <LogoutButton />
         </div>
       </aside>
 
@@ -72,6 +100,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="hidden lg:block" />
           <div className="flex items-center gap-2">
             <ModeToggle />
+            <LogoutButton />
           </div>
         </header>
 

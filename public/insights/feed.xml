@@ -4,7 +4,7 @@
         <description><![CDATA[Insights from Scanminers]]></description>
         <link>https://scanminers.com/insights</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Thu, 06 Nov 2025 17:13:55 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 14 Nov 2025 22:39:07 GMT</lastBuildDate>
         <atom:link href="https://scanminers.com/insights/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
         <item>
@@ -16,28 +16,28 @@
         </item>
         <item>
             <title><![CDATA[Advances in AI-Powered Bauxite Prospectivity Mapping]]></title>
-            <description><![CDATA[A look into how modern AI techniques are revolutionizing the discovery of bauxite deposits, with a focus on our proprietary analysis in the Payas–İslahiye region.]]></description>
+            <description><![CDATA[Scanminers' AI-MPM workflow now screens vast portions of the Taurus belt for bauxite in days, and this article breaks down the inputs, explainable scoring, and Payas–İslahiye findings that are informing new drill programs.]]></description>
             <link>https://scanminers.com/insights/bauxite-mapping-advances</link>
             <guid isPermaLink="false">/insights/bauxite-mapping-advances</guid>
             <pubDate>Wed, 15 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Cobalt in Battery Supply Chains]]></title>
-            <description><![CDATA[A brief summary of the key findings. Please review and edit.]]></description>
+            <description><![CDATA[Cobalt remains the linchpin of high-nickel battery chemistries, and this brief explains how Scanminers blends multi-sensor remote sensing, supply-chain telemetry, and ESG monitoring to keep OEMs ahead of sourcing risks.]]></description>
             <link>https://scanminers.com/insights/cobalt-in-battery-supply-chains</link>
             <guid isPermaLink="false">/insights/cobalt-in-battery-supply-chains</guid>
             <pubDate>Mon, 13 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Using LiDAR for Tailing Dam Monitoring]]></title>
-            <description><![CDATA[A brief summary of the key findings will go here. Please update.]]></description>
+            <description><![CDATA[LiDAR-derived elevation models are now the fastest way to police tailings dams, and this note explains Scanminers' workflows for drone LiDAR capture, change detection, and integration with multisensor anomaly alerts.]]></description>
             <link>https://scanminers.com/insights/using-lidar-for-tailing-dam-monitoring</link>
             <guid isPermaLink="false">/insights/using-lidar-for-tailing-dam-monitoring</guid>
             <pubDate>Sun, 12 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Advancements in using SAR data for geological mapping]]></title>
-            <description><![CDATA[A brief summary of the key findings will go here. Please update.]]></description>
+            <description><![CDATA[Synthetic aperture radar (SAR) now delivers always-on structural intelligence for exploration teams, and this briefing covers how Scanminers fuses SAR with optical data, AI workflows, and explainable analytics to derisk critical mineral programs in cloud-prone regions.]]></description>
             <link>https://scanminers.com/insights/advancements-in-using-sar-data-for-geological-mapp</link>
             <guid isPermaLink="false">/insights/advancements-in-using-sar-data-for-geological-mapp</guid>
             <pubDate>Sat, 11 Oct 2025 00:00:00 GMT</pubDate>
