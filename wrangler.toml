@@ -30,3 +30,9 @@ invocation_logs = true
 enabled = true
 persist = true
 head_sampling_rate = 1
+
+[[d1_databases]]
+binding = "LEADS_DB"
+database_name = "scanminers-leads"
+# Replace with the D1 database id provisioned in your Cloudflare account
+database_id = "00000000-0000-0000-0000-000000000000"

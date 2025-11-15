@@ -1,0 +1,99 @@
+---
+slug: voice
+title: Voice & Tone System
+summary: "Confident, grounded language rules plus examples for every channel."
+category: voice
+status: approved
+weight: 30
+keywords:
+  - tone
+  - language
+  - copy
+audience:
+  - marketing
+  - sales
+  - public
+mediums:
+  - website
+  - email
+  - press
+  - sales
+founders:
+  - name: "Dr. Amin Beiranvand Pour"
+    title: "Co-Founder & Chief Scientist"
+    role: "Scientific authority, methodologies, research validation"
+  - name: "Mahmood Asadi"
+    title: "Co-Founder & Chief AI & Product Architect"
+    role: "AI strategy, platform architecture, product vision, technical leadership"
+checklist:
+  - Lead with confident verbs ("surface", "orchestrate", "quantify").
+  - Cite data sources or safeguards within two sentences.
+  - Close with a collaborative invitation, never a hard sell.
+  - Reflect scientific authority from Dr. Amin and technical + product leadership from Mahmood.
+  - Maintain unified GeoAI brand narrative across all channels.
+guardrails:
+  - rule: "Never sensationalize geological risk or claim guaranteed discovery."
+    reason: "We are trusted because we respect the limits of remote intelligence."
+    severity: hard
+    appliesTo:
+      - website
+      - press
+  - rule: "Avoid anthropomorphizing AI or satellites."
+    reason: "We position human experts with advanced tooling, not magic."
+    severity: soft
+  - rule: "Pair every bold claim with a qualifier or citation in the same paragraph."
+    reason: "Credibility depends on sourcing and nuance."
+    severity: hard
+voiceExamples:
+  - label: "Website hero"
+    context: "Homepage hero copy"
+    before: "We are revolutionizing mining with AI and satellites!"
+    after: "Scanminers moves board-level mineral decisions forward with satellite-first intelligence that arrives in days, not field seasons."
+    channel: website
+    voiceMove: "Confident, data-backed"
+  - label: "Executive outreach"
+    context: "Outbound email to CFO"
+    before: "Hey! Want faster mining insights?"
+    after: "CFOs working on expansion rounds are using Scanminers briefs to walk into investment committees with quantified upside and mitigation in hand."
+    channel: email
+    voiceMove: "Executive clarity"
+  - label: "Press quote"
+    context: "Spokesperson quote"
+    before: "Our AI sees everything."
+    after: "Our analysts combine orbital sensing with on-the-ground expertise so regulators and operators can make the same call from a shared source of truth."
+    channel: press
+    voiceMove: "Credible and responsible"
+prompts:
+  - name: "Tone reminder"
+    instructions: "Before drafting, summarize the desired tone in one sentence and list two supporting proof points."
+    tags:
+      - guardrail
+      - tone
+  - name: "Rewrite to fit voice"
+    instructions: "Given copy, rewrite it to match the Scanminers voice: confident, grounded, collaborative, citing data and guardrails."
+    tags:
+      - rewrite
+      - marketing
+updatedBy: "brand-system"
+updatedAt: 2025-11-15
+---
+
+## Founding Team Voice Authority
+
+**Founders:**
+- **Dr. Amin Beiranvand Pour** — Co-Founder & Chief Scientist
+- **Mahmood Asadi** — Co-Founder & Chief AI & Product Architect
+
+All responses, content, emails, AI drafts, and system prompts must reflect:
+- **Scientific authority** from Dr. Amin (methodologies, research validation, geoscience expertise)
+- **Technical + product leadership** from Mahmood (AI strategy, platform architecture, UX, automation)
+- A **unified GeoAI brand narrative** that positions Scanminers as both scientifically rigorous and operationally innovative
+
+## Tone Pillars
+
+1. **Confident, never cocky** – We are experts who speak plainly about what we know and what needs validation.
+2. **Grounded in evidence** – Cite data sources, models, or pilots whenever possible.
+3. **Collaborative** – Invite regulators, communities, and partners into the solution.
+4. **Responsible urgency** – We emphasize speed because the planet needs it, not because of hype.
+
+Use the examples above when training AI models or editing copy. If a new scenario emerges, add an example via the admin portal with before/after context.

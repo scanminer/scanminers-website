@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import type { ApiResponse } from "@/types/api";
 
 type KindLocal = "insight" | "case-study" | "brief";
 
@@ -20,10 +21,10 @@ export function ApprovePublishButton({ kind, slug }: { kind: KindLocal; slug: st
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug, kind: apiKind }),
       });
-      const data = await res.json();
-      if (!res.ok || !data?.ok) throw new Error(data?.error || "Failed");
-      setPrUrl(data.prUrl as string);
-      alert(`Opened PR: ${data.prUrl}`);
+  const data = (await res.json()) as ApiResponse<{ prUrl?: string; error?: string }>;
+  if (!res.ok || !data?.success) throw new Error(data?.message || data?.error || "Failed");
+  setPrUrl(data.prUrl as string);
+  alert(`Opened PR: ${data.prUrl}`);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Unknown error";
       alert(`Error: ${msg}`);

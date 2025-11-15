@@ -22,12 +22,12 @@ function getPathFor(doc: RawDoc): string {
 
 export async function GET() {
   try {
-  const insights = (allInsights as Insight[]).map((d) => ({ slug: getSlugFor(d as unknown as RawDoc), path: getPathFor(d as unknown as RawDoc), title: d.title || "(untitled)" }));
-  const cases = (allCaseStudies as CaseStudy[]).map((d) => ({ slug: getSlugFor(d as unknown as RawDoc), path: getPathFor(d as unknown as RawDoc), title: d.title || "(untitled)" }));
-  const briefs = (allBriefs as Brief[]).map((d) => ({ slug: getSlugFor(d as unknown as RawDoc), path: getPathFor(d as unknown as RawDoc), title: (d as unknown as RawDoc).title || "(untitled)" }));
-    return NextResponse.json({ ok: true, insights, cases, briefs });
+    const insights = (allInsights as Insight[]).map((d) => ({ slug: getSlugFor(d as unknown as RawDoc), path: getPathFor(d as unknown as RawDoc), title: d.title || "(untitled)" }));
+    const cases = (allCaseStudies as CaseStudy[]).map((d) => ({ slug: getSlugFor(d as unknown as RawDoc), path: getPathFor(d as unknown as RawDoc), title: d.title || "(untitled)" }));
+    const briefs = (allBriefs as Brief[]).map((d) => ({ slug: getSlugFor(d as unknown as RawDoc), path: getPathFor(d as unknown as RawDoc), title: (d as unknown as RawDoc).title || "(untitled)" }));
+    return NextResponse.json({ success: true, ok: true, insights, cases, briefs });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json({ success: false, ok: false, error: message }, { status: 500 });
   }
 }

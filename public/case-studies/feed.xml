@@ -4,7 +4,7 @@
         <description><![CDATA[Case studies from Scanminers]]></description>
         <link>https://scanminers.com/case-studies</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Thu, 06 Nov 2025 17:13:55 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 15 Nov 2025 03:08:28 GMT</lastBuildDate>
         <atom:link href="https://scanminers.com/case-studies/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
         <item>
@@ -16,7 +16,7 @@
         </item>
         <item>
             <title><![CDATA[Payas–İslahiye Pilot: Targeting High-Potential Zones]]></title>
-            <description><![CDATA[How our AI-MPM workflow shortlisted actionable target zones in the Payas–İslahiye region.]]></description>
+            <description><![CDATA[SAR + multispectral fusion shortlisted four high-confidence bauxite corridors with traceable rationale layers for Payas–İslahiye.]]></description>
             <link>https://scanminers.com/case-studies/payas-islahiye-pilot</link>
             <guid isPermaLink="false">/case-studies/payas-islahiye-pilot</guid>
             <pubDate>Wed, 10 Sep 2025 00:00:00 GMT</pubDate>

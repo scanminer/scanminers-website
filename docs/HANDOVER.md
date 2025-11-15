@@ -13,12 +13,14 @@ This handover consolidates architecture, environment, deployment, operations, se
 - Content: MDX via Contentlayer (Insights, Case Studies)
 - SEO: Sitemap, robots, two RSS feeds
 - Contact: Cloudflare Turnstile + Edge API route + Resend (REST) email
+- Funnels: `/prospectivity-brief` (free lead magnet) and `/consultation` (paid intake) reuse the shared Turnstile + Resend stack and require billing vars for emails
 - Hosting: Cloudflare Pages (Next on Pages)
 - Observability: Sentry (client/server/edge)
 - Analytics: Optional Cloudflare Web Analytics (env-gated)
 
 Top-level paths:
 - Public pages: `/`, `/insights`, `/case-studies`, `/technologies`, `/contact`
+- Lead funnels: `/prospectivity-brief`, `/consultation`
 - Content detail: `/insights/[slug]`, `/case-studies/[slug]`, tag pages
 - SEO: `/sitemap.xml`, `/robots.txt`, `/insights/rss.xml`, `/case-studies/rss.xml`
 - API: `/api/contact` (Edge), `/api/health` (Edge), `/api/health/env` (Edge)
@@ -50,18 +52,23 @@ Top-level paths:
 
 Environment variables (Cloudflare Pages → Project settings → Environment variables; set for both Production and Preview):
 
-Required for contact form:
+Required for contact + prospectivity/consultation forms:
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` — Cloudflare Turnstile (public)
 - `TURNSTILE_SECRET_KEY` — Cloudflare Turnstile (secret)
 - `RESEND_API_KEY` — Resend API key (secret)
 - `RESEND_FROM` — Verified sender, e.g. `contact@scanminers.com`
 - `RESEND_TO` — Comma-separated recipients, e.g. `founders@scanminers.com`
+- `CONSULT_BANK_ACCOUNT_NAME`, `CONSULT_BANK_ACCOUNT`, `CONSULT_BANK_IBAN`, `CONSULT_BANK_BIC`, `CONSULT_BANK_NOTE` — Included in consultation confirmation emails so buyers see wiring instructions
 
 Recommended for SEO and analytics:
 - `NEXT_PUBLIC_SITE_URL` — e.g. `https://scanminers.com` (prevents sitemap/OG localhost)
 - `NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN` — Cloudflare Web Analytics (optional)
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 measurement ID used by `lib/analytics.ts`
 
 Sentry:
+- `NEXT_PUBLIC_SENTRY_DSN` — Browser DSN (public)
+- `SENTRY_DSN` — Server/edge DSN (secret)
+- `SENTRY_ENVIRONMENT` — Optional label (e.g., production, preview)
 Image generation & admin actions:
 - `ADMIN_ACTION_TOKEN` — Required to authorize `/api/images/regenerate` from Decap. Use a strong random string and share with editors.
 - `WORKFLOW_DISPATCH_TOKEN` — Fine-grained PAT with repo/workflow scope used by the API to call GitHub `workflow_dispatch`. Alternatively set `CONTENT_BOT_TOKEN` and the API will reuse it.
@@ -293,19 +300,169 @@ gh api -X PUT repos/<owner>/<repo>/branches/main/protection -H "Accept: applicat
 JSON
 ```
 
-Note: Even with 0 approvals, merges are still blocked until all required checks pass. This preserves build and content quality when you’re solo.
+Note: Even with 0 approvals, merges are still blocked until all required checks pass. This preserves build and content quality when you're solo.
 
+---
 
-## 11. Next steps (optional)
+## 11. Visual Components & Pages (MEGA-PROMPT 3)
+
+### New Pages
+
+#### `/technologies`
+Comprehensive technology overview with:
+- Hero section with HeroVisual component
+- Multi-sensor fusion explanation (Optical, Hyperspectral, DEM, Geochemistry)
+- Explainable AI section (XGBoost, Random Forest, SHAP)
+- ProspectivityPipeline visualization
+- Sustainability & SDG 13 alignment
+- Product views integration
+
+#### `/about`
+Team and mission page featuring:
+- Mission & vision with 3-pillar approach (Critical Minerals Security, Energy Transition, Responsible Exploration)
+- Team profiles: Dr. Amin Beiranvand Pour (Co-Founder & Chief Scientist) and Mahmood Asadi (Co-Founder & Chief AI & Product Architect)
+- Core principles: Scientific Rigor, Explainability, Collaboration, Climate Respect
+- 3-step engagement workflow (Brief → Scoping → Advisory)
+- CTAs to prospectivity brief and consultation forms
+
+### Reusable Components
+
+#### `components/HeroVisual.tsx`
+Map-like satellite visualization with:
+- Simulated satellite imagery background (SVG grid + gradients)
+- Topographic contour overlays
+- Commodity chips (Li, Co, Ni, REE, Cu, Graphite)
+- Feature chips (Multi-sensor fusion, Explainable AI, SDG-aligned, Critical mineral targeting)
+- Brand colors (sky/emerald gradients)
+- Responsive: compact and full variants
+- Animated data point indicators
+
+#### `components/ProspectivityPipeline.tsx`
+5-step workflow visualization:
+- Step 1: **Ingest** (Database icon) - Multi-sensor data inputs
+- Step 2: **Fuse** (GitMerge icon) - Data fusion and feature engineering
+- Step 3: **Model** (BrainCircuit icon) - Explainable AI (XGBoost, RF, SHAP)
+- Step 4: **Rank** (TrendingUp icon) - Prospectivity scoring
+- Step 5: **Decide** (Target icon) - Drill targeting and field programs
+- Desktop: horizontal with arrow connectors
+- Mobile: vertical stacked with down arrows
+- Color-coded cards with unique color per step
+
+#### `components/ProductScreensStrip.tsx`
+3-card product view showcase:
+- **Prospectivity Map**: Heatmap visualization with hotspot identification
+- **Explainability View**: SHAP feature importance charts (no black box)
+- **Ranked Target List**: Sortable targets with scores and metadata
+- Each card has icon, title, description, 3 bullets
+- Placeholder visuals (gradients + grid overlays) for screenshots
+- Ready to replace with actual product screenshots
+
+### Homepage Integration
+
+Updated `app/page.tsx` with:
+- HeroVisual section after hero text with cross-links to `/technologies` and `/about`
+- ProductScreensStrip section showcasing 3 product views
+- ProspectivityPipeline replacing old operating stack for better visual hierarchy
+- Maintained existing sections: hero, outcomes, critical coverage grid, funnels, latest content
+
+### OG Image Generation
+
+#### `scripts/generate-og-images.ts`
+Automated OG image generation script:
+- Iterates over published Insights and Case Studies
+- Uses Stability AI Core API to generate 1200x630 images
+- Generates prompts via `lib/og-prompts.ts` (geological/geospatial aesthetic)
+- Saves to `public/og/<slug>.png`
+- Skips existing files (use `--force` flag to regenerate)
+- Run with: `npm run generate-og-images` (requires `STABILITY_API_KEY`)
+
+#### `lib/og-prompts.ts`
+OG image prompt generation:
+- `generateOgImagePrompt()` - Creates 50-80 word prompts for Stability AI
+- Incorporates title, region, commodities into geological visualization prompts
+- Blue-green-amber color palette matching brand
+- Focus: satellite imagery, topographic contours, heatmaps, data visualization
+- No text, no people, no logos
+
+#### `lib/og-metadata.ts`
+OG metadata helpers for Next.js:
+- `getOgImageUrl(slug)` - Returns absolute URL to generated OG image
+- `getDefaultOgImageUrl()` - Fallback to default OG image
+- `buildOgMetadata()` - Complete OpenGraph object with image
+- `buildTwitterMetadata()` - Complete Twitter Card object with image
+- Designed for build-time image generation (no runtime FS access on Cloudflare)
+
+### Usage Example
+
+To generate OG images for all published content:
+
+```bash
+# Set Stability AI API key
+export STABILITY_API_KEY="sk-..."
+
+# Generate images (skip existing)
+npm run generate-og-images
+
+# Force regenerate all
+npm run generate-og-images --force
+```
+
+To use OG images in metadata:
+
+```typescript
+import { buildOgMetadata, buildTwitterMetadata } from "@/lib/og-metadata";
+
+export const metadata: Metadata = {
+  title: "My Post | Scanminers",
+  description: "...",
+  openGraph: buildOgMetadata({
+    title: "My Post",
+    description: "...",
+    url: absoluteUrl("/insights/my-post"),
+    slug: "my-post", // Uses /og/my-post.png
+  }),
+  twitter: buildTwitterMetadata({
+    title: "My Post",
+    description: "...",
+    slug: "my-post",
+  }),
+};
+```
+
+### Design System Notes
+
+All new components follow existing design patterns:
+- Tailwind utilities with brand colors (primary, emerald, sky)
+- Lucide React icons throughout
+- Responsive breakpoints (sm, md, lg)
+- Dark mode support via CSS variables
+- Border radius: `rounded-xl` for cards, `rounded-2xl` for sections
+- Shadows: `shadow-sm` to `shadow-lg` hierarchy
+- Consistent spacing: `space-y-{n}` and `gap-{n}`
+- Muted text: `text-muted-foreground`
+- Typography: Font weights 400 (normal), 600 (semibold), 700 (bold)
+
+To extend visuals:
+- Add new data sources to `/technologies` multi-sensor fusion section
+- Create additional product view cards in `ProductScreensStrip`
+- Add more steps to `ProspectivityPipeline` if workflow changes
+- Replace placeholder visuals in ProductScreensStrip with real screenshots (place in `public/images/screens/`)
+
+---
+
+## 12. Next steps (optional)
 
 - Promote Sentry init to Next.js `instrumentation.ts` per SDK guidance
 - Add stronger rate limiting (KV/Durable Object or Cloudflare Rules)
 - Add e2e smoke tests for contact flow (Playwright) running in CI
 - Add PostHog or similar privacy-friendly analytics if desired
+- Replace ProductScreensStrip placeholder visuals with actual product screenshots
+- Generate OG images for all existing content via generate-og-images script
+- Add Stability AI API key to production environment for automated OG generation
 
 ---
 
-## 12. Export to PDF
+## 13. Export to PDF
 
 - From VS Code: Open this file → Print (⌘/Ctrl+P) → Print to PDF
 - Or use `pandoc` locally to convert Markdown → PDF

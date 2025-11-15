@@ -37,15 +37,15 @@ export async function POST(req: Request) {
 
     if (!GH_REPO || !TOKEN) {
       return NextResponse.json(
-        { ok: false, error: "Missing GH_REPO/CONTENT_REPO or CONTENT_BOT_TOKEN." },
+        { success: false, ok: false, error: "Missing GH_REPO/CONTENT_REPO or CONTENT_BOT_TOKEN." },
         { status: 400 }
       );
     }
 
     const doc = findDoc(kind, slug);
-    if (!doc) return NextResponse.json({ ok: false, error: "Doc not found in contentlayer." }, { status: 404 });
+    if (!doc) return NextResponse.json({ success: false, ok: false, error: "Doc not found in contentlayer." }, { status: 404 });
     const path = pathFromDoc(doc);
-    if (!path) return NextResponse.json({ ok: false, error: "Unable to resolve file path." }, { status: 400 });
+    if (!path) return NextResponse.json({ success: false, ok: false, error: "Unable to resolve file path." }, { status: 400 });
 
     const octokit = makeOctokit(TOKEN);
 
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
       });
       const previewMdx = matter.stringify(improvedBody.trimStart() + "\n", parsed.data as Record<string, unknown>);
       const originalMdx = matter.stringify(parsed.content.trimStart() + "\n", parsed.data as Record<string, unknown>);
-      return NextResponse.json({ ok: true, mode: "preview", mdx: previewMdx, originalMdx });
+  return NextResponse.json({ success: true, ok: true, mode: "preview", mdx: previewMdx, originalMdx });
     }
 
     // Confirm/commit mode
@@ -93,9 +93,9 @@ export async function POST(req: Request) {
     const prBody = `This PR applies AI-assisted edits to the ${kind} at \`${path}\` with prompt: \n\n> ${prompt}`;
     const prUrl = await openPr(octokit, GH_REPO, branch, BASE, prTitle, prBody);
 
-  return NextResponse.json({ ok: true, mode: "commit", prUrl, branch });
+    return NextResponse.json({ success: true, ok: true, mode: "commit", prUrl, branch });
   } catch (e) {
     const message = e instanceof Error ? e.message : "Unknown error";
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json({ success: false, ok: false, error: message }, { status: 500 });
   }
 }

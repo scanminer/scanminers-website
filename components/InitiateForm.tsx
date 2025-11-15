@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ApiResponse } from "@/types/api";
 
 type Payload = {
   title: string;
@@ -25,9 +26,9 @@ export default function InitiateForm({ disabled }: { disabled?: boolean }) {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ title, summary } satisfies Payload),
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        throw new Error(data?.error || `Request failed (${res.status})`);
+      const data = (await res.json().catch(() => ({}))) as ApiResponse<{ slug?: string; error?: string }>;
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.message || data?.error || `Request failed (${res.status})`);
       }
       setMessage(data?.message || "Brief initiated (dev-only demo).");
       setTitle("");

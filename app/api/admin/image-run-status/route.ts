@@ -1,17 +1,31 @@
 // app/api/admin/image-run-status/route.ts
 import { NextResponse } from "next/server";
 
+type WorkflowRun = {
+  id: number
+  status?: string
+  conclusion?: string | null
+  html_url?: string
+  created_at?: string
+  updated_at?: string
+  head_branch?: string
+}
+
+type WorkflowRunsResponse = {
+  workflow_runs?: WorkflowRun[]
+}
+
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const branch = url.searchParams.get("branch") || "main";
 
     const repoFull = (process.env.GH_REPO || process.env.CONTENT_REPO || process.env.GITHUB_REPOSITORY || "").toString();
-    if (!repoFull.includes("/")) return NextResponse.json({ ok: false, error: "Missing repo env" }, { status: 500 });
+  if (!repoFull.includes("/")) return NextResponse.json({ success: false, ok: false, error: "Missing repo env" }, { status: 500 });
     const [owner, repo] = repoFull.split("/");
 
     const token = process.env.WORKFLOW_DISPATCH_TOKEN || process.env.CONTENT_BOT_TOKEN || "";
-    if (!token) return NextResponse.json({ ok: false, error: "Missing workflow token" }, { status: 500 });
+  if (!token) return NextResponse.json({ success: false, ok: false, error: "Missing workflow token" }, { status: 500 });
 
     const runsResp = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/workflows/regenerate-image.yml/runs?branch=${encodeURIComponent(branch)}&event=workflow_dispatch&per_page=1`, {
       headers: {
@@ -24,14 +38,15 @@ export async function GET(req: Request) {
 
     if (!runsResp.ok) {
       const t = await runsResp.text().catch(() => "");
-      return NextResponse.json({ ok: false, error: `GitHub error ${runsResp.status}: ${t}` }, { status: 502 });
+      return NextResponse.json({ success: false, ok: false, error: `GitHub error ${runsResp.status}: ${t}` }, { status: 502 });
     }
 
-    const j = await runsResp.json();
-    const run = (j?.workflow_runs?.[0]) || null;
-    if (!run) return NextResponse.json({ ok: true, hasRun: false });
+  const j = (await runsResp.json()) as WorkflowRunsResponse;
+    const run = j?.workflow_runs?.[0] || null;
+    if (!run) return NextResponse.json({ success: true, ok: true, hasRun: false });
 
     return NextResponse.json({
+      success: true,
       ok: true,
       hasRun: true,
       id: run.id,
@@ -44,6 +59,6 @@ export async function GET(req: Request) {
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, ok: false, error: msg }, { status: 500 });
   }
 }
