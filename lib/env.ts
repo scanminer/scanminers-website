@@ -6,6 +6,8 @@ const EnvSchema = z.object({
 
   // Core URLs
   NEXT_PUBLIC_SITE_URL: z.string().url().optional(),
+  NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN: z.string().optional(),
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string().optional(),
 
   // Cloudflare Turnstile
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
@@ -16,8 +18,16 @@ const EnvSchema = z.object({
   RESEND_FROM: z.string().optional(),
   RESEND_TO: z.string().optional(),
 
+  // Consultation billing
+  CONSULT_BANK_ACCOUNT_NAME: z.string().optional(),
+  CONSULT_BANK_ACCOUNT: z.string().optional(),
+  CONSULT_BANK_IBAN: z.string().optional(),
+  CONSULT_BANK_BIC: z.string().optional(),
+  CONSULT_BANK_NOTE: z.string().optional(),
+
   // Sentry
   NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
+  SENTRY_DSN: z.string().optional(),
   SENTRY_ENVIRONMENT: z.string().optional(),
 
   // Admin actions & image generation
@@ -53,6 +63,8 @@ export const env: Env = EnvSchema.parse({
   NODE_ENV: process.env.NODE_ENV,
 
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN: process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN,
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
 
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
@@ -61,7 +73,14 @@ export const env: Env = EnvSchema.parse({
   RESEND_FROM: process.env.RESEND_FROM,
   RESEND_TO: process.env.RESEND_TO,
 
+  CONSULT_BANK_ACCOUNT_NAME: process.env.CONSULT_BANK_ACCOUNT_NAME,
+  CONSULT_BANK_ACCOUNT: process.env.CONSULT_BANK_ACCOUNT,
+  CONSULT_BANK_IBAN: process.env.CONSULT_BANK_IBAN,
+  CONSULT_BANK_BIC: process.env.CONSULT_BANK_BIC,
+  CONSULT_BANK_NOTE: process.env.CONSULT_BANK_NOTE,
+
   NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  SENTRY_DSN: process.env.SENTRY_DSN,
   SENTRY_ENVIRONMENT: process.env.SENTRY_ENVIRONMENT,
 
   ADMIN_ACTION_TOKEN: process.env.ADMIN_ACTION_TOKEN,
@@ -98,6 +117,26 @@ export function logEnvWarnings() {
   if (!env.ADMIN_USER) missing.push("ADMIN_USER");
   if (!env.ADMIN_PASS) missing.push("ADMIN_PASS");
 
+  // Contact + funnel forms
+  if (!env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || !env.TURNSTILE_SECRET_KEY) {
+    hints.push("NEXT_PUBLIC_TURNSTILE_SITE_KEY + TURNSTILE_SECRET_KEY (required for CAPTCHA-protected forms)");
+  }
+
+  if (!env.RESEND_API_KEY) hints.push("RESEND_API_KEY (required for contact + funnel emails)");
+  if (!env.RESEND_FROM) hints.push("RESEND_FROM (verified sender email)");
+  if (!env.RESEND_TO) hints.push("RESEND_TO (comma-separated recipients)");
+
+  const missingConsultFields = [
+    !env.CONSULT_BANK_ACCOUNT_NAME && "CONSULT_BANK_ACCOUNT_NAME",
+    !env.CONSULT_BANK_ACCOUNT && "CONSULT_BANK_ACCOUNT",
+    !env.CONSULT_BANK_IBAN && "CONSULT_BANK_IBAN",
+    !env.CONSULT_BANK_BIC && "CONSULT_BANK_BIC",
+    !env.CONSULT_BANK_NOTE && "CONSULT_BANK_NOTE",
+  ].filter(Boolean) as string[];
+  if (missingConsultFields.length) {
+    hints.push(`Consultation billing details missing: ${missingConsultFields.join(", ")}`);
+  }
+
   // Admin actions token
   if (!env.ADMIN_ACTION_TOKEN) hints.push("ADMIN_ACTION_TOKEN (needed to call /api/images/regenerate)");
 
@@ -108,12 +147,17 @@ export function logEnvWarnings() {
   }
 
   // Email
-  if (!env.RESEND_API_KEY) hints.push("RESEND_API_KEY (required for contact form to send)");
-  if (!env.RESEND_FROM) hints.push("RESEND_FROM (recommended; verified sender)");
-  if (!env.RESEND_TO) hints.push("RESEND_TO (recommended; recipients)");
+  if (!env.NEXT_PUBLIC_GA_MEASUREMENT_ID) {
+    hints.push("NEXT_PUBLIC_GA_MEASUREMENT_ID (needed for GA4 event tracking)");
+  }
+  if (!env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN) {
+    hints.push("NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN (optional Cloudflare Web Analytics)");
+  }
 
   // Public site URL
   if (!env.NEXT_PUBLIC_SITE_URL) hints.push("NEXT_PUBLIC_SITE_URL (improves absolute URLs)");
+
+  if (!env.SENTRY_DSN) hints.push("SENTRY_DSN (server/edge error reporting)");
 
   if (missing.length || hints.length) {
     // Keep logs compact and readable

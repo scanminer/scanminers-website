@@ -1,4 +1,10 @@
 import { withContentlayer } from 'next-contentlayer'
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
+
+if (process.env.NODE_ENV !== 'production') {
+  // Enables Cloudflare bindings (D1, etc.) inside `next dev`
+  void initOpenNextCloudflareForDev()
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

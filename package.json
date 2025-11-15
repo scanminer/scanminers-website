@@ -51,6 +51,7 @@
     "zod": "4.1.12"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251113.0",
     "@eslint/eslintrc": "^3",
     "@opennextjs/cloudflare": "^1.11.1",
     "@pagefind/default-ui": "^1.4.0",
