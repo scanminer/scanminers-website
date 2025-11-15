@@ -341,9 +341,9 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid gap-6 md:grid-cols-3">
+          <MSection className="grid gap-6 md:grid-cols-3">
             {outcomes.map((card, idx) => (
-              <div 
+              <MDIV 
                 key={card.title} 
                 className="group relative overflow-hidden rounded-2xl border-2 border-border/50 bg-background p-7 transition-all hover:border-primary hover:shadow-2xl dark:bg-background/80"
               >
@@ -361,9 +361,9 @@ export default function Home() {
                     <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">{card.hint}</p>
                   </div>
                 </div>
-              </div>
+              </MDIV>
             ))}
-          </div>
+          </MSection>
           
           <div className="rounded-2xl border-2 border-success/30 bg-gradient-to-br from-success/10 via-success/5 to-transparent p-8 shadow-inner">
             <div className="flex items-start gap-4">

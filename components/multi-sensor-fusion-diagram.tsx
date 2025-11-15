@@ -17,6 +17,7 @@ export function MultiSensorFusionDiagram() {
   ];
   const shapIdx = stages.findIndex((s) => s.label === "SHAP");
   const targetsIdx = stages.findIndex((s) => s.label === "Targets");
+  const fusionIdx = stages.findIndex((s) => s.label === "Fusion");
 
   const container: Variants = prefersReducedMotion
     ? { hidden: {}, visible: {} }
@@ -53,6 +54,21 @@ export function MultiSensorFusionDiagram() {
             className={`group relative overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br ${s.color} p-3`}
           >
             <div className="text-xs font-semibold">{s.label}</div>
+            {/* Fusion shimmer: subtle moving highlight to indicate blending */}
+            {i === fusionIdx && !prefersReducedMotion && (
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-xl"
+                style={{
+                  background:
+                    "linear-gradient(120deg, transparent 30%, rgba(16,185,129,0.25) 50%, transparent 70%)",
+                  backgroundSize: "200% 100%",
+                }}
+                initial={{ backgroundPositionX: "0%", opacity: 0.0 }}
+                whileInView={{ backgroundPositionX: ["0%", "200%"], opacity: 1 }}
+                transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+              />
+            )}
             {/* SHAP emphasis: subtle pulsing glow + badge */}
             {i === shapIdx && !prefersReducedMotion && (
               <>
