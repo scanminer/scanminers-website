@@ -58,10 +58,11 @@ function formatDateTime(value: string) {
 type SearchParams = { [key: string]: string | string[] | undefined };
 
 type LeadsPageProps = {
-  searchParams?: SearchParams;
+  searchParams?: Promise<SearchParams>;
 };
 
-export default async function AdminLeadsPage({ searchParams = {} }: LeadsPageProps) {
+export default async function AdminLeadsPage(props: LeadsPageProps) {
+  const searchParams = await props.searchParams ?? {};
   const statusFilter = parseStatusParam(getParamValue(searchParams.status));
   const typeFilter = parseTypeParam(getParamValue(searchParams.type));
 

@@ -16,7 +16,8 @@ const TYPE_LABEL_MAP = {
   consultation: "Consultation",
 } as const;
 
-export default async function LeadDetailPage({ params }: { params: { id: string } }) {
+export default async function LeadDetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   let payload = await getLeadWithEvents(params.id);
   if (!payload) {
     notFound();

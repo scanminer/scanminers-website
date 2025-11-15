@@ -182,7 +182,7 @@ export function EditorPortal({ content, contentType }: EditorPortalProps) {
         <PreviewTab draft={draft} contentType={contentType} />
       )}
 
-      {activeTab === "social" && <SocialTab />}
+      {activeTab === "social" && <SocialTab slug={draft.slug} />}
     </div>
   );
 }
@@ -468,7 +468,27 @@ function PreviewTab({ draft, contentType }: { draft: DraftState; contentType: Co
   );
 }
 
-function SocialTab() {
+function SocialTab({ slug }: { slug: string }) {
+  const [linkedinPost, setLinkedinPost] = useState("");
+  const [linkedinCarousel, setLinkedinCarousel] = useState("");
+  const [xPost, setXPost] = useState("");
+  const [emailTeaser, setEmailTeaser] = useState("");
+  const [ogPrompt, setOgPrompt] = useState("");
+  
+  const [loadingLinkedin, setLoadingLinkedin] = useState(false);
+  const [loadingCarousel, setLoadingCarousel] = useState(false);
+  const [loadingX, setLoadingX] = useState(false);
+  const [loadingEmail, setLoadingEmail] = useState(false);
+  const [loadingOg, setLoadingOg] = useState(false);
+  
+  const [copyStatus, setCopyStatus] = useState<Record<string, boolean>>({});
+
+  const handleCopy = async (text: string, key: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopyStatus({ ...copyStatus, [key]: true });
+    setTimeout(() => setCopyStatus({ ...copyStatus, [key]: false }), 2000);
+  };
+
   return (
     <div className="space-y-6">
       <div className="rounded-xl border bg-card p-6">
@@ -478,11 +498,243 @@ function SocialTab() {
         </p>
       </div>
 
-      <div className="rounded-xl border bg-muted/50 p-6">
-        <p className="text-sm text-muted-foreground">
-          <strong>Coming soon:</strong> AI-powered generation of LinkedIn posts, carousel outlines, X posts, and
-          email teasers using the Scanminers brand system.
-        </p>
+      {/* LinkedIn Post */}
+      <div className="rounded-xl border bg-card p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">LinkedIn Post</h3>
+            <p className="text-xs text-muted-foreground">Professional B2B post (300-500 words)</p>
+          </div>
+          <Button
+            size="sm"
+            onClick={async () => {
+              setLoadingLinkedin(true);
+              try {
+                const { generateLinkedInPost } = await import("@/app/admin/editor/actions");
+                const result = await generateLinkedInPost(slug);
+                if (result.success && result.content) {
+                  setLinkedinPost(result.content);
+                } else {
+                  alert(`Error: ${result.error || "Unknown error"}`);
+                }
+              } catch (error) {
+                alert(`Failed to generate: ${error instanceof Error ? error.message : "Unknown"}`);
+              } finally {
+                setLoadingLinkedin(false);
+              }
+            }}
+            disabled={loadingLinkedin}
+          >
+            {loadingLinkedin ? "Generating..." : "Generate"}
+          </Button>
+        </div>
+        {linkedinPost && (
+          <>
+            <Textarea
+              value={linkedinPost}
+              onChange={(e) => setLinkedinPost(e.target.value)}
+              rows={10}
+              className="font-mono text-sm"
+            />
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>{linkedinPost.split(/\s+/).filter(Boolean).length} words</span>
+              <Button size="sm" variant="outline" onClick={() => handleCopy(linkedinPost, "linkedin")}>
+                {copyStatus.linkedin ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* LinkedIn Carousel */}
+      <div className="rounded-xl border bg-card p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">LinkedIn Carousel Outline</h3>
+            <p className="text-xs text-muted-foreground">8-10 slide outline for visual post</p>
+          </div>
+          <Button
+            size="sm"
+            onClick={async () => {
+              setLoadingCarousel(true);
+              try {
+                const { generateLinkedInCarousel } = await import("@/app/admin/editor/actions");
+                const result = await generateLinkedInCarousel(slug);
+                if (result.success && result.content) {
+                  setLinkedinCarousel(result.content);
+                } else {
+                  alert(`Error: ${result.error || "Unknown error"}`);
+                }
+              } catch (error) {
+                alert(`Failed to generate: ${error instanceof Error ? error.message : "Unknown"}`);
+              } finally {
+                setLoadingCarousel(false);
+              }
+            }}
+            disabled={loadingCarousel}
+          >
+            {loadingCarousel ? "Generating..." : "Generate"}
+          </Button>
+        </div>
+        {linkedinCarousel && (
+          <>
+            <Textarea
+              value={linkedinCarousel}
+              onChange={(e) => setLinkedinCarousel(e.target.value)}
+              rows={12}
+              className="font-mono text-sm"
+            />
+            <div className="flex justify-end">
+              <Button size="sm" variant="outline" onClick={() => handleCopy(linkedinCarousel, "carousel")}>
+                {copyStatus.carousel ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* X (Twitter) Post */}
+      <div className="rounded-xl border bg-card p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">X (Twitter) Post</h3>
+            <p className="text-xs text-muted-foreground">Punchy technical post (~240 chars)</p>
+          </div>
+          <Button
+            size="sm"
+            onClick={async () => {
+              setLoadingX(true);
+              try {
+                const { generateXPost } = await import("@/app/admin/editor/actions");
+                const result = await generateXPost(slug);
+                if (result.success && result.content) {
+                  setXPost(result.content);
+                } else {
+                  alert(`Error: ${result.error || "Unknown error"}`);
+                }
+              } catch (error) {
+                alert(`Failed to generate: ${error instanceof Error ? error.message : "Unknown"}`);
+              } finally {
+                setLoadingX(false);
+              }
+            }}
+            disabled={loadingX}
+          >
+            {loadingX ? "Generating..." : "Generate"}
+          </Button>
+        </div>
+        {xPost && (
+          <>
+            <Textarea
+              value={xPost}
+              onChange={(e) => setXPost(e.target.value)}
+              rows={4}
+              className="font-mono text-sm"
+            />
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span className={xPost.length > 280 ? "text-red-600 font-semibold" : ""}>
+                {xPost.length} / 280 characters {xPost.length > 280 ? "(too long!)" : ""}
+              </span>
+              <Button size="sm" variant="outline" onClick={() => handleCopy(xPost, "x")}>
+                {copyStatus.x ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Email Teaser */}
+      <div className="rounded-xl border bg-card p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">Email Newsletter Teaser</h3>
+            <p className="text-xs text-muted-foreground">Subject + body (100-150 words)</p>
+          </div>
+          <Button
+            size="sm"
+            onClick={async () => {
+              setLoadingEmail(true);
+              try {
+                const { generateEmailTeaser } = await import("@/app/admin/editor/actions");
+                const result = await generateEmailTeaser(slug);
+                if (result.success && result.content) {
+                  setEmailTeaser(result.content);
+                } else {
+                  alert(`Error: ${result.error || "Unknown error"}`);
+                }
+              } catch (error) {
+                alert(`Failed to generate: ${error instanceof Error ? error.message : "Unknown"}`);
+              } finally {
+                setLoadingEmail(false);
+              }
+            }}
+            disabled={loadingEmail}
+          >
+            {loadingEmail ? "Generating..." : "Generate"}
+          </Button>
+        </div>
+        {emailTeaser && (
+          <>
+            <Textarea
+              value={emailTeaser}
+              onChange={(e) => setEmailTeaser(e.target.value)}
+              rows={6}
+              className="font-mono text-sm"
+            />
+            <div className="flex justify-end">
+              <Button size="sm" variant="outline" onClick={() => handleCopy(emailTeaser, "email")}>
+                {copyStatus.email ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* OG Image Prompt */}
+      <div className="rounded-xl border bg-card p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold">OG Image Prompt</h3>
+            <p className="text-xs text-muted-foreground">Stability AI prompt for share image</p>
+          </div>
+          <Button
+            size="sm"
+            onClick={async () => {
+              setLoadingOg(true);
+              try {
+                const { generateOgImagePrompt } = await import("@/app/admin/editor/actions");
+                const result = await generateOgImagePrompt(slug);
+                if (result.success && result.content) {
+                  setOgPrompt(result.content);
+                } else {
+                  alert(`Error: ${result.error || "Unknown error"}`);
+                }
+              } catch (error) {
+                alert(`Failed to generate: ${error instanceof Error ? error.message : "Unknown"}`);
+              } finally {
+                setLoadingOg(false);
+              }
+            }}
+            disabled={loadingOg}
+          >
+            {loadingOg ? "Generating..." : "Generate"}
+          </Button>
+        </div>
+        {ogPrompt && (
+          <>
+            <Textarea
+              value={ogPrompt}
+              onChange={(e) => setOgPrompt(e.target.value)}
+              rows={4}
+              className="font-mono text-sm"
+            />
+            <div className="flex justify-end">
+              <Button size="sm" variant="outline" onClick={() => handleCopy(ogPrompt, "og")}>
+                {copyStatus.og ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

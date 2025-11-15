@@ -6,6 +6,7 @@ import type { CaseStudy } from "contentlayer/generated";
 import { allCaseStudies } from "contentlayer/generated";
 import { slugifyTag } from "@/lib/slug";
 import { formatDate } from "@/lib/date";
+import { filterVisibleContent } from "@/lib/content-filters";
 
 const toCommodityList = (study: CaseStudy): string[] => {
   const doc = study as CaseStudy & { commodities?: string[]; commodity?: string | string[] };
@@ -33,9 +34,10 @@ export const metadata: Metadata = {
 };
 
 export default function CaseStudiesIndexPage() {
-  const studies = allCaseStudies
+  // Filter to only show published or scheduled-past content
+  const studies = filterVisibleContent(allCaseStudies as Array<CaseStudy & { status?: string; publishAt?: string }>)
     .slice()
-    .sort((a: CaseStudy, b: CaseStudy) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
   const tagSet = new Set<string>();
   const regionSet = new Set<string>();

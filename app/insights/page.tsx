@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { absoluteUrl } from "@/lib/url";
 import { slugifyTag } from "@/lib/slug";
 import { formatDate } from "@/lib/date";
+import { filterVisibleContent } from "@/lib/content-filters";
 import { ArrowUpRight, BookOpen, Clock3, Tag } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -33,9 +34,10 @@ const toCommodityList = (post: Insight): string[] => {
 };
 
 export default function InsightsIndexPage() {
-  const posts = allInsights
+  // Filter to only show published or scheduled-past content
+  const posts = filterVisibleContent(allInsights as Array<Insight & { status?: string; publishAt?: string }>)
     .slice()
-    .sort((a: Insight, b: Insight) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 
   const tagSet = new Set<string>();
   const commoditySet = new Set<string>();

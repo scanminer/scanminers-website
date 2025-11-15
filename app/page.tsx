@@ -6,6 +6,9 @@ import type { Insight, CaseStudy } from "contentlayer/generated";
 import { allInsights, allCaseStudies } from "contentlayer/generated";
 import { formatDate } from "@/lib/date";
 import { CriticalCoverageGrid } from "@/components/critical-coverage-grid";
+import { HeroVisual } from "@/components/HeroVisual";
+import { ProspectivityPipeline } from "@/components/ProspectivityPipeline";
+import { ProductScreensStrip } from "@/components/ProductScreensStrip";
 import {
   CRITICAL_MINERAL_BLUEPRINT,
   aggregateCommoditySummaries,
@@ -170,6 +173,28 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Visual Hero Component */}
+        <section className="space-y-6">
+          <div className="text-center space-y-3">
+            <p className="text-sm uppercase tracking-[0.3em] text-muted">GeoAI Platform</p>
+            <h2 className="text-3xl font-semibold">Multi-Sensor Fusion Meets Explainable AI</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              From satellite imagery to drill targets, our platform integrates diverse data sources with transparent machine learning.
+            </p>
+          </div>
+          <HeroVisual variant="full" />
+          <div className="flex flex-wrap justify-center gap-3 pt-4">
+            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+              Learn how it works
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+            <Link href="/about" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+              Meet the team
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
         <section className="space-y-8 rounded-3xl border bg-card/40 px-6 py-10 shadow-[0_40px_120px_rgba(15,23,42,0.18)] sm:px-10">
           <div className="max-w-3xl space-y-4">
             <p className="text-sm uppercase tracking-[0.3em] text-muted">What partners get</p>
@@ -193,11 +218,41 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Product Screens Section */}
+        <section className="space-y-8">
+          <div className="text-center space-y-3">
+            <p className="text-sm uppercase tracking-[0.3em] text-muted">Product Views</p>
+            <h2 className="text-3xl font-semibold">From Prospectivity Maps to Explainable Insights</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Three core views power exploration decision-making: regional heatmaps, feature importance charts, and ranked target lists.
+            </p>
+          </div>
+          <ProductScreensStrip />
+        </section>
+
+        <section className="rounded-3xl border px-6 py-10 sm:px-10">
+          <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
+            <div className="max-w-2xl space-y-3">
+              <p className="text-sm uppercase tracking-[0.3em] text-muted">Prospectivity Workflow</p>
+              <h2 className="text-3xl font-semibold">From Raw Data to Drill-Ready Targets</h2>
+              <p className="text-lg text-muted-foreground">
+                Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions.
+              </p>
+            </div>
+            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+              View full technology stack
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <ProspectivityPipeline />
+        </section>
+
+        {/* Keep original operating stack for detail */}
         <section className="rounded-3xl border px-6 py-10 sm:px-10">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl space-y-3">
               <p className="text-sm uppercase tracking-[0.3em] text-muted">Scanminers operating stack</p>
-              <h2 className="text-3xl font-semibold">How we go from raw pixels to drill-ready coordinates</h2>
+              <h2 className="text-3xl font-semibold">Technical Implementation Details</h2>
               <p className="text-lg text-muted-foreground">
                 Every layer is explainable by design, with AI copilots embedded in the CMS so teams can iterate in real time.
               </p>

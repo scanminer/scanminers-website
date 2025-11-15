@@ -2,6 +2,15 @@
 
 Production-ready Next.js 15 (App Router) site with MDX content (via Contentlayer), SEO (sitemap, robots, RSS), a Turnstile-protected contact form, and Cloudflare Pages deployment using Next on Pages.
 
+## Team
+
+**Founding Team:**
+- **Dr. Amin Beiranvand Pour** — Co-Founder & Chief Scientist  
+  Scientific methodologies, multi-sensor remote sensing, critical minerals research
+  
+- **Mahmood Asadi** — Co-Founder & Chief AI & Product Architect  
+  AI strategy, platform architecture, product vision, UX design
+
 ## Quick start
 
 1) Install dependencies
