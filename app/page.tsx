@@ -235,42 +235,67 @@ export default function Home() {
       </section>
 
       <div className="mx-auto max-w-7xl space-y-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
-        {/* Why Exploration is Hard */}
-        <section className="rounded-3xl border bg-card px-6 py-10 sm:px-10 dark:bg-card/50">
-          <div className="max-w-4xl space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted">The exploration challenge</p>
-            <h2 className="text-3xl font-semibold">Why traditional methods struggle to scale</h2>
-            <p className="text-lg text-muted">
-              Critical mineral discovery faces compounding obstacles that remote sensing and GeoAI can systematically address.
+        {/* Why Exploration is Hard - Enhanced */}
+        <section className="rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card/50 to-background px-8 py-12 shadow-lg sm:px-12">
+          <div className="mx-auto max-w-4xl space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">The Challenge</span>
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight">Why traditional exploration can&apos;t keep pace</h2>
+            <p className="text-xl leading-relaxed text-muted">
+              The energy transition needs <strong className="text-fg">faster discovery cycles</strong>. Conventional field methods hit limits at scale.
             </p>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-xl border bg-background p-5 dark:bg-background/50">
-              <h3 className="text-base font-semibold mb-2">Limited field coverage</h3>
-              <p className="text-sm text-muted">
-                Traditional field surveys cover narrow transects. Screening hundreds of km² on the ground is cost-prohibitive and time-intensive.
+          
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background p-6 transition-all hover:border-primary/50 hover:shadow-xl dark:bg-background/80">
+              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="text-xl font-bold">1</span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold">Limited field coverage</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                Traditional surveys cover narrow transects—often &lt;5% of an AOI. Screening 500+ km² on foot takes years and drains budgets before a single drill hole.
               </p>
             </div>
-            <div className="rounded-xl border bg-background p-5 dark:bg-background/50">
-              <h3 className="text-base font-semibold mb-2">High-risk capital allocation</h3>
-              <p className="text-sm text-muted">
-                Decision-makers must commit drill budgets with incomplete data, leading to lower hit rates and wasted cycles.
+            
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background p-6 transition-all hover:border-primary/50 hover:shadow-xl dark:bg-background/80">
+              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="text-xl font-bold">2</span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold">High-risk capital allocation</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                Boards demand data-driven decisions. Committing $2M+ drill programs with incomplete targeting = lower hit rates and wasted cycles you can&apos;t afford.
               </p>
             </div>
-            <div className="rounded-xl border bg-background p-5 dark:bg-background/50">
-              <h3 className="text-base font-semibold mb-2">Extended project timelines</h3>
-              <p className="text-sm text-muted">
-                Conventional exploration workflows can take quarters to deliver initial target rankings, delaying strategic decisions.
+            
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background p-6 transition-all hover:border-primary/50 hover:shadow-xl dark:bg-background/80">
+              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="text-xl font-bold">3</span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold">Extended timelines kill momentum</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                Conventional workflows take 6-12 months from reconnaissance to drill-ready targets. Your competition moves faster with remote sensing intelligence.
               </p>
             </div>
           </div>
-          <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 p-5">
-            <p className="text-sm text-muted-foreground">
-              <strong className="text-foreground">Remote sensing changes the equation:</strong> by fusing satellite, airborne, and geophysical data at scale, 
-              we screen vast regions in weeks and deliver ranked targets with transparent confidence scores—
-              <Link href="/prospectivity-brief" className="font-semibold text-primary hover:underline"> start with a Prospectivity Brief</Link> or{" "}
-              <Link href="/consultation" className="font-semibold text-primary hover:underline">book a Consultation</Link> to see how it applies to your AOI.
-            </p>
+          
+          <div className="mt-8 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 p-6 shadow-inner">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/20">
+                <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <p className="mb-2 text-sm font-bold text-fg">Remote sensing changes everything</p>
+                <p className="text-sm leading-relaxed text-muted">
+                  By fusing satellite, airborne, and geophysical data at scale, you screen entire belts in <strong className="text-fg">6-8 weeks</strong> and deliver ranked targets with transparent confidence scores (~90% validation rates).{" "}
+                  <Link href="/prospectivity-brief" className="font-semibold text-primary hover:underline">
+                    Start with a free brief →
+                  </Link>
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -296,33 +321,65 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="space-y-8 rounded-3xl border bg-card/40 px-6 py-10 shadow-[0_40px_120px_rgba(15,23,42,0.18)] sm:px-10">
-          <div className="max-w-3xl space-y-4">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">What partners get</p>
-            <h2 className="text-3xl font-semibold tracking-tight">Built for geology leads, data scientists, and field superintendents</h2>
-            <p className="text-lg text-muted-foreground">
-              A WordPress-smooth authoring experience with Notion-grade AI assistants powers every deliverable: edit narratives, regenerate cover art,
-              launch PRs, or approve releases without leaving the browser.
+        {/* What You Get - Enhanced Outcomes */}
+        <section className="space-y-10 rounded-3xl border border-border/50 bg-gradient-to-br from-background via-card/30 to-background px-8 py-12 shadow-2xl sm:px-12">
+          <div className="mx-auto max-w-3xl space-y-6 text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-4 py-1.5">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-success">Proven Outcomes</span>
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight">What you gain with GeoAI prospectivity</h2>
+            <p className="text-xl leading-relaxed text-muted">
+              Built for geology leads, data scientists, and field superintendents who need <strong className="text-fg">defensible intelligence</strong>—not black-box predictions.
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {outcomes.map((card) => (
-              <div key={card.title} className="flex flex-col rounded-2xl border border-border bg-background/80 p-5">
-                <div className="text-sm uppercase tracking-[0.4em] text-muted">{card.title}</div>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{card.body}</p>
-                <div className="mt-6">
-                  <p className="text-3xl font-semibold">{card.stat}</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-muted">{card.hint}</p>
+          
+          <div className="grid gap-6 md:grid-cols-3">
+            {outcomes.map((card, idx) => (
+              <div 
+                key={card.title} 
+                className="group relative overflow-hidden rounded-2xl border-2 border-border/50 bg-background p-7 transition-all hover:border-primary hover:shadow-2xl dark:bg-background/80"
+              >
+                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 blur-2xl transition-all group-hover:scale-150" />
+                <div className="relative">
+                  <div className="mb-4 inline-flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <span className="text-sm font-bold">{idx + 1}</span>
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-muted">{card.title}</p>
+                  </div>
+                  <p className="mb-6 text-sm leading-relaxed text-muted">{card.body}</p>
+                  <div className="border-t border-border/50 pt-4">
+                    <p className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{card.stat}</p>
+                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">{card.hint}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5">
-            <p className="text-sm font-medium text-foreground mb-2">Proven validation rates</p>
-            <p className="text-sm text-muted-foreground">
-              Our multi-sensor fusion workflows have been applied to regional-scale AOIs spanning hundreds of km², achieving validation rates <strong className="text-foreground">approaching 90%</strong> against known mineral targets.
-              This level of accuracy significantly outperforms conventional single-dataset approaches and translates directly into higher-confidence drill decisions.
-            </p>
+          
+          <div className="rounded-2xl border-2 border-success/30 bg-gradient-to-br from-success/10 via-success/5 to-transparent p-8 shadow-inner">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-success/20">
+                <svg className="h-7 w-7 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="mb-3 text-lg font-bold text-fg">Validation speaks louder than promises</p>
+                <p className="text-base leading-relaxed text-muted">
+                  Our multi-sensor fusion workflows have been applied to regional-scale AOIs spanning <strong className="text-fg">hundreds of km²</strong>, achieving validation rates <strong className="text-fg">approaching 90%</strong> against known mineral targets (AUC 0.88-0.92).
+                  This significantly outperforms conventional single-dataset approaches and translates into <strong className="text-fg">higher-confidence drill decisions</strong> your board can defend.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
+                    View case studies →
+                  </Link>
+                  <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
+                    Technical methodology →
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
