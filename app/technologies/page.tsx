@@ -4,7 +4,9 @@ import { ArrowRight, Satellite, LineChart, Layers, MapPin, Leaf } from "lucide-r
 import { HeroVisual } from "@/components/HeroVisual";
 import { ProspectivityPipeline } from "@/components/ProspectivityPipeline";
 import { ProductScreensStrip } from "@/components/ProductScreensStrip";
+import { TechnologiesPipelineDiagram } from "@/components/TechnologiesPipelineDiagram";
 import { absoluteUrl } from "@/lib/url";
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Technologies | Scanminers",
@@ -89,19 +91,17 @@ export default function TechnologiesPage() {
             </div>
             
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/prospectivity-brief"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl"
-              >
-                Request Prospectivity Brief
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/case-studies"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-primary/30 bg-primary/5 px-6 py-3 text-sm font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10"
-              >
-                View Case Studies
-              </Link>
+              <Button asChild size="lg" variant="primary" className="shadow-xl hover:shadow-2xl">
+                <Link href="/prospectivity-brief" className="inline-flex items-center gap-2">
+                  Request Prospectivity Brief
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary">
+                <Link href="/case-studies">
+                  View Case Studies
+                </Link>
+              </Button>
             </div>
           </div>
           
@@ -303,6 +303,23 @@ export default function TechnologiesPage() {
         </div>
       </section>
 
+      {/* Pipeline Visualization */}
+      <section className="mb-16 lg:mb-24">
+        <div className="mb-12 text-center">
+          <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+            5-Step Workflow
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+            From Data to <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">Drill Targets</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Our systematic pipeline transforms raw multi-sensor data into actionable exploration decisions.
+          </p>
+        </div>
+        
+        <TechnologiesPipelineDiagram />
+      </section>
+
       {/* Sustainability & SDG 13 */}
       <section className="mb-16">
         <div className="rounded-3xl border-2 border-success/30 bg-gradient-to-br from-success/10 via-success/5 to-transparent p-8 lg:p-12 shadow-2xl">
@@ -360,25 +377,22 @@ export default function TechnologiesPage() {
             for your area of interest.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href="/prospectivity-brief"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl"
-            >
-              Request Prospectivity Brief
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/case-studies"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-primary/30 bg-primary/5 px-6 py-3 text-sm font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10"
-            >
-              View Case Studies
-            </Link>
-            <Link
-              href="/insights"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border/60 px-6 py-3 text-sm font-semibold transition hover:border-primary/30 hover:bg-card"
-            >
-              Read Insights
-            </Link>
+            <Button asChild size="lg" variant="primary" className="shadow-xl hover:shadow-2xl">
+              <Link href="/prospectivity-brief" className="inline-flex items-center gap-2">
+                Request Prospectivity Brief
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="secondary">
+              <Link href="/case-studies">
+                View Case Studies
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link href="/insights">
+                Read Insights
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

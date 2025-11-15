@@ -11,6 +11,12 @@ export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+export async function generateStaticParams() {
+  return allCaseStudies.map((study) => ({
+    slug: study.slug,
+  }));
+}
+
 export default async function CaseStudyPage({ params }: PageProps) {
   const { slug } = await params;
   const study = allCaseStudies.find((s: CaseStudy) => s.slug === slug) as CaseStudy | undefined;

@@ -7,6 +7,7 @@ import { allCaseStudies } from "contentlayer/generated";
 import { slugifyTag } from "@/lib/slug";
 import { formatDate } from "@/lib/date";
 import { filterVisibleContent } from "@/lib/content-filters";
+import { getMineralImage, getRandomMineralImage } from "@/lib/mineral-images";
 
 const toCommodityList = (study: CaseStudy): string[] => {
   const doc = study as CaseStudy & { commodities?: string[]; commodity?: string | string[] };
@@ -155,19 +156,33 @@ export default function CaseStudiesIndexPage() {
             <div className="grid gap-6 lg:grid-cols-2">
               {studies.map((study) => {
                 const commodities = toCommodityList(study);
+                const studyWithMineral = study as CaseStudy & { imageMineral?: string };
+                const mineralImage = studyWithMineral.imageMineral 
+                  ? getMineralImage(studyWithMineral.imageMineral) 
+                  : getRandomMineralImage();
+                
                 return (
-                  <article key={study._id} className="group relative flex h-full flex-col rounded-2xl border border-border/70 bg-gradient-to-br from-card/60 via-card/40 to-background p-6 shadow-lg transition hover:border-primary/50 hover:shadow-2xl">
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted">
-                      <span className="font-semibold">Case study</span>
-                      <span className="text-muted">•</span>
-                      {formatDate(study.publishedAt)}
-                    </div>
-                    <Link href={study.url} className="mt-3 block">
-                      <h3 className="text-2xl font-bold tracking-tight text-foreground transition group-hover:text-primary">
-                        {study.title}
-                      </h3>
-                    </Link>
-                    {study.summary && <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{study.summary}</p>}
+                  <article key={study._id} className="group relative flex h-full flex-col rounded-2xl border border-border/70 overflow-hidden shadow-lg transition hover:border-primary/50 hover:shadow-2xl">
+                    {/* Mineral background */}
+                    <div 
+                      className="absolute inset-0 bg-mineral opacity-15 mix-blend-screen"
+                      style={{ backgroundImage: `url(${mineralImage})` }}
+                    />
+                    <div className="absolute inset-0 bg-mineral-overlay" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 p-6 flex flex-col h-full">
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted">
+                        <span className="font-semibold">Case study</span>
+                        <span className="text-muted">•</span>
+                        {formatDate(study.publishedAt)}
+                      </div>
+                      <Link href={study.url} className="mt-3 block">
+                        <h3 className="text-2xl font-bold tracking-tight text-foreground transition group-hover:text-primary">
+                          {study.title}
+                        </h3>
+                      </Link>
+                      {study.summary && <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{study.summary}</p>}
                     <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                       {study.region && (
                         <span className="inline-flex items-center gap-1 font-semibold">
@@ -197,6 +212,7 @@ export default function CaseStudiesIndexPage() {
                         <ArrowUpRight className="h-4 w-4" />
                       </Link>
                     </div>
+                  </div>
                   </article>
                 );
               })}

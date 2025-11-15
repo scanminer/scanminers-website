@@ -2,29 +2,29 @@
     <channel>
         <title><![CDATA[Scanminers Case Studies]]></title>
         <description><![CDATA[Case studies from Scanminers]]></description>
-        <link>https://scanminers.com/case-studies</link>
+        <link>http://localhost:3000/case-studies</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sat, 15 Nov 2025 07:18:36 GMT</lastBuildDate>
-        <atom:link href="https://scanminers.com/case-studies/feed.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>Sat, 15 Nov 2025 19:42:55 GMT</lastBuildDate>
+        <atom:link href="http://localhost:3000/case-studies/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
         <item>
             <title><![CDATA[Regional-Scale Critical Mineral Screening (Conceptual Example)]]></title>
             <description><![CDATA[Multi-sensor fusion workflow applied across ~500 km² to identify high-priority target zones for bauxite and critical minerals, demonstrating regional-scale screening capabilities with high validation rates.]]></description>
-            <link>https://scanminers.com/case-studies/regional-critical-mineral-screening</link>
+            <link>http://localhost:3000/case-studies/regional-critical-mineral-screening</link>
             <guid isPermaLink="false">/case-studies/regional-critical-mineral-screening</guid>
             <pubDate>Fri, 14 Nov 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Bauxite Prospectivity in Payas–İslahiye, SE Turkey]]></title>
             <description><![CDATA[Proprietary analysis using multisensor fusion identified 7 high-potential zones and 183 priority points for bauxite exploration in SE Turkey, mapping 33 existing mines.]]></description>
-            <link>https://scanminers.com/case-studies/bauxite-payas-islahiye</link>
+            <link>http://localhost:3000/case-studies/bauxite-payas-islahiye</link>
             <guid isPermaLink="false">/case-studies/bauxite-payas-islahiye</guid>
             <pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Payas–İslahiye Pilot: Targeting High-Potential Zones]]></title>
             <description><![CDATA[SAR + multispectral fusion shortlisted four high-confidence bauxite corridors with traceable rationale layers for Payas–İslahiye.]]></description>
-            <link>https://scanminers.com/case-studies/payas-islahiye-pilot</link>
+            <link>http://localhost:3000/case-studies/payas-islahiye-pilot</link>
             <guid isPermaLink="false">/case-studies/payas-islahiye-pilot</guid>
             <pubDate>Wed, 10 Sep 2025 00:00:00 GMT</pubDate>
         </item>

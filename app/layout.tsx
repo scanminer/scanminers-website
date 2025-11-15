@@ -54,12 +54,12 @@ export default function RootLayout({
   const cfAnalyticsToken = process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN;
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}>
         <Suspense fallback={null}><SentryInit /></Suspense>
         <ThemeProvider>
           <Providers>
             <Header />
-            <main>{children}</main>
+            <main className="overflow-x-hidden">{children}</main>
             {/* Global conversion helpers */}
             <StickyCTA />
             <ChatWidget />

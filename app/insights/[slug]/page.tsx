@@ -10,6 +10,12 @@ type PageProps = { params: Promise<{ slug: string }> };
 
 export const dynamic = "force-dynamic";
 
+export async function generateStaticParams() {
+  return allInsights.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
 export default async function InsightPage({ params }: PageProps) {
   const { slug } = await params;
   const post = allInsights.find((p: Insight) => p.slug === slug) as Insight | undefined;

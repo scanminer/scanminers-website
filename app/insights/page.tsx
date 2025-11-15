@@ -7,6 +7,7 @@ import { slugifyTag } from "@/lib/slug";
 import { formatDate } from "@/lib/date";
 import { filterVisibleContent } from "@/lib/content-filters";
 import { ArrowUpRight, BookOpen, Clock3, Tag } from "lucide-react";
+import { getMineralImage, getRandomMineralImage } from "@/lib/mineral-images";
 
 export const metadata: Metadata = {
   title: "Insights | Scanminers",
@@ -142,15 +143,29 @@ export default function InsightsIndexPage() {
               {posts.map((post) => {
                 const commodities = toCommodityList(post);
                 const readingTime = (post as Insight & { readingTimeMinutes?: number }).readingTimeMinutes;
+                const postWithMineral = post as Insight & { imageMineral?: string };
+                const mineralImage = postWithMineral.imageMineral 
+                  ? getMineralImage(postWithMineral.imageMineral) 
+                  : getRandomMineralImage();
+                
                 return (
-                  <article key={post._id} className="group flex h-full flex-col rounded-2xl border border-border/70 bg-card/60 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.12)]">
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted">
-                      Research note · {formatDate(post.publishedAt)}
-                    </div>
-                    <Link href={post.url} className="mt-3 block">
-                      <h3 className="text-xl font-semibold tracking-tight text-foreground transition group-hover:text-primary">{post.title}</h3>
-                    </Link>
-                    {post.summary && <p className="mt-2 text-sm text-muted-foreground">{post.summary}</p>}
+                  <article key={post._id} className="group relative flex h-full flex-col rounded-2xl border border-border/70 overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.12)]">
+                    {/* Mineral background */}
+                    <div 
+                      className="absolute inset-0 bg-mineral opacity-15 mix-blend-screen"
+                      style={{ backgroundImage: `url(${mineralImage})` }}
+                    />
+                    <div className="absolute inset-0 bg-mineral-overlay" />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 p-5 flex flex-col h-full">
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-muted">
+                        Research note · {formatDate(post.publishedAt)}
+                      </div>
+                      <Link href={post.url} className="mt-3 block">
+                        <h3 className="text-xl font-semibold tracking-tight text-foreground transition group-hover:text-primary">{post.title}</h3>
+                      </Link>
+                      {post.summary && <p className="mt-2 text-sm text-muted-foreground">{post.summary}</p>}
                     <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                       {post.region && (
                         <span className="inline-flex items-center gap-1">
@@ -185,6 +200,7 @@ export default function InsightsIndexPage() {
                         <ArrowUpRight className="h-4 w-4" />
                       </Link>
                     </div>
+                  </div>
                   </article>
                 );
               })}

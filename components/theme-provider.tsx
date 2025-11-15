@@ -7,9 +7,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
+      defaultTheme="dark"
+      enableSystem={false}
+      storageKey="scanminers-theme"
+      disableTransitionOnChange={false}
     >
       {children}
     </NextThemesProvider>

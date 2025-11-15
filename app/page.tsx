@@ -1,16 +1,17 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { ArrowUpRight, Globe, Layers, LineChart, Scan, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Layers, LineChart, Scan, ShieldCheck } from "lucide-react";
 import { absoluteUrl } from "@/lib/url";
 import type { Insight, CaseStudy } from "contentlayer/generated";
 import { allInsights, allCaseStudies } from "contentlayer/generated";
 import { formatDate } from "@/lib/date";
 import { CriticalCoverageGrid } from "@/components/critical-coverage-grid";
-import { HeroVisual } from "@/components/HeroVisual";
+import HeroCinematic from "@/components/HeroCinematic";
 import { ProspectivityPipeline } from "@/components/ProspectivityPipeline";
 import { ProductScreensStrip } from "@/components/ProductScreensStrip";
 import { MultiSensorFusionDiagram } from "@/components/multi-sensor-fusion-diagram";
-import { MSection, MDIV, MH1, MP } from "@/components/motion-primitives";
+import { MSection, MDIV, MP } from "@/components/motion-primitives";
+import { Button } from "@/components/ui/button";
 import {
   CRITICAL_MINERAL_BLUEPRINT,
   aggregateCommoditySummaries,
@@ -76,13 +77,6 @@ export default function Home() {
     },
   ];
 
-  const proofPoints = [
-    { label: "Countries mapped", value: "12", detail: "Lithium brines, nickel laterites, rare earth belts" },
-    { label: "Remote scenes processed", value: "4.7k", detail: "Across optical, radar, radiometrics" },
-    { label: "Average uplift", value: "+22%", detail: "Drill hit-rate compared to legacy targeting" },
-    { label: "Turnaround", value: "< 48h", detail: "For incremental AOIs once baseline is live" },
-  ];
-
   const funnelOptions = [
     {
       title: "Prospectivity brief (free)",
@@ -119,120 +113,8 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      {/* Hero Section - Redesigned */}
-  <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/15 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
-        {/* Background Effects */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-[-200px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/20 dark:bg-primary/30 blur-[200px]" />
-          <div className="absolute bottom-[-150px] right-[-60px] h-[400px] w-[400px] rounded-full bg-accent/10 dark:bg-accent/20 blur-[160px]" />
-          <div className="absolute left-[10%] top-[30%] h-[300px] w-[300px] rounded-full bg-secondary/10 dark:bg-secondary/20 blur-[120px]" />
-        </div>
-
-        <MSection className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_380px] lg:items-start">
-            {/* Left Column: Main Message */}
-            <MSection className="space-y-8">
-              {/* Badge */}
-              <MDIV className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span>
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-success"></span>
-                </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
-                  Trusted by 12 countries
-                </span>
-              </MDIV>
-              {/* Headline - You-Oriented */}
-              <MH1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] sm:text-6xl lg:text-7xl">
-                Find critical minerals{" "}
-                <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-                  before your competition
-                </span>
-              </MH1>
-
-              {/* Subheadline with Urgency (SDG/IEA framing) */}
-              <MP className="text-xl leading-relaxed text-white/85 drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)] sm:text-2xl">
-                The energy transition demands <strong className="font-semibold text-white">3× more lithium, 7× more REE</strong> by 2040 (IEA).
-                Your next discovery starts with intelligence—not luck.
-              </MP>
-              {/* Value Props */}
-              <MDIV className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
-                    <LineChart className="h-3.5 w-3.5 text-success" />
-                  </div>
-                  <p className="text-base text-white/80 sm:text-lg">
-                    <strong className="font-semibold text-white">Screen 500+ km²</strong> in weeks with fused satellite, geophysics, and geochemistry
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
-                    <ShieldCheck className="h-3.5 w-3.5 text-success" />
-                  </div>
-                  <p className="text-base text-white/80 sm:text-lg">
-                    <strong className="font-semibold text-white">~90% validation rates</strong> against known deposits—drill with confidence
-                  </p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
-                    <Globe className="h-3.5 w-3.5 text-success" />
-                  </div>
-                  <p className="text-base text-white/80 sm:text-lg">
-                    <strong className="font-semibold text-white">Transparent AI</strong> you can defend to boards, JVs, and regulators
-                  </p>
-                </div>
-              </MDIV>
-
-              {/* CTAs */}
-              <MDIV className="flex flex-wrap items-center gap-4">
-                <Link
-                  href="/prospectivity-brief"
-                  className="pressable group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary via-primary/80 to-secondary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-xl shadow-primary/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/30"
-                >
-                  Get free prospectivity brief
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
-                <Link
-                  href="/consultation"
-                  className="pressable inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/20"
-                >
-                  Book paid consultation
-                </Link>
-                <Link
-                  href="/case-studies"
-                  className="pressable group inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white"
-                >
-                  View proof in the field
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
-              </MDIV>
-
-              {/* Trust Signal */}
-              <MP className="text-sm text-white/60">
-                Used by exploration teams at mining majors, junior explorers, and national geological surveys across Africa, Middle East, Asia-Pacific
-              </MP>
-            </MSection>
-
-            {/* Right Column: Proof Points Card */}
-            <MDIV className="rounded-2xl border border-white/15 bg-white/10 p-8 backdrop-blur-xl lg:sticky lg:top-24">
-              <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Proven at scale</p>
-              <div className="space-y-6">
-                {proofPoints.map((item) => (
-                  <div key={item.label} className="border-b border-white/10 pb-5 last:border-0 last:pb-0">
-                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/60">{item.label}</p>
-                    <p className="mt-2 text-4xl font-bold text-white">{item.value}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-white/75">{item.detail}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-8 rounded-lg bg-accent/10 p-4">
-                <p className="text-xs font-semibold text-accent">⚡ Fast-track available</p>
-                <p className="mt-1 text-sm text-white/80">Incremental AOIs delivered in &lt; 48 hours once baseline model is live</p>
-              </div>
-            </MDIV>
-          </div>
-        </MSection>
-      </section>
+      {/* Hero Section - Cinematic Dark Mode Experience */}
+      <HeroCinematic />
 
       <div className="mx-auto max-w-7xl space-y-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
         {/* Why Exploration is Hard - Enhanced */}
@@ -290,9 +172,11 @@ export default function Home() {
                 <p className="mb-2 text-sm font-bold text-fg">Remote sensing changes everything</p>
                 <p className="text-sm leading-relaxed text-muted">
                   By fusing satellite, airborne, and geophysical data at scale, you screen entire belts in <strong className="text-fg">6-8 weeks</strong> and deliver ranked targets with transparent confidence scores (~90% validation rates).{" "}
-                  <Link href="/prospectivity-brief" className="pressable font-semibold text-primary hover:underline">
-                    Start with a free brief →
-                  </Link>
+                  <Button asChild variant="link" size="sm" className="p-0 h-auto text-sm">
+                    <Link href="/prospectivity-brief">
+                      Start with a free brief →
+                    </Link>
+                  </Button>
                 </p>
               </div>
             </div>
@@ -310,20 +194,23 @@ export default function Home() {
               From satellite imagery to drill targets, our platform integrates diverse data sources with transparent machine learning.
             </MP>
           </MSection>
-          <HeroVisual variant="full" />
           {/* Lightweight animated overview of the fusion pipeline (Phase 1). Replaced by Framer Motion in Phase 2. */}
           <div className="mx-auto max-w-5xl">
             <MultiSensorFusionDiagram />
           </div>
           <div className="flex flex-wrap justify-center gap-3 pt-4">
-            <Link href="/technologies" className="pressable inline-flex items-center gap-2 text-sm font-medium text-primary">
-              Learn how it works
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-            <Link href="/about" className="pressable inline-flex items-center gap-2 text-sm font-medium text-primary">
-              Meet the team
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            <Button asChild variant="link">
+              <Link href="/technologies" className="inline-flex items-center gap-2">
+                Learn how it works
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="link">
+              <Link href="/about" className="inline-flex items-center gap-2">
+                Meet the team
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </section>
 
@@ -377,12 +264,16 @@ export default function Home() {
                   This significantly outperforms conventional single-dataset approaches and translates into <strong className="text-fg">higher-confidence drill decisions</strong> your board can defend.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Link href="/case-studies" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
-                    View case studies →
-                  </Link>
-                  <Link href="/technologies" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
-                    Technical methodology →
-                  </Link>
+                  <Button asChild size="sm" variant="link" className="text-success hover:text-success/90">
+                    <Link href="/case-studies">
+                      View case studies →
+                    </Link>
+                  </Button>
+                  <Button asChild size="sm" variant="link" className="text-success hover:text-success/90">
+                    <Link href="/technologies">
+                      Technical methodology →
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -416,10 +307,12 @@ export default function Home() {
                 Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions <strong className="text-fg">in under 48 hours</strong>.
               </p>
             </div>
-            <Link href="/technologies" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-              View full technology stack
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            <Button asChild variant="link">
+              <Link href="/technologies" className="inline-flex items-center gap-2">
+                View full technology stack
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
           <ProspectivityPipeline />
         </section>
@@ -438,10 +331,12 @@ export default function Home() {
                 Every layer is explainable by design, with <strong className="text-fg">AI copilots embedded in the CMS</strong> so teams can iterate in real time.
               </p>
             </div>
-            <Link href="/insights" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
-              Read the technical deep dives
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            <Button asChild variant="link">
+              <Link href="/insights" className="inline-flex items-center gap-2">
+                Read the technical deep dives
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {operatingStack.map((step, idx) => (
@@ -503,12 +398,11 @@ export default function Home() {
                   {option.turnaround}
                 </div>
                 <div className="mt-6 flex-1" />
-                <Link
-                  href={option.cta.href}
-                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl"
-                >
-                  {option.cta.label}
-                </Link>
+                <Button asChild variant="secondary" size="sm" className="shadow-md hover:shadow-lg">
+                  <Link href={option.cta.href}>
+                    {option.cta.label}
+                  </Link>
+                </Button>
               </article>
             ))}
           </div>
@@ -528,13 +422,12 @@ export default function Home() {
                 so your team can dive deeper.
               </p>
             </div>
-            <Link
-              href="/contact"
-              className="pressable inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-bold transition hover:border-primary hover:bg-primary/5"
-            >
-              Submit an AOI
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/contact" className="inline-flex items-center gap-2">
+                Submit an AOI
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
           <div className="mt-8">
             <CriticalCoverageGrid rows={criticalMineralGrid} />
@@ -551,10 +444,12 @@ export default function Home() {
                 Latest work <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">from the team</span>
               </h2>
             </div>
-            <Link href="/case-studies" className="pressable inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
-              Browse all case studies
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+            <Button asChild variant="link">
+              <Link href="/case-studies" className="inline-flex items-center gap-2">
+                Browse all case studies
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <div className="space-y-5">
@@ -617,15 +512,21 @@ export default function Home() {
                 Submit a brief for a quick-fit assessment, wire the consultation fee for a working session, or jump straight into a scoped project—<strong className="text-fg">each option uses the same governed workflows</strong>.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/prospectivity-brief" className="pressable inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl">
-                  Request a prospectivity brief
-                </Link>
-                <Link href="/consultation" className="pressable inline-flex items-center justify-center rounded-xl border-2 border-primary/30 bg-primary/5 px-5 py-3 text-base font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10">
-                  Book a paid consultation
-                </Link>
-                <Link href="/contact" className="pressable inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-semibold transition hover:border-primary/30 hover:bg-card">
-                  Talk to the team
-                </Link>
+                <Button asChild size="lg" variant="primary" className="shadow-xl hover:shadow-2xl">
+                  <Link href="/prospectivity-brief">
+                    Request a prospectivity brief
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="secondary">
+                  <Link href="/consultation">
+                    Book a paid consultation
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline">
+                  <Link href="/contact">
+                    Talk to the team
+                  </Link>
+                </Button>
               </div>
             </div>
             <div className="rounded-2xl border-2 border-border/70 bg-background/90 p-6 shadow-lg">

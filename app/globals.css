@@ -9,38 +9,66 @@
 
 @layer base {
   :root {
-    /* Light theme — V2: AI Deep Blue, Exploration Green, Mineral Amber */
-    --bg: 255 255 255;             /* white */
-    --fg: 28 25 23;                /* neutral-900 */
-    --muted: 120 113 108;          /* neutral-500 */
-    --primary: 12 63 107;          /* AI deep blue (#0C3F6B) */
-    --primary-fg: 255 255 255;     /* white */
-    --secondary: 15 140 85;        /* exploration green (#0F8C55) */
-    --secondary-fg: 255 255 255;   /* white */
-    --accent: 245 158 11;          /* mineral amber (#F59E0B) */
-    --accent-fg: 255 255 255;      /* white */
-    --success: 34 197 94;          /* success-500 (#22c55e) */
-    --card: 250 250 249;           /* neutral-50 */
-    --border: 231 229 228;         /* neutral-200 */
-    --ring: 12 63 107;             /* AI deep blue */
+    /* Light theme — Scanminers brand palette */
+    --brand-blue-deep: 0 60 109;        /* #003C6D */
+    --brand-green-mineral: 0 122 90;    /* #007A5A */
+    --brand-black-ai: 10 10 10;         /* #0A0A0A */
+    --brand-blue-accent: 30 143 251;    /* #1E8FFB */
+    --brand-orange-terrain: 240 138 36; /* #F08A24 */
+    --brand-grey-fog: 243 245 247;      /* #F3F5F7 */
+
+    /* Stone/mineral palette for dark signature */
+    --gold: 212 175 55;                 /* #D4AF37 */
+    --pyrite: 198 166 103;              /* #C6A667 */
+    --stone: 153 145 122;               /* #99917A */
+    --basalt: 26 26 29;                 /* #1A1A1D */
+    --ore: 42 42 48;                    /* #2A2A30 */
+
+    --bg: 255 255 255;
+    --fg: 28 25 23;
+    --muted: 87 87 87;
+    --primary: var(--brand-blue-deep);
+    --primary-fg: 255 255 255;
+    --secondary: var(--brand-green-mineral);
+    --secondary-fg: 255 255 255;
+    --accent: var(--brand-orange-terrain);
+    --accent-fg: 10 10 10;
+    --success: 17 160 110;
+    --card: var(--brand-grey-fog);
+    --border: 214 217 221;
+    --ring: var(--brand-blue-accent);
     --radius: 12px;
   }
 
   .dark {
-    /* Dark theme — V2: Deep neutrals with brighter AI blue/green accents */
-    --bg: 12 10 9;                 /* neutral-950 */
-    --fg: 250 250 249;             /* neutral-50 */
-    --muted: 168 162 158;          /* neutral-400 */
-    --primary: 44 117 173;         /* brighter AI blue for dark */
-    --primary-fg: 12 10 9;         /* neutral-950 */
-    --secondary: 55 181 125;       /* brighter exploration green */
-    --secondary-fg: 12 10 9;       /* neutral-950 */
-    --accent: 252 211 77;          /* amber-300 */
-    --accent-fg: 12 10 9;          /* neutral-950 */
-    --success: 134 239 172;        /* success-300 */
-    --card: 28 25 23;              /* neutral-900 */
-    --border: 68 64 60;            /* neutral-700 */
-    --ring: 44 117 173;            /* brighter AI blue */
+    /* Dark theme — elevated neutrals with luminous accents */
+    --brand-blue-deep: 22 103 170;
+    --brand-green-mineral: 73 196 151;
+    --brand-black-ai: 3 4 6;
+    --brand-blue-accent: 96 181 255;
+    --brand-orange-terrain: 255 178 94;
+    --brand-grey-fog: 18 18 20;
+
+    /* Stone/mineral palette for dark signature (slightly brighter for dark bg) */
+    --gold: 220 185 85;                 /* Brighter for dark */
+    --pyrite: 208 176 123;              /* Brighter for dark */
+    --stone: 163 155 132;               /* Brighter for dark */
+    --basalt: 16 16 19;                 /* Darker basalt */
+    --ore: 32 32 38;                    /* Darker ore */
+
+    --bg: 8 9 12;
+    --fg: 236 236 238;
+    --muted: 168 175 187;
+    --primary: var(--brand-blue-deep);
+    --primary-fg: 5 9 16;
+    --secondary: var(--brand-green-mineral);
+    --secondary-fg: 5 9 16;
+    --accent: var(--brand-orange-terrain);
+    --accent-fg: 5 9 16;
+    --success: 141 237 196;
+    --card: 21 23 34;
+    --border: 48 53 68;
+    --ring: var(--brand-blue-accent);
     --radius: 12px;
   }
 
@@ -65,10 +93,23 @@
   --color-secondary-fg: rgb(var(--secondary-fg) / <alpha-value>);
   --color-accent: rgb(var(--accent) / <alpha-value>);
   --color-accent-fg: rgb(var(--accent-fg) / <alpha-value>);
+  --color-brand-blue-deep: rgb(var(--brand-blue-deep) / <alpha-value>);
+  --color-brand-green-mineral: rgb(var(--brand-green-mineral) / <alpha-value>);
+  --color-brand-black-ai: rgb(var(--brand-black-ai) / <alpha-value>);
+  --color-brand-blue-accent: rgb(var(--brand-blue-accent) / <alpha-value>);
+  --color-brand-orange-terrain: rgb(var(--brand-orange-terrain) / <alpha-value>);
+  --color-brand-grey-fog: rgb(var(--brand-grey-fog) / <alpha-value>);
   --color-success: rgb(var(--success) / <alpha-value>);
   --color-card: rgb(var(--card) / <alpha-value>);
   --color-border: rgb(var(--border) / <alpha-value>);
   --color-ring: rgb(var(--ring) / <alpha-value>);
+
+  /* Stone/mineral palette */
+  --color-gold: rgb(var(--gold) / <alpha-value>);
+  --color-pyrite: rgb(var(--pyrite) / <alpha-value>);
+  --color-stone: rgb(var(--stone) / <alpha-value>);
+  --color-basalt: rgb(var(--basalt) / <alpha-value>);
+  --color-ore: rgb(var(--ore) / <alpha-value>);
 
   /* Shadows and radius */
   --shadow-soft: 0 8px 30px rgba(0,0,0,0.08);
@@ -82,6 +123,32 @@
 /* Preserve system fonts as fallback; Geist fonts are loaded in layout */
 body {
   font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--fg));
+}
+
+h1,
+.heading-1 {
+  @apply text-4xl md:text-5xl font-bold leading-tight;
+  color: rgb(var(--fg));
+}
+
+h2,
+.heading-2 {
+  @apply text-3xl md:text-4xl font-semibold;
+  color: rgb(var(--fg));
+}
+
+p,
+.body-text {
+  color: rgb(var(--fg));
+  opacity: 0.85;
+}
+
+small,
+.body-small,
+.eyebrow {
+  @apply text-xs uppercase tracking-[0.3em];
+  color: rgb(var(--muted));
 }
 
 /* Lightweight MDX typography without @tailwindcss/typography */
@@ -198,3 +265,56 @@ body {
     transform: none;
   }
 }
+
+/* Custom animations for cinematic hero */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-slower {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-slowest {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-spin-slower {
+  animation: spin-slower 30s linear infinite;
+}
+
+.animate-spin-slowest {
+  animation: spin-slowest 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow,
+  .animate-spin-slower,
+  .animate-spin-slowest {
+    animation: none;
+  }
+}
+
+/* Mineral image utilities */
+.bg-mineral {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.bg-mineral-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+:is(.dark .bg-mineral-overlay) {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+

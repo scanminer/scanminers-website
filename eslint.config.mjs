@@ -23,6 +23,7 @@ const eslintConfig = [
       "next-env.d.ts",
       ".contentlayer/**",
       "public/pagefind/**",
+      ".open-next/**",
     ],
   },
   {
