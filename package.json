@@ -24,6 +24,7 @@
     "og:fetch": "node scripts/fetch-og-covers.mjs"
   },
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.2.2",
     "@octokit/rest": "^21.0.2",
     "@radix-ui/react-dialog": "^1.1.15",
     "@sentry/browser": "10.19.0",
