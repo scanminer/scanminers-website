@@ -142,7 +142,6 @@ export default function Home() {
                   Trusted by 12 countries
                 </span>
               </MDIV>
-
               {/* Headline - You-Oriented */}
               <MH1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
                 Find critical minerals{" "}
@@ -156,7 +155,6 @@ export default function Home() {
                 The energy transition demands <strong className="font-semibold text-white">3× more lithium, 7× more REE</strong> by 2040 (IEA).
                 Your next discovery starts with intelligence—not luck.
               </MP>
-
               {/* Value Props */}
               <MDIV className="space-y-3">
                 <div className="flex items-start gap-3">
@@ -189,20 +187,20 @@ export default function Home() {
               <MDIV className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/prospectivity-brief"
-                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-neutral-900 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
+                  className="pressable group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-neutral-900 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
                 >
                   Get free prospectivity brief
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
                 <Link
                   href="/consultation"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/20"
+                  className="pressable inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/20"
                 >
                   Book paid consultation
                 </Link>
                 <Link
                   href="/case-studies"
-                  className="group inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white"
+                  className="pressable group inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white"
                 >
                   View proof in the field
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -292,7 +290,7 @@ export default function Home() {
                 <p className="mb-2 text-sm font-bold text-fg">Remote sensing changes everything</p>
                 <p className="text-sm leading-relaxed text-muted">
                   By fusing satellite, airborne, and geophysical data at scale, you screen entire belts in <strong className="text-fg">6-8 weeks</strong> and deliver ranked targets with transparent confidence scores (~90% validation rates).{" "}
-                  <Link href="/prospectivity-brief" className="font-semibold text-primary hover:underline">
+                  <Link href="/prospectivity-brief" className="pressable font-semibold text-primary hover:underline">
                     Start with a free brief →
                   </Link>
                 </p>
@@ -318,11 +316,11 @@ export default function Home() {
             <MultiSensorFusionDiagram />
           </div>
           <div className="flex flex-wrap justify-center gap-3 pt-4">
-            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/technologies" className="pressable inline-flex items-center gap-2 text-sm font-medium text-primary">
               Learn how it works
               <ArrowUpRight className="h-4 w-4" />
             </Link>
-            <Link href="/about" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/about" className="pressable inline-flex items-center gap-2 text-sm font-medium text-primary">
               Meet the team
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -379,10 +377,10 @@ export default function Home() {
                   This significantly outperforms conventional single-dataset approaches and translates into <strong className="text-fg">higher-confidence drill decisions</strong> your board can defend.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
+                  <Link href="/case-studies" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
                     View case studies →
                   </Link>
-                  <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
+                  <Link href="/technologies" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
                     Technical methodology →
                   </Link>
                 </div>
@@ -418,7 +416,7 @@ export default function Home() {
                 Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions <strong className="text-fg">in under 48 hours</strong>.
               </p>
             </div>
-            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+            <Link href="/technologies" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               View full technology stack
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -440,7 +438,7 @@ export default function Home() {
                 Every layer is explainable by design, with <strong className="text-fg">AI copilots embedded in the CMS</strong> so teams can iterate in real time.
               </p>
             </div>
-            <Link href="/insights" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
+            <Link href="/insights" className="pressable inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               Read the technical deep dives
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -532,7 +530,7 @@ export default function Home() {
             </div>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-bold transition hover:border-primary hover:bg-primary/5"
+              className="pressable inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-bold transition hover:border-primary hover:bg-primary/5"
             >
               Submit an AOI
               <ArrowUpRight className="h-4 w-4" />
@@ -553,7 +551,7 @@ export default function Home() {
                 Latest work <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">from the team</span>
               </h2>
             </div>
-            <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
+            <Link href="/case-studies" className="pressable inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
               Browse all case studies
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -569,7 +567,7 @@ export default function Home() {
                     <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted">
                       Critical minerals · {formatDate(s.publishedAt)}
                     </div>
-                    <Link href={s.url} className="mt-3 block">
+                    <Link href={s.url} className="pressable mt-3 block">
                       <h3 className="text-xl font-bold tracking-tight group-hover:text-primary">{s.title}</h3>
                     </Link>
                     {s.summary && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.summary}</p>}
@@ -591,7 +589,7 @@ export default function Home() {
                     <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted">
                       Research note · {formatDate(p.publishedAt)}
                     </div>
-                    <Link href={p.url} className="mt-3 block">
+                    <Link href={p.url} className="pressable mt-3 block">
                       <h3 className="text-xl font-bold tracking-tight group-hover:text-primary">{p.title}</h3>
                     </Link>
                     {p.summary && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.summary}</p>}
@@ -619,13 +617,13 @@ export default function Home() {
                 Submit a brief for a quick-fit assessment, wire the consultation fee for a working session, or jump straight into a scoped project—<strong className="text-fg">each option uses the same governed workflows</strong>.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl">
+                <Link href="/prospectivity-brief" className="pressable inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl">
                   Request a prospectivity brief
                 </Link>
-                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border-2 border-primary/30 bg-primary/5 px-5 py-3 text-base font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10">
+                <Link href="/consultation" className="pressable inline-flex items-center justify-center rounded-xl border-2 border-primary/30 bg-primary/5 px-5 py-3 text-base font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10">
                   Book a paid consultation
                 </Link>
-                <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-semibold transition hover:border-primary/30 hover:bg-card">
+                <Link href="/contact" className="pressable inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-semibold transition hover:border-primary/30 hover:bg-card">
                   Talk to the team
                 </Link>
               </div>
