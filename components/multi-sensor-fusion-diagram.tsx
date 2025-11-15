@@ -1,9 +1,10 @@
 "use client";
 
-// Simple animated diagram showing multi-sensor fusion flow
-// No external deps; CSS transitions only (upgrade to Framer Motion in Phase 2)
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 
+// Animated diagram showing multi-sensor fusion flow (Phase 2)
 export function MultiSensorFusionDiagram() {
+  const prefersReducedMotion = useReducedMotion();
   const stages = [
     { label: "ASTER", color: "from-primary/20 to-primary/5" },
     { label: "Landsat", color: "from-primary/20 to-primary/5" },
@@ -15,23 +16,62 @@ export function MultiSensorFusionDiagram() {
     { label: "Targets", color: "from-accent/20 to-accent/5" },
   ];
 
+  const container: Variants = prefersReducedMotion
+    ? { hidden: {}, visible: {} }
+    : {
+        hidden: { opacity: 1 },
+        visible: {
+          opacity: 1,
+          transition: { staggerChildren: 0.08, delayChildren: 0.15 },
+        },
+      };
+
+  const item: Variants = prefersReducedMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : {
+        hidden: { y: 8, opacity: 0 },
+        visible: { y: 0, opacity: 1, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+      };
+
   return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-5 text-white backdrop-blur">
+    <motion.div
+      className="rounded-2xl border border-white/15 bg-white/10 p-5 text-white backdrop-blur"
+      variants={container}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+    >
       <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">Multi-sensor fusion</p>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <motion.div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stages.map((s, i) => (
-          <div
+          <motion.div
             key={s.label}
-            className={`group relative overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br ${s.color} p-3 transition-transform duration-300 hover:-translate-y-0.5`}
+            variants={item}
+            whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+            className={`group relative overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br ${s.color} p-3`}
           >
             <div className="text-xs font-semibold">{s.label}</div>
+            {/* Connecting line (animate width) */}
             {i < stages.length - 1 && i % 2 === 1 && (
-              <div className="pointer-events-none absolute -right-2 top-1/2 hidden h-0.5 w-4 -translate-y-1/2 bg-white/40 sm:block" />
+              <motion.div
+                aria-hidden
+                className="pointer-events-none absolute -right-2 top-1/2 hidden h-0.5 -translate-y-1/2 bg-white/40 sm:block"
+                initial={prefersReducedMotion ? { width: 16 } : { width: 0 }}
+                animate={prefersReducedMotion ? undefined : { width: 16 }}
+                transition={{ delay: 0.2 + i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              />
             )}
-          </div>
+          </motion.div>
         ))}
-      </div>
-      <div className="mt-3 text-[11px] text-white/70">ASTER → Landsat → Sentinel → PRISMA → Fusion → XGBoost → SHAP → Targets</div>
-    </div>
+      </motion.div>
+      <motion.div
+        className="mt-3 text-[11px] text-white/70"
+        initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+        whileInView={prefersReducedMotion ? undefined : { opacity: 1 }}
+        transition={{ delay: 0.35 }}
+      >
+        ASTER → Landsat → Sentinel → PRISMA → Fusion → XGBoost → SHAP → Targets
+      </motion.div>
+    </motion.div>
   );
 }
