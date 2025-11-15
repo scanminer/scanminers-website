@@ -93,10 +93,10 @@ export function ProspectivityPipeline() {
                   <Icon className={`mb-3 h-8 w-8 ${colors.icon}`} />
                   
                   {/* Title */}
-                  <h3 className="mb-2 text-lg font-semibold text-foreground">{step.title}</h3>
+                  <h3 className="mb-2 text-lg font-semibold">{step.title}</h3>
                   
                   {/* Description */}
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
+                  <p className="text-sm text-foreground/70 dark:text-foreground/60">{step.description}</p>
                 </div>
                 
                 {/* Arrow connector */}
@@ -130,9 +130,9 @@ export function ProspectivityPipeline() {
                 <div className="flex-1">
                   <div className="mb-2 flex items-center gap-2">
                     <Icon className={`h-6 w-6 ${colors.icon}`} />
-                    <h3 className="text-lg font-semibold text-foreground">{step.title}</h3>
+                    <h3 className="text-lg font-semibold">{step.title}</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
+                  <p className="text-sm text-foreground/70 dark:text-foreground/60">{step.description}</p>
                 </div>
               </div>
               
