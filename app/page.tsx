@@ -116,99 +116,186 @@ export default function Home() {
   const criticalMineralGrid = buildCriticalCoverageRows(CRITICAL_MINERAL_BLUEPRINT, commoditySummaries);
 
   return (
-    <main className="min-h-screen px-6 py-12 sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-6xl space-y-12 lg:space-y-16">
-        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-primary/25 to-slate-900 px-6 py-10 text-white sm:px-10 sm:py-14">
-          <div className="pointer-events-none absolute inset-0 -z-10">
-            <div className="absolute left-1/2 top-[-200px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-primary/40 blur-[180px]" />
-            <div className="absolute bottom-[-120px] right-[-40px] h-[360px] w-[360px] rounded-full bg-emerald-500/20 blur-[140px]" />
-          </div>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1 text-[0.65rem] uppercase tracking-[0.3em] text-white/80">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" /> Scanminers OS
+    <main className="min-h-screen">
+      {/* Hero Section - Redesigned */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/20 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
+        {/* Background Effects */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-[-200px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/30 blur-[200px]" />
+          <div className="absolute bottom-[-150px] right-[-60px] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[160px]" />
+          <div className="absolute left-[10%] top-[30%] h-[300px] w-[300px] rounded-full bg-secondary/15 blur-[120px]" />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_380px] lg:items-start">
+            {/* Left Column: Main Message */}
+            <div className="space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-success"></span>
+                </span>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
+                  Trusted by 12 countries
+                </span>
               </div>
-              <h1 className="mt-6 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                Prospectivity intelligence for the critical minerals transition
+
+              {/* Headline - You-Oriented */}
+              <h1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
+                Find critical minerals{" "}
+                <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                  before your competition
+                </span>
               </h1>
-              <p className="mt-6 text-lg text-white/80 sm:text-xl">
-                We blend remote sensing, geophysics, geochemistry, and structural geology into a living model that highlights
-                the most valuable hectares—before field crews start their first traverse.
+
+              {/* Subheadline with Urgency (SDG/IEA framing) */}
+              <p className="text-xl leading-relaxed text-white/85 sm:text-2xl">
+                The energy transition demands <strong className="font-semibold text-white">3× more lithium, 7× more REE</strong> by 2040 (IEA).
+                Your next discovery starts with intelligence—not luck.
               </p>
-              <ul className="mt-6 space-y-2 text-white/80">
-                <li className="flex items-center gap-2 text-sm sm:text-base">
-                  <Globe className="h-4 w-4" /> Regional to basin-scale coverage with AOI refresh in under 48h.
-                </li>
-                <li className="flex items-center gap-2 text-sm sm:text-base">
-                  <LineChart className="h-4 w-4" /> Explainable scoring, confidence bands, and uncertainty tiles.
-                </li>
-                <li className="flex items-center gap-2 text-sm sm:text-base">
-                  <ShieldCheck className="h-4 w-4" /> Governance-ready workflows for JV partners and regulators.
-                </li>
-              </ul>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-base font-medium text-slate-900 shadow-lg shadow-black/20 transition hover:-translate-y-0.5">
-                  Request a prospectivity brief
+
+              {/* Value Props */}
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
+                    <LineChart className="h-3.5 w-3.5 text-success" />
+                  </div>
+                  <p className="text-base text-white/80 sm:text-lg">
+                    <strong className="font-semibold text-white">Screen 500+ km²</strong> in weeks with fused satellite, geophysics, and geochemistry
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
+                    <ShieldCheck className="h-3.5 w-3.5 text-success" />
+                  </div>
+                  <p className="text-base text-white/80 sm:text-lg">
+                    <strong className="font-semibold text-white">~90% validation rates</strong> against known deposits—drill with confidence
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
+                    <Globe className="h-3.5 w-3.5 text-success" />
+                  </div>
+                  <p className="text-base text-white/80 sm:text-lg">
+                    <strong className="font-semibold text-white">Transparent AI</strong> you can defend to boards, JVs, and regulators
+                  </p>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/prospectivity-brief"
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-neutral-900 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
+                >
+                  Get free prospectivity brief
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
-                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border border-white/40 px-5 py-3 text-base font-medium text-white/90 transition hover:bg-white/10">
-                  Book a paid consultation
+                <Link
+                  href="/consultation"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/20"
+                >
+                  Book paid consultation
                 </Link>
-                <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white">
-                  See proof in the field
-                  <ArrowUpRight className="h-4 w-4" />
+                <Link
+                  href="/case-studies"
+                  className="group inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white"
+                >
+                  View proof in the field
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
               </div>
+
+              {/* Trust Signal */}
+              <p className="text-sm text-white/60">
+                Used by exploration teams at mining majors, junior explorers, and national geological surveys across Africa, Middle East, Asia-Pacific
+              </p>
             </div>
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur">
-              <div className="space-y-5">
+
+            {/* Right Column: Proof Points Card */}
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-8 backdrop-blur-xl lg:sticky lg:top-24">
+              <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Proven at scale</p>
+              <div className="space-y-6">
                 {proofPoints.map((item) => (
-                  <div key={item.label} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">{item.label}</p>
-                    <p className="mt-1 text-3xl font-semibold">{item.value}</p>
-                    <p className="text-sm text-white/70">{item.detail}</p>
+                  <div key={item.label} className="border-b border-white/10 pb-5 last:border-0 last:pb-0">
+                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/60">{item.label}</p>
+                    <p className="mt-2 text-4xl font-bold text-white">{item.value}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-white/75">{item.detail}</p>
                   </div>
                 ))}
               </div>
+              <div className="mt-8 rounded-lg bg-accent/10 p-4">
+                <p className="text-xs font-semibold text-accent">⚡ Fast-track available</p>
+                <p className="mt-1 text-sm text-white/80">Incremental AOIs delivered in &lt; 48 hours once baseline model is live</p>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Why Exploration is Hard */}
-        <section className="rounded-3xl border bg-muted/30 px-6 py-10 sm:px-10">
-          <div className="max-w-4xl space-y-4">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">The exploration challenge</p>
-            <h2 className="text-3xl font-semibold">Why traditional methods struggle to scale</h2>
-            <p className="text-lg text-muted-foreground">
-              Critical mineral discovery faces compounding obstacles that remote sensing and GeoAI can systematically address.
+      <div className="mx-auto max-w-7xl space-y-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
+        {/* Why Exploration is Hard - Enhanced */}
+        <section className="rounded-3xl border border-border/50 bg-gradient-to-br from-card via-card/50 to-background px-8 py-12 shadow-lg sm:px-12">
+          <div className="mx-auto max-w-4xl space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-4 py-1.5">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-accent">The Challenge</span>
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight">Why traditional exploration can&apos;t keep pace</h2>
+            <p className="text-xl leading-relaxed text-muted">
+              The energy transition needs <strong className="text-fg">faster discovery cycles</strong>. Conventional field methods hit limits at scale.
             </p>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
-              <h3 className="text-base font-semibold mb-2">Limited field coverage</h3>
-              <p className="text-sm text-muted-foreground">
-                Traditional field surveys cover narrow transects. Screening hundreds of km² on the ground is cost-prohibitive and time-intensive.
+          
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background p-6 transition-all hover:border-primary/50 hover:shadow-xl dark:bg-background/80">
+              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="text-xl font-bold">1</span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold">Limited field coverage</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                Traditional surveys cover narrow transects—often &lt;5% of an AOI. Screening 500+ km² on foot takes years and drains budgets before a single drill hole.
               </p>
             </div>
-            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
-              <h3 className="text-base font-semibold mb-2">High-risk capital allocation</h3>
-              <p className="text-sm text-muted-foreground">
-                Decision-makers must commit drill budgets with incomplete data, leading to lower hit rates and wasted cycles.
+            
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background p-6 transition-all hover:border-primary/50 hover:shadow-xl dark:bg-background/80">
+              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="text-xl font-bold">2</span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold">High-risk capital allocation</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                Boards demand data-driven decisions. Committing $2M+ drill programs with incomplete targeting = lower hit rates and wasted cycles you can&apos;t afford.
               </p>
             </div>
-            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
-              <h3 className="text-base font-semibold mb-2">Extended project timelines</h3>
-              <p className="text-sm text-muted-foreground">
-                Conventional exploration workflows can take quarters to deliver initial target rankings, delaying strategic decisions.
+            
+            <div className="group relative overflow-hidden rounded-2xl border border-border/50 bg-background p-6 transition-all hover:border-primary/50 hover:shadow-xl dark:bg-background/80">
+              <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="text-xl font-bold">3</span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold">Extended timelines kill momentum</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                Conventional workflows take 6-12 months from reconnaissance to drill-ready targets. Your competition moves faster with remote sensing intelligence.
               </p>
             </div>
           </div>
-          <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 p-5">
-            <p className="text-sm text-muted-foreground">
-              <strong className="text-foreground">Remote sensing changes the equation:</strong> by fusing satellite, airborne, and geophysical data at scale, 
-              we screen vast regions in weeks and deliver ranked targets with transparent confidence scores—
-              <Link href="/prospectivity-brief" className="font-semibold text-primary hover:underline"> start with a Prospectivity Brief</Link> or{" "}
-              <Link href="/consultation" className="font-semibold text-primary hover:underline">book a Consultation</Link> to see how it applies to your AOI.
-            </p>
+          
+          <div className="mt-8 rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-primary/10 to-primary/5 p-6 shadow-inner">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/20">
+                <svg className="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div>
+                <p className="mb-2 text-sm font-bold text-fg">Remote sensing changes everything</p>
+                <p className="text-sm leading-relaxed text-muted">
+                  By fusing satellite, airborne, and geophysical data at scale, you screen entire belts in <strong className="text-fg">6-8 weeks</strong> and deliver ranked targets with transparent confidence scores (~90% validation rates).{" "}
+                  <Link href="/prospectivity-brief" className="font-semibold text-primary hover:underline">
+                    Start with a free brief →
+                  </Link>
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -234,58 +321,96 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="space-y-8 rounded-3xl border bg-card/40 px-6 py-10 shadow-[0_40px_120px_rgba(15,23,42,0.18)] sm:px-10">
-          <div className="max-w-3xl space-y-4">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">What partners get</p>
-            <h2 className="text-3xl font-semibold tracking-tight">Built for geology leads, data scientists, and field superintendents</h2>
-            <p className="text-lg text-muted-foreground">
-              A WordPress-smooth authoring experience with Notion-grade AI assistants powers every deliverable: edit narratives, regenerate cover art,
-              launch PRs, or approve releases without leaving the browser.
+        {/* What You Get - Enhanced Outcomes */}
+        <section className="space-y-10 rounded-3xl border border-border/50 bg-gradient-to-br from-background via-card/30 to-background px-8 py-12 shadow-2xl sm:px-12">
+          <div className="mx-auto max-w-3xl space-y-6 text-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-4 py-1.5">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-success">Proven Outcomes</span>
+            </div>
+            <h2 className="text-4xl font-bold tracking-tight">What you gain with GeoAI prospectivity</h2>
+            <p className="text-xl leading-relaxed text-muted">
+              Built for geology leads, data scientists, and field superintendents who need <strong className="text-fg">defensible intelligence</strong>—not black-box predictions.
             </p>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {outcomes.map((card) => (
-              <div key={card.title} className="flex flex-col rounded-2xl border border-border bg-background/80 p-5">
-                <div className="text-sm uppercase tracking-[0.4em] text-muted">{card.title}</div>
-                <p className="mt-3 flex-1 text-sm text-muted-foreground">{card.body}</p>
-                <div className="mt-6">
-                  <p className="text-3xl font-semibold">{card.stat}</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-muted">{card.hint}</p>
+          
+          <div className="grid gap-6 md:grid-cols-3">
+            {outcomes.map((card, idx) => (
+              <div 
+                key={card.title} 
+                className="group relative overflow-hidden rounded-2xl border-2 border-border/50 bg-background p-7 transition-all hover:border-primary hover:shadow-2xl dark:bg-background/80"
+              >
+                <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-primary/10 to-accent/10 blur-2xl transition-all group-hover:scale-150" />
+                <div className="relative">
+                  <div className="mb-4 inline-flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <span className="text-sm font-bold">{idx + 1}</span>
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-muted">{card.title}</p>
+                  </div>
+                  <p className="mb-6 text-sm leading-relaxed text-muted">{card.body}</p>
+                  <div className="border-t border-border/50 pt-4">
+                    <p className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{card.stat}</p>
+                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">{card.hint}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5">
-            <p className="text-sm font-medium text-foreground mb-2">Proven validation rates</p>
-            <p className="text-sm text-muted-foreground">
-              Our multi-sensor fusion workflows have been applied to regional-scale AOIs spanning hundreds of km², achieving validation rates <strong className="text-foreground">approaching 90%</strong> against known mineral targets.
-              This level of accuracy significantly outperforms conventional single-dataset approaches and translates directly into higher-confidence drill decisions.
-            </p>
+          
+          <div className="rounded-2xl border-2 border-success/30 bg-gradient-to-br from-success/10 via-success/5 to-transparent p-8 shadow-inner">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-success/20">
+                <svg className="h-7 w-7 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="mb-3 text-lg font-bold text-fg">Validation speaks louder than promises</p>
+                <p className="text-base leading-relaxed text-muted">
+                  Our multi-sensor fusion workflows have been applied to regional-scale AOIs spanning <strong className="text-fg">hundreds of km²</strong>, achieving validation rates <strong className="text-fg">approaching 90%</strong> against known mineral targets (AUC 0.88-0.92).
+                  This significantly outperforms conventional single-dataset approaches and translates into <strong className="text-fg">higher-confidence drill decisions</strong> your board can defend.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
+                    View case studies →
+                  </Link>
+                  <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-semibold text-success hover:underline">
+                    Technical methodology →
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Product Screens Section */}
         <section className="space-y-8">
           <div className="text-center space-y-3">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">Product Views</p>
-            <h2 className="text-3xl font-semibold">From Prospectivity Maps to Explainable Insights</h2>
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              Product Views
+            </div>
+            <h2 className="text-3xl font-bold">
+              From <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">prospectivity maps</span> to explainable insights
+            </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Three core views power exploration decision-making: regional heatmaps, feature importance charts, and ranked target lists.
+              Three core views power exploration decision-making: <strong className="text-fg">regional heatmaps</strong>, <strong className="text-fg">feature importance charts</strong>, and <strong className="text-fg">ranked target lists</strong>.
             </p>
           </div>
           <ProductScreensStrip />
         </section>
 
-        <section className="rounded-3xl border px-6 py-10 sm:px-10">
+        <section className="rounded-3xl border bg-gradient-to-br from-card via-card/50 to-background px-6 py-10 sm:px-10 shadow-lg">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
             <div className="max-w-2xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Prospectivity Workflow</p>
-              <h2 className="text-3xl font-semibold">From Raw Data to Drill-Ready Targets</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Prospectivity Workflow
+              </div>
+              <h2 className="text-3xl font-bold">From raw data to <span className="bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">drill-ready targets</span></h2>
               <p className="text-lg text-muted-foreground">
-                Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions.
+                Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions <strong className="text-fg">in under 48 hours</strong>.
               </p>
             </div>
-            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               View full technology stack
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -294,66 +419,87 @@ export default function Home() {
         </section>
 
         {/* Keep original operating stack for detail */}
-        <section className="rounded-3xl border px-6 py-10 sm:px-10">
+        <section className="rounded-3xl border bg-gradient-to-br from-card via-card/30 to-background px-6 py-10 sm:px-10 shadow-lg">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Scanminers operating stack</p>
-              <h2 className="text-3xl font-semibold">Technical Implementation Details</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-earth/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-earth">
+                Scanminers Operating Stack
+              </div>
+              <h2 className="text-3xl font-bold">
+                Technical implementation <span className="bg-gradient-to-r from-earth to-primary bg-clip-text text-transparent">by the numbers</span>
+              </h2>
               <p className="text-lg text-muted-foreground">
-                Every layer is explainable by design, with AI copilots embedded in the CMS so teams can iterate in real time.
+                Every layer is explainable by design, with <strong className="text-fg">AI copilots embedded in the CMS</strong> so teams can iterate in real time.
               </p>
             </div>
-            <Link href="/insights" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/insights" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               Read the technical deep dives
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">
-            {operatingStack.map((step) => (
-              <div key={step.title} className="rounded-2xl border border-border/70 bg-muted/20 p-5">
+            {operatingStack.map((step, idx) => (
+              <div key={step.title} className="group relative rounded-2xl border border-border/70 bg-gradient-to-br from-muted/40 via-muted/20 to-background p-6 transition hover:border-primary/50 hover:shadow-xl">
+                <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-earth/10 text-base font-bold text-earth">
+                  {idx + 1}
+                </div>
                 <div className="flex items-center gap-3">
-                  <step.icon className="h-10 w-10 rounded-xl border border-border/60 p-2" />
+                  <step.icon className="h-11 w-11 rounded-xl border border-border/60 bg-background/60 p-2 text-primary" />
                   <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-muted">Step</p>
-                    <h3 className="text-lg font-semibold">{step.title}</h3>
+                    <p className="text-xs uppercase tracking-[0.3em] text-muted">Step</p>
+                    <h3 className="text-lg font-bold">{step.title}</h3>
                   </div>
                 </div>
-                <p className="mt-4 text-sm text-muted-foreground">{step.description}</p>
-                <p className="mt-3 rounded-xl bg-background/60 p-4 text-sm text-muted">{step.detail}</p>
+                <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                <div className="mt-4 rounded-xl border border-border/40 bg-card/60 p-4">
+                  <p className="text-sm text-muted leading-relaxed">{step.detail}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border bg-background/70 px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.12)] sm:px-10">
+        <section className="rounded-3xl border bg-gradient-to-br from-background via-card/30 to-background px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.12)] sm:px-10">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-3xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Choose your next step</p>
-              <h2 className="text-3xl font-semibold">Two fast paths into the funnel</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+                Choose Your Next Step
+              </div>
+              <h2 className="text-3xl font-bold">
+                Two fast paths <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">into the funnel</span>
+              </h2>
               <p className="text-lg text-muted-foreground">
-                Start with a complimentary prospectivity brief to scope fit, or wire the consultation fee for a deeper working session.
+                Start with a <strong className="text-fg">complimentary prospectivity brief</strong> to scope fit, or wire the consultation fee for a deeper working session.
                 Both routes use the same Turnstile-protected admin stack, so approvals stay governed.
               </p>
             </div>
           </div>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {funnelOptions.map((option) => (
-              <article key={option.title} className="flex h-full flex-col rounded-2xl border border-border/70 bg-card/70 p-6">
+            {funnelOptions.map((option, idx) => (
+              <article key={option.title} className="group relative flex h-full flex-col rounded-2xl border border-border/70 bg-gradient-to-br from-card/70 via-card/40 to-background p-6 transition hover:border-primary/50 hover:shadow-xl">
+                <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                  {idx + 1}
+                </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] text-muted">Engagement</p>
-                  <h3 className="mt-2 text-2xl font-semibold tracking-tight">{option.title}</h3>
-                  <p className="mt-3 text-sm text-muted-foreground">{option.description}</p>
+                  <h3 className="mt-2 text-2xl font-bold tracking-tight">{option.title}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{option.description}</p>
                 </div>
                 <ul className="mt-5 space-y-2 text-sm text-muted-foreground">
                   {option.bullets.map((bullet) => (
-                    <li key={bullet}>• {bullet}</li>
+                    <li key={bullet} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      <span>{bullet}</span>
+                    </li>
                   ))}
                 </ul>
-                <div className="mt-5 text-xs uppercase tracking-[0.3em] text-muted">{option.turnaround}</div>
+                <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-success">
+                  {option.turnaround}
+                </div>
                 <div className="mt-6 flex-1" />
                 <Link
                   href={option.cta.href}
-                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl"
                 >
                   {option.cta.label}
                 </Link>
@@ -362,19 +508,23 @@ export default function Home() {
           </div>
         </section>
 
-  <section className="rounded-3xl border bg-card/40 px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.15)] sm:px-10">
+  <section className="rounded-3xl border bg-gradient-to-br from-card/40 via-card/20 to-background px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.15)] sm:px-10">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-3xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Critical mineral coverage grid</p>
-              <h2 className="text-3xl font-semibold">Active programs and upcoming slots</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-secondary">
+                Critical Mineral Coverage Grid
+              </div>
+              <h2 className="text-3xl font-bold">
+                Active programs and <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">upcoming slots</span>
+              </h2>
               <p className="text-lg text-muted-foreground">
-                Track which mandates already ship with explainable assets and which ones are scoping. Each card links to the freshest field note or case study
+                Track which mandates already ship with explainable assets and which ones are scoping. Each card links to the <strong className="text-fg">freshest field note or case study</strong>
                 so your team can dive deeper.
               </p>
             </div>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-bold transition hover:border-primary hover:bg-primary/5"
             >
               Submit an AOI
               <ArrowUpRight className="h-4 w-4" />
@@ -385,33 +535,37 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-3xl border bg-background/60 px-6 py-10 sm:px-10">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <section className="rounded-3xl border bg-gradient-to-br from-background via-card/30 to-background px-6 py-10 sm:px-10 shadow-lg">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Field proven</p>
-              <h2 className="text-3xl font-semibold">Latest work from the team</h2>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Field Proven
+              </div>
+              <h2 className="text-3xl font-bold">
+                Latest work <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">from the team</span>
+              </h2>
             </div>
-            <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
               Browse all case studies
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <div className="space-y-5">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted">Case studies</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Case studies</p>
               {latestCaseStudies.length === 0 ? (
                 <p className="text-muted-foreground">No case studies published yet.</p>
               ) : (
                 latestCaseStudies.map((s) => (
-                  <article key={s._id} className="group rounded-2xl border border-border/70 bg-card/60 p-5 hover:border-primary/40">
+                  <article key={s._id} className="group rounded-2xl border border-border/70 bg-gradient-to-br from-card/60 via-card/40 to-background p-5 transition hover:border-primary/50 hover:shadow-xl">
                     <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted">
                       Critical minerals · {formatDate(s.publishedAt)}
                     </div>
                     <Link href={s.url} className="mt-3 block">
-                      <h3 className="text-xl font-semibold tracking-tight group-hover:text-primary">{s.title}</h3>
+                      <h3 className="text-xl font-bold tracking-tight group-hover:text-primary">{s.title}</h3>
                     </Link>
-                    {s.summary && <p className="mt-2 text-sm text-muted-foreground">{s.summary}</p>}
-                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                    {s.summary && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.summary}</p>}
+                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary">
                       View work
                       <ArrowUpRight className="h-4 w-4" />
                     </div>
@@ -420,20 +574,20 @@ export default function Home() {
               )}
             </div>
             <div className="space-y-5">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted">Insights</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Insights</p>
               {latestInsights.length === 0 ? (
                 <p className="text-muted-foreground">No insights available yet.</p>
               ) : (
                 latestInsights.map((p: Insight) => (
-                  <article key={p._id} className="group rounded-2xl border border-border/70 bg-card/40 p-5 hover:border-primary/40">
+                  <article key={p._id} className="group rounded-2xl border border-border/70 bg-gradient-to-br from-card/40 via-card/20 to-background p-5 transition hover:border-primary/50 hover:shadow-xl">
                     <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted">
                       Research note · {formatDate(p.publishedAt)}
                     </div>
                     <Link href={p.url} className="mt-3 block">
-                      <h3 className="text-xl font-semibold tracking-tight group-hover:text-primary">{p.title}</h3>
+                      <h3 className="text-xl font-bold tracking-tight group-hover:text-primary">{p.title}</h3>
                     </Link>
-                    {p.summary && <p className="mt-2 text-sm text-muted-foreground">{p.summary}</p>}
-                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                    {p.summary && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.summary}</p>}
+                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary">
                       Read insight
                       <ArrowUpRight className="h-4 w-4" />
                     </div>
@@ -444,34 +598,50 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-6 py-10 sm:px-10">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center">
+        <section className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-6 py-10 sm:px-10 shadow-2xl">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center">
             <div className="space-y-5">
-              <p className="text-sm uppercase tracking-[0.3em] text-primary">Next step</p>
-              <h2 className="text-3xl font-semibold">Bring prospectivity intelligence into your exploration stack</h2>
-              <p className="text-lg text-muted-foreground">
-                Submit a brief for a quick-fit assessment, wire the consultation fee for a working session, or jump straight into a scoped project—each option uses the same governed workflows.
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Next Step
+              </div>
+              <h2 className="text-3xl font-bold leading-tight">
+                Bring prospectivity intelligence <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">into your exploration stack</span>
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Submit a brief for a quick-fit assessment, wire the consultation fee for a working session, or jump straight into a scoped project—<strong className="text-fg">each option uses the same governed workflows</strong>.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-medium text-primary-foreground">
+                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl">
                   Request a prospectivity brief
                 </Link>
-                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border border-border px-5 py-3 text-base font-medium">
+                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border-2 border-primary/30 bg-primary/5 px-5 py-3 text-base font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10">
                   Book a paid consultation
                 </Link>
-                <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-medium">
+                <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-semibold transition hover:border-primary/30 hover:bg-card">
                   Talk to the team
                 </Link>
               </div>
             </div>
-            <div className="rounded-2xl border border-border/70 bg-background/80 p-5 text-sm text-muted-foreground">
-              <p className="font-medium text-foreground">What to expect</p>
-              <ul className="mt-3 space-y-2">
-                <li>• 30-minute scoping call with geology + data leads.</li>
-                <li>• Secure data drop or GitHub sync.</li>
-                <li>• Draft prospectivity board + admin-ready content within 10 business days.</li>
+            <div className="rounded-2xl border-2 border-border/70 bg-background/90 p-6 shadow-lg">
+              <p className="font-bold text-foreground">What to expect</p>
+              <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                  <span><strong className="text-fg">30-minute scoping call</strong> with geology + data leads.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                  <span>Secure data drop or <strong className="text-fg">GitHub sync</strong>.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                  <span>Draft prospectivity board + admin-ready content within <strong className="text-fg">10 business days</strong>.</span>
+                </li>
               </ul>
-              <p className="mt-4 text-xs uppercase tracking-[0.3em] text-muted">contact@scanminers.com</p>
+              <div className="mt-6 rounded-lg border border-primary/30 bg-primary/5 p-3">
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Contact</p>
+                <p className="mt-1 text-sm font-semibold text-foreground">contact@scanminers.com</p>
+              </div>
             </div>
           </div>
         </section>

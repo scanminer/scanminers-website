@@ -30,6 +30,7 @@
 
 # cloudflare next-on-pages build output
 .cf-nop*
+.open-next/
 
 # misc
 .DS_Store
