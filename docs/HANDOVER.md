@@ -306,6 +306,13 @@ Note: Even with 0 approvals, merges are still blocked until all required checks 
 
 ## 11. Visual Components & Pages (MEGA-PROMPT 3)
 
+### Mineral texture pack
+
+- The geology-flavoured design system lives in `docs/mineral-texture-pack.md`.
+- All canonical assets (18 minerals + neutral default) belong in `public/minerals/` as 1920×1080 WebP files. Use the prompts in the doc when regenerating.
+- `lib/mineral-images.ts` now exports `MINERAL_TEXTURE_SPECS`, `getMineralTextureSpec`, and `getPreferredMineralTexture()` so automation/OG pipelines can stay in sync with creative direction.
+- Editors should continue filling `imageMineral` in Contentlayer frontmatter; if omitted, the UI falls back to `getRandomMineralImage()` which still returns a safe placeholder.
+
 ### New Pages
 
 #### `/technologies`

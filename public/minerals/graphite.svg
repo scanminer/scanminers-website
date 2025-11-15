@@ -1,0 +1,33 @@
+<svg width="1600" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-graphite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#383838;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1C1C1C;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#5A5A5A;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glow-graphite" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1C1C1C;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#383838;stop-opacity:0" />
+    </radialGradient>
+    <pattern id="grain-graphite" patternUnits="userSpaceOnUse" width="100" height="100">
+      <rect width="100" height="100" fill="url(#grad-graphite)"/>
+      <circle cx="10" cy="10" r="1.5" fill="#1C1C1C" opacity="0.3"/>
+      <circle cx="45" cy="25" r="1" fill="#5A5A5A" opacity="0.2"/>
+      <circle cx="75" cy="50" r="1.2" fill="#383838" opacity="0.25"/>
+      <circle cx="30" cy="70" r="0.8" fill="#1C1C1C" opacity="0.2"/>
+      <circle cx="90" cy="85" r="1.3" fill="#5A5A5A" opacity="0.3"/>
+    </pattern>
+  </defs>
+  
+  <!-- Base gradient -->
+  <rect width="1600" height="900" fill="url(#grad-graphite)"/>
+  
+  <!-- Glow overlay -->
+  <rect width="1600" height="900" fill="url(#glow-graphite)"/>
+  
+  <!-- Grain texture -->
+  <rect width="1600" height="900" fill="url(#grain-graphite)" opacity="0.4"/>
+  
+  <!-- Subtle vignette -->
+  <rect width="1600" height="900" fill="radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.3) 100%)" opacity="0.5"/>
+</svg>

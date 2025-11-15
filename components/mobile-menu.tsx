@@ -50,8 +50,9 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+        className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Menu Panel */}
@@ -61,20 +62,20 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         aria-label="Main menu"
         className="fixed inset-y-0 right-0 z-50 w-full max-w-sm animate-in slide-in-from-right duration-300"
       >
-        <div className="flex h-full flex-col gap-6 bg-background p-6 shadow-2xl">
+        <div className="flex h-full flex-col gap-6 border-l-2 border-primary/20 bg-background p-6 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2" onClick={onClose}>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-                <span className="text-sm font-bold text-white">S</span>
+            <Link href="/" className="flex items-center gap-2.5" onClick={onClose}>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-blue-deep to-brand-green-mineral shadow-md">
+                <span className="text-base font-bold text-white">S</span>
               </div>
-              <span className="text-lg font-bold tracking-tight">
+              <span className="text-lg font-bold tracking-tight text-fg">
                 Scanminers
               </span>
             </Link>
             <button
               onClick={onClose}
-              className="rounded-lg p-2 text-fg/70 transition-colors hover:bg-fg/10 hover:text-fg"
+              className="rounded-lg p-2.5 text-muted transition-colors hover:bg-fg/10 hover:text-fg"
               aria-label="Close menu"
             >
               <svg
@@ -82,11 +83,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                strokeWidth={2.5}
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
                   d="M6 18L18 6M6 6l12 12"
                 />
               </svg>
@@ -94,7 +95,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-col gap-2">
+          <nav className="flex flex-col gap-2.5">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -102,11 +103,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                   key={link.href}
                   href={link.href}
                   className={`
-                    group flex items-center justify-between rounded-xl px-4 py-3 text-base font-semibold transition-all
+                    group flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-bold transition-all
                     ${
                       isActive
-                        ? "bg-gradient-to-r from-primary/10 to-primary/5 text-primary"
-                        : "text-fg/70 hover:bg-fg/5 hover:text-fg"
+                        ? "bg-gradient-to-r from-primary/15 to-primary/5 text-primary shadow-sm"
+                        : "text-fg/80 hover:bg-fg/5 hover:text-fg"
                     }
                   `}
                 >
@@ -118,11 +119,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
+                    strokeWidth={2.5}
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
@@ -132,39 +133,39 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           </nav>
 
           {/* Divider */}
-          <div className="border-t border-border/50" />
+          <div className="border-t border-border/60" />
 
           {/* CTA Buttons */}
           <div className="flex flex-col gap-3">
             <Link
               href="/prospectivity-brief"
-              className="rounded-xl border-2 border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10 px-5 py-3 text-center text-sm font-bold text-primary transition-all hover:border-primary/50 hover:from-primary/10 hover:to-primary/15"
+              className="rounded-xl border-2 border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10 px-5 py-3.5 text-center text-sm font-bold text-primary transition-all hover:border-primary/50 hover:from-primary/10 hover:to-primary/15 hover:shadow-md"
             >
               Request Free Brief
             </Link>
             <Link
               href="/consultation"
-              className="rounded-xl bg-gradient-to-r from-secondary to-accent px-5 py-3 text-center text-sm font-bold text-white shadow-lg transition-all hover:shadow-xl"
+              className="rounded-xl bg-gradient-to-r from-secondary to-secondary/90 px-5 py-3.5 text-center text-sm font-bold text-secondary-fg shadow-lg transition-all hover:shadow-xl hover:from-secondary/95 hover:to-secondary/85"
             >
               Book Paid Consultation
             </Link>
           </div>
 
           {/* Footer Info */}
-          <div className="mt-auto space-y-3 border-t border-border/50 pt-6">
-            <p className="text-xs font-semibold text-fg/50">
+          <div className="mt-auto space-y-3 border-t border-border/60 pt-6">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted">
               AI-Powered Critical Minerals Prospectivity
             </p>
-            <div className="flex items-center gap-4 text-xs text-fg/40">
-              <Link href="/legal/privacy" className="hover:text-fg/60">
+            <div className="flex items-center gap-4 text-xs text-muted">
+              <Link href="/legal/privacy" className="hover:text-fg/80 transition-colors">
                 Privacy
               </Link>
               <span>•</span>
-              <Link href="/legal/terms" className="hover:text-fg/60">
+              <Link href="/legal/terms" className="hover:text-fg/80 transition-colors">
                 Terms
               </Link>
               <span>•</span>
-              <Link href="/contact" className="hover:text-fg/60">
+              <Link href="/contact" className="hover:text-fg/80 transition-colors">
                 Contact
               </Link>
             </div>
@@ -179,7 +180,7 @@ export function MobileMenuButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="rounded-lg p-2 text-fg/70 transition-colors hover:bg-fg/10 hover:text-fg lg:hidden"
+      className="rounded-lg p-2.5 text-muted transition-colors hover:bg-fg/10 hover:text-fg lg:hidden"
       aria-label="Open menu"
     >
       <svg
@@ -187,11 +188,11 @@ export function MobileMenuButton({ onClick }: { onClick: () => void }) {
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
+        strokeWidth={2.5}
       >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth={2}
           d="M4 6h16M4 12h16M4 18h16"
         />
       </svg>

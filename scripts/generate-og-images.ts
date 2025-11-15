@@ -23,6 +23,7 @@
 import fs from "fs";
 import path from "path";
 import { allInsights, allCaseStudies } from "../.contentlayer/generated/index.mjs";
+import { getMineralImage, MINERAL_IMAGES } from "../lib/mineral-images";
 import { generateOgImagePrompt } from "../lib/og-prompts";
 
 const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
@@ -36,6 +37,12 @@ if (!fs.existsSync(OG_DIR)) {
 }
 
 type ContentItem = typeof allInsights[0] | typeof allCaseStudies[0];
+
+function resolveMineral(mineral?: string): string {
+  if (!mineral) return "default";
+  const normalized = mineral.toLowerCase().trim();
+  return MINERAL_IMAGES[normalized] ? normalized : "default";
+}
 
 /**
  * Check if content should be processed (published only)
@@ -103,6 +110,11 @@ async function processItem(item: ContentItem, type: "insight" | "case-study"): P
   console.log(`\n→ Processing ${type}: ${item.slug}`);
   console.log(`  Title: ${item.title}`);
 
+  const itemWithMineral = item as ContentItem & { imageMineral?: string };
+  const mineralKey = resolveMineral(itemWithMineral.imageMineral);
+  const mineralImagePath = getMineralImage(mineralKey);
+  console.log(`  Mineral background: ${mineralKey} (${mineralImagePath})`);
+
   try {
     // Generate prompt
     const itemWithCommodities = item as ContentItem & { commodities?: string[]; commodity?: string | string[] };
@@ -117,6 +129,7 @@ async function processItem(item: ContentItem, type: "insight" | "case-study"): P
       summary: item.summary,
       region: item.region,
       commodities,
+      mineral: mineralKey,
     });
 
     // Generate and save image

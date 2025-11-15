@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Target, Users, Lightbulb, Handshake, ExternalLink } from "lucide-react";
 import { absoluteUrl } from "@/lib/url";
+import { Button } from "@/components/ui/button";
+import { getRandomMineralImage } from "@/lib/mineral-images";
 
 export const metadata: Metadata = {
   title: "About | Scanminers",
@@ -21,6 +23,8 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  const mineralBg = getRandomMineralImage();
+  
   const principles = [
     {
       icon: Target,
@@ -132,8 +136,24 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="mb-16 lg:mb-24">
-        <div className="mb-12 text-center">
+      <section className="mb-16 lg:mb-24 relative overflow-hidden">
+        {/* Mineral texture overlay - very subtle */}
+        <div 
+          className="absolute inset-0 bg-mineral opacity-[0.08] mix-blend-screen pointer-events-none"
+          style={{ backgroundImage: `url(${mineralBg})` }}
+        />
+        <div className="absolute inset-0 bg-mineral-overlay pointer-events-none" />
+        
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
+            backgroundSize: '40px 40px'
+          }} />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background pointer-events-none" />
+        
+        <div className="mb-12 text-center relative z-10">
           <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full bg-earth/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-earth">
             Leadership Team
           </div>
@@ -146,7 +166,7 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2 relative z-10">
           {/* Dr. Amin */}
           <div className="group relative rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card via-card/70 to-background p-8 lg:p-10 shadow-xl transition hover:border-primary/50 hover:shadow-2xl">
             <div className="absolute right-6 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
@@ -180,7 +200,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <a
-                href="https://orcid.org/0000-0002-7606-5619"
+                href="https://orcid.org/0000-0001-8783-5120"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline mt-4"
@@ -330,19 +350,17 @@ export default function AboutPage() {
             Request a <strong className="text-fg">prospectivity brief</strong> for your area of interest, or <strong className="text-fg">book a consultation</strong> to discuss your exploration goals.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link
-              href="/prospectivity-brief"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl"
-            >
-              Request a Prospectivity Brief
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/consultation"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-primary/30 bg-primary/5 px-6 py-3 text-sm font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10"
-            >
-              Book a Consultation
-            </Link>
+            <Button asChild size="lg" variant="primary" className="shadow-xl hover:shadow-2xl">
+              <Link href="/prospectivity-brief" className="inline-flex items-center gap-2">
+                Request a Prospectivity Brief
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="secondary">
+              <Link href="/consultation">
+                Book a Consultation
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

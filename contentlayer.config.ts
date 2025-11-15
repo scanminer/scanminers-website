@@ -332,6 +332,11 @@ export const CaseStudy = defineDocumentType(() => ({
       required: true,
       validate: (value: unknown) => nonEmptyString('imagePrompt').parse(value),
     },
+    imageMineral: {
+      type: 'string',
+      required: false,
+      description: 'Optional mineral image to use as background (e.g., "gold", "copper", "lithium")',
+    },
     // New moderation/AI flags
     review_status: {
       type: 'enum',
@@ -456,6 +461,11 @@ export const Insight = defineDocumentType(() => ({
       type: 'string',
       required: true,
       validate: (value: unknown) => nonEmptyString('imagePrompt').parse(value),
+    },
+    imageMineral: {
+      type: 'string',
+      required: false,
+      description: 'Optional mineral image to use as background (e.g., "gold", "copper", "lithium")',
     },
     // New moderation/AI flags and richer media
     review_status: {

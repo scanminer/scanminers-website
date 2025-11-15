@@ -17,11 +17,12 @@
     "contentlayer": "node scripts/contentlayer-build.js",
     "build:content": "npm run contentlayer && node scripts/generate-feeds.mjs",
     "content:check": "node scripts/content-check.js",
-    "test": "vitest --run",
-    "test:watch": "vitest",
+    "test": "NODE_OPTIONS='--max_old_space_size=4096' vitest --run",
+    "test:watch": "NODE_OPTIONS='--max_old_space_size=4096' vitest",
     "test:e2e": "playwright test",
     "prepare": "husky",
-    "og:fetch": "node scripts/fetch-og-covers.mjs"
+    "og:fetch": "node scripts/fetch-og-covers.mjs",
+    "generate-mineral-textures": "tsx scripts/generate-mineral-textures.ts"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.2.2",

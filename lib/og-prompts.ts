@@ -11,6 +11,7 @@ type ContentEntry = {
   region: string;
   commodities?: string[];
   commodity?: string | string[];
+  mineral?: string;
 };
 
 /**
@@ -30,11 +31,15 @@ export function generateOgImagePrompt(content: ContentEntry): string {
 
   const commodityStr = commodities.length > 0 ? commodities.join(", ") : "minerals";
 
-  // Build prompt focused on geological/geospatial aesthetics
+  // Build prompt focused on geological/geospatial aesthetics with Scanminers brand colors
+  const mineralLabel = content.mineral ? content.mineral.replace(/-/g, " ") : "critical mineral";
+  const mineralHint = `Featuring ${mineralLabel} mineral textures with metallic veining to reinforce the geology theme.`;
+
   const prompt = `Professional technical visualization for ${commodityStr} exploration in ${content.region}. 
     Satellite imagery style with topographic contours, heatmap overlays showing prospectivity zones, 
-    and data visualization elements. Clean modern scientific aesthetic with blue-green-amber color palette. 
-    No text, no people, no logos. Emphasis on geological features and remote sensing data patterns.`;
+    and geospatial data visualization elements. ${mineralHint} Modern scientific aesthetic using deep blue (#003C6D), 
+    emerald green (#007A5A), and amber-orange (#F08A24) color palette inspired by geoscience and AI. 
+    No text, no people, no logos. Emphasis on geological features, remote sensing data patterns, and mineral targeting.`;
 
   return prompt.replace(/\s+/g, " ").trim();
 }
@@ -44,6 +49,7 @@ export function generateOgImagePrompt(content: ContentEntry): string {
  */
 export function getDefaultOgPrompt(): string {
   return `Professional geospatial data visualization showing critical mineral prospectivity mapping. 
-    Satellite imagery with topographic overlays, heatmap gradients, and technical data elements. 
-    Clean scientific aesthetic with blue-emerald-amber color scheme. No text overlays.`;
+    Satellite imagery with topographic overlays, heatmap gradients in deep blue (#003C6D), 
+    emerald green (#007A5A), and amber-orange (#F08A24). Clean scientific aesthetic with 
+    technical data elements. No text overlays, emphasis on Earth observation and AI-driven targeting.`;
 }

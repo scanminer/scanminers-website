@@ -2,43 +2,43 @@
     <channel>
         <title><![CDATA[Scanminers Insights]]></title>
         <description><![CDATA[Insights from Scanminers]]></description>
-        <link>https://scanminers.com/insights</link>
+        <link>http://localhost:3000/insights</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sat, 15 Nov 2025 07:18:36 GMT</lastBuildDate>
-        <atom:link href="https://scanminers.com/insights/feed.xml" rel="self" type="application/rss+xml"/>
+        <lastBuildDate>Sat, 15 Nov 2025 20:33:16 GMT</lastBuildDate>
+        <atom:link href="http://localhost:3000/insights/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
         <item>
             <title><![CDATA[Advanced Machine Learning for REE Prospectivity Mapping in Carbonatite-Alkaline Complexes]]></title>
             <description><![CDATA[This article details how Scanminer can deploy Random Forest and XGBoost algorithms—integrated with multispectral and hyperspectral data from ASTER, Sentinel-2, Landsat 8/9, and PRISMA—to map rare earth element (REE) mineralization in carbonatite-alkaline complexes. The approach combines spectral indices, structural analysis, explainability techniques (SHAP), and uncertainty quantification, with rigorous preprocessing and expert review by Dr. Amin Beiranvand Pour. The discussion highlights screening-level outputs, limitations, and comparisons to industry reporting standards (NI 43-101/JORC).]]></description>
-            <link>https://scanminers.com/insights/advanced-ml-ree-prospectivity-carbonatite-alkaline-complexes</link>
+            <link>http://localhost:3000/insights/advanced-ml-ree-prospectivity-carbonatite-alkaline-complexes</link>
             <guid isPermaLink="false">/insights/advanced-ml-ree-prospectivity-carbonatite-alkaline-complexes</guid>
             <pubDate>Sat, 01 Nov 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Advances in AI-Powered Bauxite Prospectivity Mapping]]></title>
             <description><![CDATA[Scanminers' AI-MPM workflow now screens vast portions of the Taurus belt for bauxite in days, and this article breaks down the inputs, explainable scoring, and Payas–İslahiye findings that are informing new drill programs.]]></description>
-            <link>https://scanminers.com/insights/bauxite-mapping-advances</link>
+            <link>http://localhost:3000/insights/bauxite-mapping-advances</link>
             <guid isPermaLink="false">/insights/bauxite-mapping-advances</guid>
             <pubDate>Wed, 15 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Cobalt in Battery Supply Chains]]></title>
             <description><![CDATA[Cobalt remains the linchpin of high-nickel battery chemistries, and this brief explains how Scanminers blends multi-sensor remote sensing, supply-chain telemetry, and ESG monitoring to keep OEMs ahead of sourcing risks.]]></description>
-            <link>https://scanminers.com/insights/cobalt-in-battery-supply-chains</link>
+            <link>http://localhost:3000/insights/cobalt-in-battery-supply-chains</link>
             <guid isPermaLink="false">/insights/cobalt-in-battery-supply-chains</guid>
             <pubDate>Mon, 13 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Using LiDAR for Tailing Dam Monitoring]]></title>
             <description><![CDATA[LiDAR-derived elevation models are now the fastest way to police tailings dams, and this note explains Scanminers' workflows for drone LiDAR capture, change detection, and integration with multisensor anomaly alerts.]]></description>
-            <link>https://scanminers.com/insights/using-lidar-for-tailing-dam-monitoring</link>
+            <link>http://localhost:3000/insights/using-lidar-for-tailing-dam-monitoring</link>
             <guid isPermaLink="false">/insights/using-lidar-for-tailing-dam-monitoring</guid>
             <pubDate>Sun, 12 Oct 2025 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Advancements in using SAR data for geological mapping]]></title>
             <description><![CDATA[Synthetic aperture radar (SAR) now delivers always-on structural intelligence for exploration teams, and this briefing covers how Scanminers fuses SAR with optical data, AI workflows, and explainable analytics to derisk critical mineral programs in cloud-prone regions.]]></description>
-            <link>https://scanminers.com/insights/advancements-in-using-sar-data-for-geological-mapp</link>
+            <link>http://localhost:3000/insights/advancements-in-using-sar-data-for-geological-mapp</link>
             <guid isPermaLink="false">/insights/advancements-in-using-sar-data-for-geological-mapp</guid>
             <pubDate>Sat, 11 Oct 2025 00:00:00 GMT</pubDate>
         </item>
