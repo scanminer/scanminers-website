@@ -15,6 +15,8 @@ export function MultiSensorFusionDiagram() {
     { label: "SHAP", color: "from-accent/20 to-accent/5" },
     { label: "Targets", color: "from-accent/20 to-accent/5" },
   ];
+  const shapIdx = stages.findIndex((s) => s.label === "SHAP");
+  const targetsIdx = stages.findIndex((s) => s.label === "Targets");
 
   const container: Variants = prefersReducedMotion
     ? { hidden: {}, visible: {} }
@@ -51,6 +53,40 @@ export function MultiSensorFusionDiagram() {
             className={`group relative overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br ${s.color} p-3`}
           >
             <div className="text-xs font-semibold">{s.label}</div>
+            {/* SHAP emphasis: subtle pulsing glow + badge */}
+            {i === shapIdx && !prefersReducedMotion && (
+              <>
+                <motion.div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 rounded-xl"
+                  initial={{ boxShadow: "0 0 0 0 rgba(245,158,11,0)" }}
+                  animate={{ boxShadow: [
+                    "0 0 0 0 rgba(245,158,11,0)",
+                    "0 0 0 10px rgba(245,158,11,0.15)",
+                    "0 0 0 0 rgba(245,158,11,0)"
+                  ] }}
+                  transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1.2, ease: [0.22,1,0.36,1] }}
+                />
+                <motion.span
+                  className="absolute right-2 top-2 rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-semibold text-white/90"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0, transition: { delay: 0.6 } }}
+                >
+                  explainability
+                </motion.span>
+              </>
+            )}
+
+            {/* Targets emphasis: quick tick highlight once in view */}
+            {i === targetsIdx && !prefersReducedMotion && (
+              <motion.span
+                className="absolute right-2 bottom-2 rounded-md bg-white/10 px-1.5 py-0.5 text-[10px] text-white/80"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1, transition: { delay: 0.4 } }}
+              >
+                ranked targets
+              </motion.span>
+            )}
             {/* Connecting line (animate width) */}
             {i < stages.length - 1 && i % 2 === 1 && (
               <motion.div
