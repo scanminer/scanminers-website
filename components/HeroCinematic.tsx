@@ -50,7 +50,7 @@ export default function HeroCinematic() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-2 border-stone text-white dark:text-white light:text-neutral-900 hover:bg-stone/10 font-semibold text-base px-8 py-6 rounded-lg transition-all"
+                className="border-2 border-stone text-white dark:text-white light:text-neutral-900 hover:bg-stone/10 dark:hover:bg-stone/10 light:hover:bg-neutral-200 font-semibold text-base px-8 py-6 rounded-lg transition-all"
               >
                 <Link href="/consultation">Book Consultation</Link>
               </Button>

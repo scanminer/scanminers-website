@@ -4,7 +4,7 @@
         <description><![CDATA[Case studies from Scanminers]]></description>
         <link>http://localhost:3000/case-studies</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Sat, 15 Nov 2025 19:42:55 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 15 Nov 2025 20:33:16 GMT</lastBuildDate>
         <atom:link href="http://localhost:3000/case-studies/feed.xml" rel="self" type="application/rss+xml"/>
         <language><![CDATA[en]]></language>
         <item>
