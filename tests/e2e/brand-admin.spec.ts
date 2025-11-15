@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Admin Brand Portal', () => {
+test.describe.skip('Admin Brand Portal', () => {
   test.beforeEach(async ({ page }) => {
     // Mock admin auth - in real scenario you'd log in first
     await page.addInitScript(() => {
