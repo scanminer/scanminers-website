@@ -354,6 +354,19 @@ export const CaseStudy = defineDocumentType(() => ({
       },
       required: false,
     },
+    // Publishing workflow fields
+    status: {
+      type: 'enum',
+      options: ['draft', 'review', 'scheduled', 'published'],
+      required: false,
+      default: 'published',
+      description: 'Publication status for editorial workflow',
+    },
+    publishAt: {
+      type: 'date',
+      required: false,
+      description: 'Scheduled publication date (ISO string)',
+    },
   },
   computedFields: {
     url: {
@@ -465,6 +478,19 @@ export const Insight = defineDocumentType(() => ({
         })).optional().parse(value),
       },
       required: false,
+    },
+    // Publishing workflow fields
+    status: {
+      type: 'enum',
+      options: ['draft', 'review', 'scheduled', 'published'],
+      required: false,
+      default: 'published',
+      description: 'Publication status for editorial workflow',
+    },
+    publishAt: {
+      type: 'date',
+      required: false,
+      description: 'Scheduled publication date (ISO string)',
     },
   },
   computedFields: {
