@@ -116,88 +116,150 @@ export default function Home() {
   const criticalMineralGrid = buildCriticalCoverageRows(CRITICAL_MINERAL_BLUEPRINT, commoditySummaries);
 
   return (
-    <main className="min-h-screen px-6 py-12 sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-6xl space-y-12 lg:space-y-16">
-        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-primary/25 to-slate-900 px-6 py-10 text-white sm:px-10 sm:py-14">
-          <div className="pointer-events-none absolute inset-0 -z-10">
-            <div className="absolute left-1/2 top-[-200px] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-primary/40 blur-[180px]" />
-            <div className="absolute bottom-[-120px] right-[-40px] h-[360px] w-[360px] rounded-full bg-emerald-500/20 blur-[140px]" />
-          </div>
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1 text-[0.65rem] uppercase tracking-[0.3em] text-white/80">
-                <span className="h-2 w-2 rounded-full bg-emerald-400" /> Scanminers OS
+    <main className="min-h-screen">
+      {/* Hero Section - Redesigned */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/20 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
+        {/* Background Effects */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-[-200px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/30 blur-[200px]" />
+          <div className="absolute bottom-[-150px] right-[-60px] h-[400px] w-[400px] rounded-full bg-accent/20 blur-[160px]" />
+          <div className="absolute left-[10%] top-[30%] h-[300px] w-[300px] rounded-full bg-secondary/15 blur-[120px]" />
+        </div>
+
+        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_380px] lg:items-start">
+            {/* Left Column: Main Message */}
+            <div className="space-y-8">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span>
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-success"></span>
+                </span>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
+                  Trusted by 12 countries
+                </span>
               </div>
-              <h1 className="mt-6 text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
-                Prospectivity intelligence for the critical minerals transition
+
+              {/* Headline - You-Oriented */}
+              <h1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
+                Find critical minerals{" "}
+                <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                  before your competition
+                </span>
               </h1>
-              <p className="mt-6 text-lg text-white/80 sm:text-xl">
-                We blend remote sensing, geophysics, geochemistry, and structural geology into a living model that highlights
-                the most valuable hectares—before field crews start their first traverse.
+
+              {/* Subheadline with Urgency (SDG/IEA framing) */}
+              <p className="text-xl leading-relaxed text-white/85 sm:text-2xl">
+                The energy transition demands <strong className="font-semibold text-white">3× more lithium, 7× more REE</strong> by 2040 (IEA).
+                Your next discovery starts with intelligence—not luck.
               </p>
-              <ul className="mt-6 space-y-2 text-white/80">
-                <li className="flex items-center gap-2 text-sm sm:text-base">
-                  <Globe className="h-4 w-4" /> Regional to basin-scale coverage with AOI refresh in under 48h.
-                </li>
-                <li className="flex items-center gap-2 text-sm sm:text-base">
-                  <LineChart className="h-4 w-4" /> Explainable scoring, confidence bands, and uncertainty tiles.
-                </li>
-                <li className="flex items-center gap-2 text-sm sm:text-base">
-                  <ShieldCheck className="h-4 w-4" /> Governance-ready workflows for JV partners and regulators.
-                </li>
-              </ul>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-base font-medium text-slate-900 shadow-lg shadow-black/20 transition hover:-translate-y-0.5">
-                  Request a prospectivity brief
+
+              {/* Value Props */}
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
+                    <LineChart className="h-3.5 w-3.5 text-success" />
+                  </div>
+                  <p className="text-base text-white/80 sm:text-lg">
+                    <strong className="font-semibold text-white">Screen 500+ km²</strong> in weeks with fused satellite, geophysics, and geochemistry
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
+                    <ShieldCheck className="h-3.5 w-3.5 text-success" />
+                  </div>
+                  <p className="text-base text-white/80 sm:text-lg">
+                    <strong className="font-semibold text-white">~90% validation rates</strong> against known deposits—drill with confidence
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
+                    <Globe className="h-3.5 w-3.5 text-success" />
+                  </div>
+                  <p className="text-base text-white/80 sm:text-lg">
+                    <strong className="font-semibold text-white">Transparent AI</strong> you can defend to boards, JVs, and regulators
+                  </p>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-4">
+                <Link
+                  href="/prospectivity-brief"
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-neutral-900 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
+                >
+                  Get free prospectivity brief
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
-                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border border-white/40 px-5 py-3 text-base font-medium text-white/90 transition hover:bg-white/10">
-                  Book a paid consultation
+                <Link
+                  href="/consultation"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 px-6 py-3.5 text-base font-semibold text-white backdrop-blur transition hover:border-white/50 hover:bg-white/20"
+                >
+                  Book paid consultation
                 </Link>
-                <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white">
-                  See proof in the field
-                  <ArrowUpRight className="h-4 w-4" />
+                <Link
+                  href="/case-studies"
+                  className="group inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:text-white"
+                >
+                  View proof in the field
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
               </div>
+
+              {/* Trust Signal */}
+              <p className="text-sm text-white/60">
+                Used by exploration teams at mining majors, junior explorers, and national geological surveys across Africa, Middle East, Asia-Pacific
+              </p>
             </div>
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur">
-              <div className="space-y-5">
+
+            {/* Right Column: Proof Points Card */}
+            <div className="rounded-2xl border border-white/15 bg-white/10 p-8 backdrop-blur-xl lg:sticky lg:top-24">
+              <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Proven at scale</p>
+              <div className="space-y-6">
                 {proofPoints.map((item) => (
-                  <div key={item.label} className="border-b border-white/10 pb-4 last:border-0 last:pb-0">
-                    <p className="text-xs uppercase tracking-[0.25em] text-white/60">{item.label}</p>
-                    <p className="mt-1 text-3xl font-semibold">{item.value}</p>
-                    <p className="text-sm text-white/70">{item.detail}</p>
+                  <div key={item.label} className="border-b border-white/10 pb-5 last:border-0 last:pb-0">
+                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/60">{item.label}</p>
+                    <p className="mt-2 text-4xl font-bold text-white">{item.value}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-white/75">{item.detail}</p>
                   </div>
                 ))}
               </div>
+              <div className="mt-8 rounded-lg bg-accent/10 p-4">
+                <p className="text-xs font-semibold text-accent">⚡ Fast-track available</p>
+                <p className="mt-1 text-sm text-white/80">Incremental AOIs delivered in &lt; 48 hours once baseline model is live</p>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
+      <div className="mx-auto max-w-7xl space-y-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
         {/* Why Exploration is Hard */}
-        <section className="rounded-3xl border bg-muted/30 px-6 py-10 sm:px-10">
+        <section className="rounded-3xl border bg-card px-6 py-10 sm:px-10 dark:bg-card/50">
           <div className="max-w-4xl space-y-4">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">The exploration challenge</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-muted">The exploration challenge</p>
             <h2 className="text-3xl font-semibold">Why traditional methods struggle to scale</h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted">
               Critical mineral discovery faces compounding obstacles that remote sensing and GeoAI can systematically address.
             </p>
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
+            <div className="rounded-xl border bg-background p-5 dark:bg-background/50">
               <h3 className="text-base font-semibold mb-2">Limited field coverage</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted">
                 Traditional field surveys cover narrow transects. Screening hundreds of km² on the ground is cost-prohibitive and time-intensive.
               </p>
             </div>
-            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
+            <div className="rounded-xl border bg-background p-5 dark:bg-background/50">
               <h3 className="text-base font-semibold mb-2">High-risk capital allocation</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted">
                 Decision-makers must commit drill budgets with incomplete data, leading to lower hit rates and wasted cycles.
               </p>
             </div>
-            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
+            <div className="rounded-xl border bg-background p-5 dark:bg-background/50">
               <h3 className="text-base font-semibold mb-2">Extended project timelines</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted">
                 Conventional exploration workflows can take quarters to deliver initial target rankings, delaying strategic decisions.
               </p>
             </div>
