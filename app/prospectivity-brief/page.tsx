@@ -46,7 +46,22 @@ export default async function ProspectivityBriefPage({ searchParams }: PageProps
               <li>• Indicate which remote sensing, geophysical, and geochemical workflows apply.</li>
               <li>• Suggest a potential modelling approach and when a paid engagement makes sense.</li>
             </ul>
-            <p className="mt-4 text-sm text-muted-foreground">If we’re not the right fit, we’ll tell you so you don’t waste time.</p>
+            <p className="mt-4 text-sm text-muted-foreground">If we&apos;re not the right fit, we&apos;ll tell you so you don&apos;t waste time.</p>
+            
+            <div className="mt-6 rounded-lg border border-sky-200/50 bg-sky-50/50 dark:border-sky-800/50 dark:bg-sky-950/30 p-5">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-900 dark:text-sky-200 mb-3">
+                What a Full Engagement Delivers
+              </h3>
+              <ul className="space-y-2 text-sm text-foreground/70 dark:text-foreground/60">
+                <li>• <strong>Fused remote sensing maps</strong> of your AOI highlighting alteration and structural patterns</li>
+                <li>• <strong>Ranked zones of interest</strong> with explainable reasoning (SHAP-style feature attributions)</li>
+                <li>• <strong>Structured written report</strong> summarizing methods, findings, uncertainties, and suggested next steps</li>
+                <li>• <strong>Clear guidance</strong> on where additional data (geophysics, geochem, field validation) adds most value</li>
+              </ul>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Typical full engagement covers regional-scale AOIs (hundreds of km²) with validation rates approaching 90% against known targets.
+              </p>
+            </div>
           </section>
 
           <section className="rounded-3xl border border-border/60 bg-background/80 p-6 sm:p-10">

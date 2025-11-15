@@ -31,8 +31,8 @@ enabled = true
 persist = true
 head_sampling_rate = 1
 
-[[d1_databases]]
-binding = "LEADS_DB"
-database_name = "scanminers-leads"
-# Replace with the D1 database id provisioned in your Cloudflare account
-database_id = "00000000-0000-0000-0000-000000000000"
+# D1 Database - Temporarily commented out until database is created in production
+# [[d1_databases]]
+# binding = "LEADS_DB"
+# database_name = "scanminers-leads"
+# database_id = "ab5a9ca1-0c10-4ed4-8d04-8df2a910b9da"

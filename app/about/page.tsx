@@ -71,12 +71,29 @@ export default function AboutPage() {
             About Scanminers
           </h1>
           <p className="text-xl text-muted-foreground mb-8">
-            We accelerate the discovery of <strong>critical minerals</strong> essential for the energy transition—using
-            transparent GeoAI that respects both scientific rigor and planetary boundaries.
+            We modernize <strong>critical mineral exploration</strong> with remote sensing, GeoAI, and explainable analytics—accelerating
+            discovery while supporting more sustainable, climate-aligned exploration practices.
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3 mt-12">
+        <div className="grid gap-6 md:grid-cols-2 mt-12">
+          <div className="rounded-xl border border-border/70 bg-card/60 p-6">
+            <h3 className="text-lg font-semibold mb-2">Mission</h3>
+            <p className="text-sm text-muted-foreground">
+              Transform mineral exploration through transparent, data-rich prospectivity intelligence that points teams to the most promising 
+              hectares first—reducing exploration timelines, field disturbance, and capital risk.
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/70 bg-card/60 p-6">
+            <h3 className="text-lg font-semibold mb-2">Impact</h3>
+            <p className="text-sm text-muted-foreground">
+              Support the energy transition by helping find the lithium, cobalt, nickel, rare earth elements, and copper needed for batteries, 
+              EVs, and renewable infrastructure—while aligning with climate goals (SDG 13) and minimizing environmental footprint.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-3 mt-6">
           <div className="rounded-xl border border-border/70 bg-card/60 p-6">
             <h3 className="text-lg font-semibold mb-2">Critical Minerals Security</h3>
             <p className="text-sm text-muted-foreground">
@@ -103,10 +120,11 @@ export default function AboutPage() {
       <section className="mb-16 lg:mb-24">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Team
+            Our Scientific Backbone
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Scanminers brings together deep expertise in remote sensing, geoscience, and product engineering.
+            Scanminers is built on deep expertise in remote sensing, geoscience, and AI-driven prospectivity modeling—combining 
+            academic rigor with practical exploration experience.
           </p>
         </div>
 
@@ -160,11 +178,18 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Advisors / Partners placeholder */}
-        <div className="mt-8 rounded-xl border border-dashed border-border/50 bg-muted/30 p-6 text-center">
+        {/* Broader team description */}
+        <div className="mt-8 rounded-xl border border-border/70 bg-muted/30 p-6">
+          <h3 className="text-lg font-semibold mb-3">Our Broader Scientific Team & Network</h3>
+          <p className="text-sm text-muted-foreground mb-3">
+            Around this core founding team, Scanminers collaborates with a wider scientific network—specialists in economic geology, 
+            geophysics, environmental remote sensing, and data science. This multidisciplinary network allows us to bring the right 
+            capabilities into each project as needed, maintaining flexibility and depth without over-extending our operational footprint.
+          </p>
           <p className="text-sm text-muted-foreground">
-            <strong>Advisors & Strategic Partners</strong> — Coming soon. We&apos;re building a network of industry
-            veterans, ESG specialists, and exploration executives.
+            Our methods are grounded in peer-reviewed research and validated against real-world exploration outcomes. Our broader 
+            scientific team has collective experience across dozens of mineral exploration and remote sensing projects worldwide, 
+            spanning multiple continents and commodity types.
           </p>
         </div>
       </section>

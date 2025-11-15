@@ -70,6 +70,53 @@ export default async function ConsultationPage({ searchParams }: PageProps) {
           </section>
 
           <section className="rounded-3xl border border-border/60 bg-background/80 p-6 sm:p-10">
+            <h2 className="text-2xl font-semibold tracking-tight">How a consultation typically works</h2>
+            <div className="mt-4 space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-base font-medium text-foreground mb-1">Scoping & Discovery</h3>
+                  <p className="text-sm text-muted-foreground">
+                    We start by understanding your goals, AOI, target commodities, and existing data inventory (remote sensing, geophysics, geochemistry, drilling logs).
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-base font-medium text-foreground mb-1">Prototype Exploration View (if appropriate)</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Where feasible, we may prepare a small prototype view of your region using public datasets—a rapid illustration of what our multi-sensor workflows can reveal before a full engagement.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-base font-medium text-foreground mb-1">Scoped Engagement Definition</h3>
+                  <p className="text-sm text-muted-foreground">
+                    We then work with you to define a scoped engagement: which minerals, what scale (regional? basin-wide?), what deliverables (maps, target lists, reports), and what timelines fit your decision cycles.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="mt-6 rounded-lg border border-emerald-200/50 bg-emerald-50/50 dark:border-emerald-800/50 dark:bg-emerald-950/30 p-4">
+              <p className="text-sm text-foreground/70 dark:text-foreground/60">
+                <strong className="text-foreground">Outcome:</strong> You leave with concrete next steps—not a generic sales pitch. If a full project makes sense, we&apos;ll outline deliverables, timelines, and pricing. If not, we&apos;ll tell you honestly.
+              </p>
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-border/60 bg-background/80 p-6 sm:p-10">
             <h2 className="text-2xl font-semibold tracking-tight">Format and investment</h2>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li>• <strong>Duration:</strong> 60 minutes (online)</li>

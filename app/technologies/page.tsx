@@ -211,6 +211,66 @@ export default function TechnologiesPage() {
         </div>
       </section>
 
+      {/* What You Actually Get - NEW SECTION */}
+      <section className="mb-16 lg:mb-24">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+            What You Actually Get
+          </h2>
+          <p className="text-lg text-foreground/70 dark:text-foreground/60 max-w-3xl mx-auto">
+            Concrete deliverables from a Scanminers engagement—not just models, but actionable intelligence.
+          </p>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-xl border border-border/50 bg-card/40 p-6">
+            <h3 className="text-lg font-semibold mb-3">Fused Remote Sensing Maps</h3>
+            <p className="text-sm text-foreground/70 dark:text-foreground/60">
+              Multi-sensor composite maps highlighting alteration zones, structural corridors, and geochemical anomalies 
+              relevant to your target commodities. Delivered as georeferenced rasters (GeoTIFF) compatible with ArcGIS, QGIS, or your GIS platform.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border/50 bg-card/40 p-6">
+            <h3 className="text-lg font-semibold mb-3">Ranked Target Zones</h3>
+            <p className="text-sm text-foreground/70 dark:text-foreground/60">
+              Prospectivity scores for every grid cell in your AOI, ranked by likelihood of mineralization. Each target includes 
+              coordinates, confidence bands, and recommended follow-up actions (e.g., ground-truth sampling, geophysical surveys).
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border/50 bg-card/40 p-6">
+            <h3 className="text-lg font-semibold mb-3">Explainable Reasoning</h3>
+            <p className="text-sm text-foreground/70 dark:text-foreground/60">
+              Feature importance breakdowns (SHAP values) showing which data inputs drove each target&apos;s score—spectral indices, 
+              topography, geochemical pathfinders, etc. No black boxes; you see exactly why the model ranks a zone as high-priority.
+            </p>
+          </div>
+
+          <div className="rounded-xl border border-border/50 bg-card/40 p-6">
+            <h3 className="text-lg font-semibold mb-3">Structured Exploration Report</h3>
+            <p className="text-sm text-foreground/70 dark:text-foreground/60">
+              A written report summarizing methodology, data sources, findings, model limitations, and recommended next steps. 
+              Includes clear guidance on where additional data (geophysics, geochemistry, field validation) would add the most value.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 rounded-xl border border-sky-200/50 bg-sky-50/50 dark:border-sky-800/50 dark:bg-sky-950/30 p-6">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-sky-900 dark:text-sky-200 mb-3">
+            Regional-Scale Capability
+          </h3>
+          <p className="text-sm text-foreground/70 dark:text-foreground/60 mb-3">
+            Our workflows can cover <strong>regional to basin-scale AOIs spanning hundreds of km²</strong>, processing multi-sensor 
+            datasets to deliver comprehensive prospectivity intelligence before any field mobilization.
+          </p>
+          <p className="text-sm text-foreground/70 dark:text-foreground/60">
+            Methods have been <strong>validated against known mineral deposits with accuracy rates approaching 90%</strong>, 
+            significantly outperforming conventional single-dataset targeting approaches.
+          </p>
+        </div>
+      </section>
+
       {/* Sustainability & SDG 13 */}
       <section className="mb-16">
         <div className="rounded-2xl border border-border/70 bg-gradient-to-br from-emerald-50/50 to-sky-50/50 dark:from-emerald-950/20 dark:to-sky-950/20 p-8 lg:p-12">

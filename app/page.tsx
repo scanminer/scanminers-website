@@ -173,6 +173,45 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Why Exploration is Hard */}
+        <section className="rounded-3xl border bg-muted/30 px-6 py-10 sm:px-10">
+          <div className="max-w-4xl space-y-4">
+            <p className="text-sm uppercase tracking-[0.3em] text-muted">The exploration challenge</p>
+            <h2 className="text-3xl font-semibold">Why traditional methods struggle to scale</h2>
+            <p className="text-lg text-muted-foreground">
+              Critical mineral discovery faces compounding obstacles that remote sensing and GeoAI can systematically address.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
+              <h3 className="text-base font-semibold mb-2">Limited field coverage</h3>
+              <p className="text-sm text-muted-foreground">
+                Traditional field surveys cover narrow transects. Screening hundreds of km² on the ground is cost-prohibitive and time-intensive.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
+              <h3 className="text-base font-semibold mb-2">High-risk capital allocation</h3>
+              <p className="text-sm text-muted-foreground">
+                Decision-makers must commit drill budgets with incomplete data, leading to lower hit rates and wasted cycles.
+              </p>
+            </div>
+            <div className="rounded-xl border border-border/50 bg-background/60 p-5">
+              <h3 className="text-base font-semibold mb-2">Extended project timelines</h3>
+              <p className="text-sm text-muted-foreground">
+                Conventional exploration workflows can take quarters to deliver initial target rankings, delaying strategic decisions.
+              </p>
+            </div>
+          </div>
+          <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 p-5">
+            <p className="text-sm text-muted-foreground">
+              <strong className="text-foreground">Remote sensing changes the equation:</strong> by fusing satellite, airborne, and geophysical data at scale, 
+              we screen vast regions in weeks and deliver ranked targets with transparent confidence scores—
+              <Link href="/prospectivity-brief" className="font-semibold text-primary hover:underline"> start with a Prospectivity Brief</Link> or{" "}
+              <Link href="/consultation" className="font-semibold text-primary hover:underline">book a Consultation</Link> to see how it applies to your AOI.
+            </p>
+          </div>
+        </section>
+
         {/* Visual Hero Component */}
         <section className="space-y-6">
           <div className="text-center space-y-3">
@@ -215,6 +254,13 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-5">
+            <p className="text-sm font-medium text-foreground mb-2">Proven validation rates</p>
+            <p className="text-sm text-muted-foreground">
+              Our multi-sensor fusion workflows have been applied to regional-scale AOIs spanning hundreds of km², achieving validation rates <strong className="text-foreground">approaching 90%</strong> against known mineral targets.
+              This level of accuracy significantly outperforms conventional single-dataset approaches and translates directly into higher-confidence drill decisions.
+            </p>
           </div>
         </section>
 
