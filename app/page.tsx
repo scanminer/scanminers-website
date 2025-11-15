@@ -386,25 +386,31 @@ export default function Home() {
         {/* Product Screens Section */}
         <section className="space-y-8">
           <div className="text-center space-y-3">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">Product Views</p>
-            <h2 className="text-3xl font-semibold">From Prospectivity Maps to Explainable Insights</h2>
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              Product Views
+            </div>
+            <h2 className="text-3xl font-bold">
+              From <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">prospectivity maps</span> to explainable insights
+            </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Three core views power exploration decision-making: regional heatmaps, feature importance charts, and ranked target lists.
+              Three core views power exploration decision-making: <strong className="text-fg">regional heatmaps</strong>, <strong className="text-fg">feature importance charts</strong>, and <strong className="text-fg">ranked target lists</strong>.
             </p>
           </div>
           <ProductScreensStrip />
         </section>
 
-        <section className="rounded-3xl border px-6 py-10 sm:px-10">
+        <section className="rounded-3xl border bg-gradient-to-br from-card via-card/50 to-background px-6 py-10 sm:px-10 shadow-lg">
           <div className="flex flex-wrap items-end justify-between gap-4 mb-8">
             <div className="max-w-2xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Prospectivity Workflow</p>
-              <h2 className="text-3xl font-semibold">From Raw Data to Drill-Ready Targets</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Prospectivity Workflow
+              </div>
+              <h2 className="text-3xl font-bold">From raw data to <span className="bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">drill-ready targets</span></h2>
               <p className="text-lg text-muted-foreground">
-                Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions.
+                Our systematic 5-step pipeline transforms multi-sensor data into actionable exploration decisions <strong className="text-fg">in under 48 hours</strong>.
               </p>
             </div>
-            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               View full technology stack
               <ArrowUpRight className="h-4 w-4" />
             </Link>
@@ -413,66 +419,87 @@ export default function Home() {
         </section>
 
         {/* Keep original operating stack for detail */}
-        <section className="rounded-3xl border px-6 py-10 sm:px-10">
+        <section className="rounded-3xl border bg-gradient-to-br from-card via-card/30 to-background px-6 py-10 sm:px-10 shadow-lg">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="max-w-2xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Scanminers operating stack</p>
-              <h2 className="text-3xl font-semibold">Technical Implementation Details</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-earth/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-earth">
+                Scanminers Operating Stack
+              </div>
+              <h2 className="text-3xl font-bold">
+                Technical implementation <span className="bg-gradient-to-r from-earth to-primary bg-clip-text text-transparent">by the numbers</span>
+              </h2>
               <p className="text-lg text-muted-foreground">
-                Every layer is explainable by design, with AI copilots embedded in the CMS so teams can iterate in real time.
+                Every layer is explainable by design, with <strong className="text-fg">AI copilots embedded in the CMS</strong> so teams can iterate in real time.
               </p>
             </div>
-            <Link href="/insights" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/insights" className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               Read the technical deep dives
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2">
-            {operatingStack.map((step) => (
-              <div key={step.title} className="rounded-2xl border border-border/70 bg-muted/20 p-5">
+            {operatingStack.map((step, idx) => (
+              <div key={step.title} className="group relative rounded-2xl border border-border/70 bg-gradient-to-br from-muted/40 via-muted/20 to-background p-6 transition hover:border-primary/50 hover:shadow-xl">
+                <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-earth/10 text-base font-bold text-earth">
+                  {idx + 1}
+                </div>
                 <div className="flex items-center gap-3">
-                  <step.icon className="h-10 w-10 rounded-xl border border-border/60 p-2" />
+                  <step.icon className="h-11 w-11 rounded-xl border border-border/60 bg-background/60 p-2 text-primary" />
                   <div>
-                    <p className="text-sm uppercase tracking-[0.3em] text-muted">Step</p>
-                    <h3 className="text-lg font-semibold">{step.title}</h3>
+                    <p className="text-xs uppercase tracking-[0.3em] text-muted">Step</p>
+                    <h3 className="text-lg font-bold">{step.title}</h3>
                   </div>
                 </div>
-                <p className="mt-4 text-sm text-muted-foreground">{step.description}</p>
-                <p className="mt-3 rounded-xl bg-background/60 p-4 text-sm text-muted">{step.detail}</p>
+                <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
+                <div className="mt-4 rounded-xl border border-border/40 bg-card/60 p-4">
+                  <p className="text-sm text-muted leading-relaxed">{step.detail}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="rounded-3xl border bg-background/70 px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.12)] sm:px-10">
+        <section className="rounded-3xl border bg-gradient-to-br from-background via-card/30 to-background px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.12)] sm:px-10">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-3xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Choose your next step</p>
-              <h2 className="text-3xl font-semibold">Two fast paths into the funnel</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent">
+                Choose Your Next Step
+              </div>
+              <h2 className="text-3xl font-bold">
+                Two fast paths <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">into the funnel</span>
+              </h2>
               <p className="text-lg text-muted-foreground">
-                Start with a complimentary prospectivity brief to scope fit, or wire the consultation fee for a deeper working session.
+                Start with a <strong className="text-fg">complimentary prospectivity brief</strong> to scope fit, or wire the consultation fee for a deeper working session.
                 Both routes use the same Turnstile-protected admin stack, so approvals stay governed.
               </p>
             </div>
           </div>
           <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {funnelOptions.map((option) => (
-              <article key={option.title} className="flex h-full flex-col rounded-2xl border border-border/70 bg-card/70 p-6">
+            {funnelOptions.map((option, idx) => (
+              <article key={option.title} className="group relative flex h-full flex-col rounded-2xl border border-border/70 bg-gradient-to-br from-card/70 via-card/40 to-background p-6 transition hover:border-primary/50 hover:shadow-xl">
+                <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">
+                  {idx + 1}
+                </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.3em] text-muted">Engagement</p>
-                  <h3 className="mt-2 text-2xl font-semibold tracking-tight">{option.title}</h3>
-                  <p className="mt-3 text-sm text-muted-foreground">{option.description}</p>
+                  <h3 className="mt-2 text-2xl font-bold tracking-tight">{option.title}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{option.description}</p>
                 </div>
                 <ul className="mt-5 space-y-2 text-sm text-muted-foreground">
                   {option.bullets.map((bullet) => (
-                    <li key={bullet}>• {bullet}</li>
+                    <li key={bullet} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                      <span>{bullet}</span>
+                    </li>
                   ))}
                 </ul>
-                <div className="mt-5 text-xs uppercase tracking-[0.3em] text-muted">{option.turnaround}</div>
+                <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-success/30 bg-success/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-success">
+                  {option.turnaround}
+                </div>
                 <div className="mt-6 flex-1" />
                 <Link
                   href={option.cta.href}
-                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl"
                 >
                   {option.cta.label}
                 </Link>
@@ -481,19 +508,23 @@ export default function Home() {
           </div>
         </section>
 
-  <section className="rounded-3xl border bg-card/40 px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.15)] sm:px-10">
+  <section className="rounded-3xl border bg-gradient-to-br from-card/40 via-card/20 to-background px-6 py-10 shadow-[0_30px_90px_rgba(15,23,42,0.15)] sm:px-10">
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="max-w-3xl space-y-3">
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Critical mineral coverage grid</p>
-              <h2 className="text-3xl font-semibold">Active programs and upcoming slots</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-secondary">
+                Critical Mineral Coverage Grid
+              </div>
+              <h2 className="text-3xl font-bold">
+                Active programs and <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">upcoming slots</span>
+              </h2>
               <p className="text-lg text-muted-foreground">
-                Track which mandates already ship with explainable assets and which ones are scoping. Each card links to the freshest field note or case study
+                Track which mandates already ship with explainable assets and which ones are scoping. Each card links to the <strong className="text-fg">freshest field note or case study</strong>
                 so your team can dive deeper.
               </p>
             </div>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold"
+              className="inline-flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-bold transition hover:border-primary hover:bg-primary/5"
             >
               Submit an AOI
               <ArrowUpRight className="h-4 w-4" />
@@ -504,33 +535,37 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-3xl border bg-background/60 px-6 py-10 sm:px-10">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <section className="rounded-3xl border bg-gradient-to-br from-background via-card/30 to-background px-6 py-10 sm:px-10 shadow-lg">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-muted">Field proven</p>
-              <h2 className="text-3xl font-semibold">Latest work from the team</h2>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Field Proven
+              </div>
+              <h2 className="text-3xl font-bold">
+                Latest work <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">from the team</span>
+              </h2>
             </div>
-            <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
+            <Link href="/case-studies" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
               Browse all case studies
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <div className="space-y-5">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted">Case studies</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Case studies</p>
               {latestCaseStudies.length === 0 ? (
                 <p className="text-muted-foreground">No case studies published yet.</p>
               ) : (
                 latestCaseStudies.map((s) => (
-                  <article key={s._id} className="group rounded-2xl border border-border/70 bg-card/60 p-5 hover:border-primary/40">
+                  <article key={s._id} className="group rounded-2xl border border-border/70 bg-gradient-to-br from-card/60 via-card/40 to-background p-5 transition hover:border-primary/50 hover:shadow-xl">
                     <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted">
                       Critical minerals · {formatDate(s.publishedAt)}
                     </div>
                     <Link href={s.url} className="mt-3 block">
-                      <h3 className="text-xl font-semibold tracking-tight group-hover:text-primary">{s.title}</h3>
+                      <h3 className="text-xl font-bold tracking-tight group-hover:text-primary">{s.title}</h3>
                     </Link>
-                    {s.summary && <p className="mt-2 text-sm text-muted-foreground">{s.summary}</p>}
-                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                    {s.summary && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.summary}</p>}
+                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary">
                       View work
                       <ArrowUpRight className="h-4 w-4" />
                     </div>
@@ -539,20 +574,20 @@ export default function Home() {
               )}
             </div>
             <div className="space-y-5">
-              <p className="text-xs uppercase tracking-[0.3em] text-muted">Insights</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">Insights</p>
               {latestInsights.length === 0 ? (
                 <p className="text-muted-foreground">No insights available yet.</p>
               ) : (
                 latestInsights.map((p: Insight) => (
-                  <article key={p._id} className="group rounded-2xl border border-border/70 bg-card/40 p-5 hover:border-primary/40">
+                  <article key={p._id} className="group rounded-2xl border border-border/70 bg-gradient-to-br from-card/40 via-card/20 to-background p-5 transition hover:border-primary/50 hover:shadow-xl">
                     <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-muted">
                       Research note · {formatDate(p.publishedAt)}
                     </div>
                     <Link href={p.url} className="mt-3 block">
-                      <h3 className="text-xl font-semibold tracking-tight group-hover:text-primary">{p.title}</h3>
+                      <h3 className="text-xl font-bold tracking-tight group-hover:text-primary">{p.title}</h3>
                     </Link>
-                    {p.summary && <p className="mt-2 text-sm text-muted-foreground">{p.summary}</p>}
-                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-primary">
+                    {p.summary && <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{p.summary}</p>}
+                    <div className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary">
                       Read insight
                       <ArrowUpRight className="h-4 w-4" />
                     </div>
@@ -563,34 +598,50 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-6 py-10 sm:px-10">
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center">
+        <section className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent px-6 py-10 sm:px-10 shadow-2xl">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center">
             <div className="space-y-5">
-              <p className="text-sm uppercase tracking-[0.3em] text-primary">Next step</p>
-              <h2 className="text-3xl font-semibold">Bring prospectivity intelligence into your exploration stack</h2>
-              <p className="text-lg text-muted-foreground">
-                Submit a brief for a quick-fit assessment, wire the consultation fee for a working session, or jump straight into a scoped project—each option uses the same governed workflows.
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Next Step
+              </div>
+              <h2 className="text-3xl font-bold leading-tight">
+                Bring prospectivity intelligence <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">into your exploration stack</span>
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Submit a brief for a quick-fit assessment, wire the consultation fee for a working session, or jump straight into a scoped project—<strong className="text-fg">each option uses the same governed workflows</strong>.
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-medium text-primary-foreground">
+                <Link href="/prospectivity-brief" className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-3 text-base font-bold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:shadow-2xl">
                   Request a prospectivity brief
                 </Link>
-                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border border-border px-5 py-3 text-base font-medium">
+                <Link href="/consultation" className="inline-flex items-center justify-center rounded-xl border-2 border-primary/30 bg-primary/5 px-5 py-3 text-base font-bold text-primary transition hover:border-primary/50 hover:bg-primary/10">
                   Book a paid consultation
                 </Link>
-                <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-medium">
+                <Link href="/contact" className="inline-flex items-center justify-center rounded-xl border border-border/60 px-5 py-3 text-base font-semibold transition hover:border-primary/30 hover:bg-card">
                   Talk to the team
                 </Link>
               </div>
             </div>
-            <div className="rounded-2xl border border-border/70 bg-background/80 p-5 text-sm text-muted-foreground">
-              <p className="font-medium text-foreground">What to expect</p>
-              <ul className="mt-3 space-y-2">
-                <li>• 30-minute scoping call with geology + data leads.</li>
-                <li>• Secure data drop or GitHub sync.</li>
-                <li>• Draft prospectivity board + admin-ready content within 10 business days.</li>
+            <div className="rounded-2xl border-2 border-border/70 bg-background/90 p-6 shadow-lg">
+              <p className="font-bold text-foreground">What to expect</p>
+              <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                  <span><strong className="text-fg">30-minute scoping call</strong> with geology + data leads.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                  <span>Secure data drop or <strong className="text-fg">GitHub sync</strong>.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
+                  <span>Draft prospectivity board + admin-ready content within <strong className="text-fg">10 business days</strong>.</span>
+                </li>
               </ul>
-              <p className="mt-4 text-xs uppercase tracking-[0.3em] text-muted">contact@scanminers.com</p>
+              <div className="mt-6 rounded-lg border border-primary/30 bg-primary/5 p-3">
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary">Contact</p>
+                <p className="mt-1 text-sm font-semibold text-foreground">contact@scanminers.com</p>
+              </div>
             </div>
           </div>
         </section>
