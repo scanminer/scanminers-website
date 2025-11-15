@@ -7,6 +7,8 @@ import { SentryInit } from "@/components/SentryInit";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
 import { Header } from "@/components/header";
+import { StickyCTA } from "@/components/sticky-cta";
+import { ChatWidget } from "@/components/chat-widget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +60,9 @@ export default function RootLayout({
           <Providers>
             <Header />
             <main>{children}</main>
+            {/* Global conversion helpers */}
+            <StickyCTA />
+            <ChatWidget />
             <footer className="border-t border-border bg-muted/30 mt-16">
               <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">

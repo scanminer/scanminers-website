@@ -9,6 +9,7 @@ import { CriticalCoverageGrid } from "@/components/critical-coverage-grid";
 import { HeroVisual } from "@/components/HeroVisual";
 import { ProspectivityPipeline } from "@/components/ProspectivityPipeline";
 import { ProductScreensStrip } from "@/components/ProductScreensStrip";
+import { MultiSensorFusionDiagram } from "@/components/multi-sensor-fusion-diagram";
 import {
   CRITICAL_MINERAL_BLUEPRINT,
   aggregateCommoditySummaries,
@@ -299,7 +300,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Visual Hero Component */}
+        {/* Visual Hero Component + Fusion Diagram */}
         <section className="space-y-6">
           <div className="text-center space-y-3">
             <p className="text-sm uppercase tracking-[0.3em] text-muted">GeoAI Platform</p>
@@ -309,6 +310,10 @@ export default function Home() {
             </p>
           </div>
           <HeroVisual variant="full" />
+          {/* Lightweight animated overview of the fusion pipeline (Phase 1). Replaced by Framer Motion in Phase 2. */}
+          <div className="mx-auto max-w-5xl">
+            <MultiSensorFusionDiagram />
+          </div>
           <div className="flex flex-wrap justify-center gap-3 pt-4">
             <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
               Learn how it works
