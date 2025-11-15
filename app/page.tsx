@@ -9,6 +9,8 @@ import { CriticalCoverageGrid } from "@/components/critical-coverage-grid";
 import { HeroVisual } from "@/components/HeroVisual";
 import { ProspectivityPipeline } from "@/components/ProspectivityPipeline";
 import { ProductScreensStrip } from "@/components/ProductScreensStrip";
+import { MultiSensorFusionDiagram } from "@/components/multi-sensor-fusion-diagram";
+import { MSection, MDIV, MH1, MP } from "@/components/motion-primitives";
 import {
   CRITICAL_MINERAL_BLUEPRINT,
   aggregateCommoditySummaries,
@@ -118,7 +120,7 @@ export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero Section - Redesigned */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/20 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
+  <section className="relative overflow-hidden bg-gradient-to-br from-neutral-950 via-primary/20 to-neutral-900 dark:from-neutral-950 dark:via-primary/30 dark:to-black">
         {/* Background Effects */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-[-200px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/30 blur-[200px]" />
@@ -126,12 +128,12 @@ export default function Home() {
           <div className="absolute left-[10%] top-[30%] h-[300px] w-[300px] rounded-full bg-secondary/15 blur-[120px]" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+        <MSection className="relative mx-auto max-w-7xl px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-24">
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_380px] lg:items-start">
             {/* Left Column: Main Message */}
-            <div className="space-y-8">
+            <MSection className="space-y-8">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur">
+              <MDIV className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 backdrop-blur">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75"></span>
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-success"></span>
@@ -139,24 +141,24 @@ export default function Home() {
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
                   Trusted by 12 countries
                 </span>
-              </div>
+              </MDIV>
 
               {/* Headline - You-Oriented */}
-              <h1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
+              <MH1 className="text-5xl font-bold leading-[1.1] tracking-tight text-white sm:text-6xl lg:text-7xl">
                 Find critical minerals{" "}
                 <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
                   before your competition
                 </span>
-              </h1>
+              </MH1>
 
               {/* Subheadline with Urgency (SDG/IEA framing) */}
-              <p className="text-xl leading-relaxed text-white/85 sm:text-2xl">
+              <MP className="text-xl leading-relaxed text-white/85 sm:text-2xl">
                 The energy transition demands <strong className="font-semibold text-white">3× more lithium, 7× more REE</strong> by 2040 (IEA).
                 Your next discovery starts with intelligence—not luck.
-              </p>
+              </MP>
 
               {/* Value Props */}
-              <div className="space-y-3">
+              <MDIV className="space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success/20">
                     <LineChart className="h-3.5 w-3.5 text-success" />
@@ -181,10 +183,10 @@ export default function Home() {
                     <strong className="font-semibold text-white">Transparent AI</strong> you can defend to boards, JVs, and regulators
                   </p>
                 </div>
-              </div>
+              </MDIV>
 
               {/* CTAs */}
-              <div className="flex flex-wrap items-center gap-4">
+              <MDIV className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/prospectivity-brief"
                   className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-neutral-900 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
@@ -205,16 +207,16 @@ export default function Home() {
                   View proof in the field
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
-              </div>
+              </MDIV>
 
               {/* Trust Signal */}
-              <p className="text-sm text-white/60">
+              <MP className="text-sm text-white/60">
                 Used by exploration teams at mining majors, junior explorers, and national geological surveys across Africa, Middle East, Asia-Pacific
-              </p>
-            </div>
+              </MP>
+            </MSection>
 
             {/* Right Column: Proof Points Card */}
-            <div className="rounded-2xl border border-white/15 bg-white/10 p-8 backdrop-blur-xl lg:sticky lg:top-24">
+            <MDIV className="rounded-2xl border border-white/15 bg-white/10 p-8 backdrop-blur-xl lg:sticky lg:top-24">
               <p className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">Proven at scale</p>
               <div className="space-y-6">
                 {proofPoints.map((item) => (
@@ -229,9 +231,9 @@ export default function Home() {
                 <p className="text-xs font-semibold text-accent">⚡ Fast-track available</p>
                 <p className="mt-1 text-sm text-white/80">Incremental AOIs delivered in &lt; 48 hours once baseline model is live</p>
               </div>
-            </div>
+            </MDIV>
           </div>
-        </div>
+        </MSection>
       </section>
 
       <div className="mx-auto max-w-7xl space-y-16 px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
@@ -299,16 +301,22 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Visual Hero Component */}
+        {/* Visual Hero Component + Fusion Diagram */}
         <section className="space-y-6">
-          <div className="text-center space-y-3">
-            <p className="text-sm uppercase tracking-[0.3em] text-muted">GeoAI Platform</p>
-            <h2 className="text-3xl font-semibold">Multi-Sensor Fusion Meets Explainable AI</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <MSection className="text-center space-y-3">
+            <MP className="text-sm uppercase tracking-[0.3em] text-muted">GeoAI Platform</MP>
+            <MDIV>
+              <h2 className="text-3xl font-semibold">Multi-Sensor Fusion Meets Explainable AI</h2>
+            </MDIV>
+            <MP className="text-lg text-muted-foreground max-w-3xl mx-auto">
               From satellite imagery to drill targets, our platform integrates diverse data sources with transparent machine learning.
-            </p>
-          </div>
+            </MP>
+          </MSection>
           <HeroVisual variant="full" />
+          {/* Lightweight animated overview of the fusion pipeline (Phase 1). Replaced by Framer Motion in Phase 2. */}
+          <div className="mx-auto max-w-5xl">
+            <MultiSensorFusionDiagram />
+          </div>
           <div className="flex flex-wrap justify-center gap-3 pt-4">
             <Link href="/technologies" className="inline-flex items-center gap-2 text-sm font-medium text-primary">
               Learn how it works
@@ -333,9 +341,9 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid gap-6 md:grid-cols-3">
+          <MSection className="grid gap-6 md:grid-cols-3">
             {outcomes.map((card, idx) => (
-              <div 
+              <MDIV 
                 key={card.title} 
                 className="group relative overflow-hidden rounded-2xl border-2 border-border/50 bg-background p-7 transition-all hover:border-primary hover:shadow-2xl dark:bg-background/80"
               >
@@ -353,9 +361,9 @@ export default function Home() {
                     <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">{card.hint}</p>
                   </div>
                 </div>
-              </div>
+              </MDIV>
             ))}
-          </div>
+          </MSection>
           
           <div className="rounded-2xl border-2 border-success/30 bg-gradient-to-br from-success/10 via-success/5 to-transparent p-8 shadow-inner">
             <div className="flex items-start gap-4">

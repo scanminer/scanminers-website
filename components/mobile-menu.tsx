@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,11 +11,18 @@ interface MobileMenuProps {
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+  const initial = useRef(true);
 
   // Close menu on route change
   useEffect(() => {
+    // Skip initial mount to avoid immediately closing after opening
+    if (initial.current) {
+      initial.current = false;
+      return;
+    }
     onClose();
-  }, [pathname, onClose]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -48,7 +55,12 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
       />
 
       {/* Menu Panel */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm animate-in slide-in-from-right duration-300">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Main menu"
+        className="fixed inset-y-0 right-0 z-50 w-full max-w-sm animate-in slide-in-from-right duration-300"
+      >
         <div className="flex h-full flex-col gap-6 bg-background p-6 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-between">

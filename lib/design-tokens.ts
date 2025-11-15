@@ -6,35 +6,35 @@
 export const designTokens = {
   // Brand Colors
   colors: {
-    // Primary: Teal/Cyan (remote sensing, technology, trust)
+    // Primary (V2): AI Deep Blue (technology, trust)
     primary: {
-      50: '#f0fdff',
-      100: '#ccf7fe',
-      200: '#99eefd',
-      300: '#5ce0fa',
-      400: '#22c9f0',
-      500: '#06aed6',
-      600: '#088bb3',
-      700: '#0e7091',
-      800: '#155b75',
-      900: '#154c63',
-      950: '#083144',
+      50: '#eff6fc',
+      100: '#d9e7f4',
+      200: '#b6cfeb',
+      300: '#86b0dc',
+      400: '#578ec8',
+      500: '#2c75ad',
+      600: '#1d5f95',
+      700: '#0c3f6b', // AI deep blue
+      800: '#0a3559',
+      900: '#082a46',
+      950: '#04182b',
     },
-    // Secondary: Earth tones (geology, minerals, ground truth)
+    // Secondary (V2): Exploration Green (geology, field-ready)
     earth: {
-      50: '#f8f7f4',
-      100: '#eeeae0',
-      200: '#ddd4c0',
-      300: '#c7b89a',
-      400: '#b09a73',
-      500: '#a08459',
-      600: '#93734d',
-      700: '#7a5d41',
-      800: '#654e39',
-      900: '#544131',
-      950: '#2e2219',
+      50: '#ecf8f2',
+      100: '#d4efdf',
+      200: '#a8dfc0',
+      300: '#7acc9f',
+      400: '#4fbf85',
+      500: '#0f8c55', // exploration green
+      600: '#0d7b4b',
+      700: '#0b6a41',
+      800: '#095636',
+      900: '#06432a',
+      950: '#042a1a',
     },
-    // Accent: Warm orange/amber (energy, discovery, highlights)
+    // Accent (V2): Mineral Amber (energy, discovery, highlights)
     accent: {
       50: '#fffbeb',
       100: '#fef3c7',
@@ -48,7 +48,7 @@ export const designTokens = {
       900: '#78350f',
       950: '#451a03',
     },
-    // Success: Green (validation, accuracy, positive results)
+    // Success: System green (validation, accuracy, positive)
     success: {
       50: '#f0fdf4',
       100: '#dcfce7',
@@ -182,9 +182,9 @@ export const designTokens = {
     },
     // Gradient overlays (for hero sections)
     gradients: {
-      primary: 'linear-gradient(135deg, rgba(6, 174, 214, 0.1) 0%, rgba(8, 139, 179, 0.05) 100%)',
-      earth: 'linear-gradient(135deg, rgba(160, 132, 89, 0.1) 0%, rgba(122, 93, 65, 0.05) 100%)',
-      accent: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(217, 119, 6, 0.05) 100%)',
+      primary: 'linear-gradient(135deg, rgba(12, 63, 107, 0.18) 0%, rgba(12, 63, 107, 0.06) 100%)',
+      earth: 'linear-gradient(135deg, rgba(15, 140, 85, 0.16) 0%, rgba(15, 140, 85, 0.06) 100%)',
+      accent: 'linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(245, 158, 11, 0.06) 100%)',
       dark: 'linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 100%)',
     },
   },
