@@ -1,0 +1,99 @@
+---
+slug: visual-identity
+title: Visual Identity
+summary: "Color, type, and imagery rules for expressing subsurface intelligence."
+category: visual
+status: approved
+weight: 40
+keywords:
+  - color
+  - typography
+  - imagery
+audience:
+  - marketing
+  - product
+mediums:
+  - website
+  - deck
+  - product
+  - email
+checklist:
+  - Use dark backgrounds for intelligence or product UI scenes; reserve warm neutrals for human impact stories.
+  - Keep gradients subtle (two stops max) and tied to mineral tones.
+  - Overlay data visuals with clear provenance captions.
+colorPalette:
+  - name: Midnight Basin
+    hex: "#020617"
+    role: primary
+    usage: "Backgrounds, hero sections, overlays"
+    contrastOnLight: "AAA"
+    contrastOnDark: "AAA"
+  - name: Lidar Teal
+    hex: "#14b8a6"
+    role: accent
+    usage: "Links, data highlights, CTA outlines"
+    contrastOnLight: "AA"
+    contrastOnDark: "AAA"
+  - name: Bauxite Ember
+    hex: "#f97316"
+    role: call-to-action
+    usage: "Primary CTA buttons, key metrics"
+    contrastOnLight: "AA"
+    contrastOnDark: "AA"
+  - name: Survey Clay
+    hex: "#f3f4f6"
+    role: neutral
+    usage: "Surface cards, diagrams, backgrounds"
+    contrastOnLight: "AA"
+    contrastOnDark: "AAA"
+typography:
+  - family: "Space Grotesk"
+    role: "Headlines and hero numerics"
+    fallback: "Inter, system"
+    styles:
+      - name: H1
+        size: "clamp(2.5rem, 3vw, 3.75rem)"
+        weight: "600"
+        lineHeight: "1.05"
+      - name: H2
+        size: "clamp(1.75rem, 2.2vw, 2.5rem)"
+        weight: "600"
+        lineHeight: "1.2"
+  - family: "Inter"
+    role: "Body copy and UI labels"
+    fallback: "system"
+    styles:
+      - name: Body Large
+        size: "1.125rem"
+        weight: "400"
+        lineHeight: "1.6"
+      - name: Caption
+        size: "0.85rem"
+        weight: "500"
+        lineHeight: "1.4"
+guardrails:
+  - rule: "Do not use mining photography with heavy machinery unless contextualized with ESG language."
+    reason: "We reinforce responsible operations, not extraction dramatics."
+    severity: soft
+  - rule: "Respect contrast ratios of AA or higher for text overlays."
+    reason: "Accessibility is non-negotiable."
+    severity: hard
+  - rule: "Limit gradients to on-brand tones (Midnight Basin + Lidar Teal)."
+    reason: "Prevents neon or gaming aesthetics."
+    severity: soft
+updatedBy: "brand-system"
+updatedAt: 2025-02-18
+---
+
+## Imagery Guidance
+
+- Use macro earth textures, topographic lines, and satellite composites.
+- Pair human imagery with candid field coordination moments, not staged hardhats.
+- Always include a caption that references the dataset or mission depicted.
+
+## Layout Rhythm
+
+1. Hero background: Midnight Basin with a low-opacity intelligence grid.
+2. Secondary sections alternate between dark and Survey Clay surfaces.
+3. Cards use 16px radius with 1px stroke in translucent teal.
+4. Keep typography tight—short headlines, scannable body copy.
