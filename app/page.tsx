@@ -187,7 +187,7 @@ export default function Home() {
               <MDIV className="flex flex-wrap items-center gap-4">
                 <Link
                   href="/prospectivity-brief"
-                  className="pressable group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-base font-semibold text-neutral-900 shadow-xl shadow-black/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20"
+                  className="pressable group inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary via-primary/80 to-secondary px-6 py-3.5 text-base font-semibold text-primary-foreground shadow-xl shadow-primary/30 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/30"
                 >
                   Get free prospectivity brief
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
