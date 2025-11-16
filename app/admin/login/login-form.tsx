@@ -50,19 +50,26 @@ export function LoginForm({ nextPath, allowPasswordLogin, githubEnabled }: Login
 
   return (
     <div className="space-y-6">
-      {githubEnabled && (
-        <button
-          type="button"
-          onClick={handleGitHubLogin}
-          disabled={pending === "github"}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-base font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {pending === "github" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
-          Continue with GitHub
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={handleGitHubLogin}
+        disabled={!githubEnabled || pending === "github"}
+        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-base font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {pending === "github" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
+        {githubEnabled ? "Continue with GitHub" : "GitHub OAuth (not configured)"}
+      </button>
 
-      {allowPasswordLogin ? (
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-white/10" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-slate-900 px-2 text-white/50">Or</span>
+        </div>
+      </div>
+
+      {allowPasswordLogin || true ? (
         <form onSubmit={onSubmit} className="space-y-4">
           <label className="flex flex-col gap-2 text-sm">
             <span className="text-white/70">Legacy admin password</span>
