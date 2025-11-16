@@ -5,14 +5,17 @@ import { getLead, markLeadReplied, saveLeadDraft } from "@/lib/lead-store";
 import { getAdminActorName } from "@/lib/admin-actor";
 import { reportServerError } from "@/lib/server-logger";
 import { generateLeadReplyDraft } from "@/lib/ai/lead-replies";
+import { requireAdminSession } from "@/lib/admin-session";
 
 export async function markLeadAsRepliedAction(leadId: string, detail?: string | null) {
   if (!leadId) {
     return { success: false, message: "Missing lead ID." };
   }
 
+  await requireAdminSession();
   try {
-    await markLeadReplied(leadId, detail ?? null, getAdminActorName());
+    const actor = await getAdminActorName();
+    await markLeadReplied(leadId, detail ?? null, actor);
     revalidatePath("/admin/leads");
     revalidatePath(`/admin/leads/${leadId}`);
     return { success: true };
@@ -27,6 +30,7 @@ export async function generateLeadReplyAction(leadId: string) {
     return { success: false, message: "Missing lead ID." };
   }
 
+  await requireAdminSession();
   try {
     const lead = await getLead(leadId);
     if (!lead) {
@@ -34,9 +38,10 @@ export async function generateLeadReplyAction(leadId: string) {
     }
 
     const draft = await generateLeadReplyDraft(lead);
-  await saveLeadDraft(leadId, draft, getAdminActorName());
-  revalidatePath("/admin/leads");
-  revalidatePath(`/admin/leads/${leadId}`);
+    const actor = await getAdminActorName();
+    await saveLeadDraft(leadId, draft, actor);
+    revalidatePath("/admin/leads");
+    revalidatePath(`/admin/leads/${leadId}`);
     return { success: true, draft };
   } catch (error) {
     await reportServerError(error, { action: "generateLeadReply", leadId });

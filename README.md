@@ -49,6 +49,11 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 - NEXT_PUBLIC_GA_MEASUREMENT_ID: GA4 measurement ID used by `trackEvent`
 - NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN: Optional Cloudflare Web Analytics beacon token
 - CONSULT_BANK_ACCOUNT_NAME / CONSULT_BANK_ACCOUNT / CONSULT_BANK_IBAN / CONSULT_BANK_BIC / CONSULT_BANK_NOTE: Displayed in consultation confirmation emails
+- GITHUB_OAUTH_CLIENT_ID / GITHUB_OAUTH_CLIENT_SECRET: GitHub OAuth App used for both Decap CMS and admin SSO
+- ADMIN_ALLOWED_EMAILS / ADMIN_ALLOWED_EMAIL_DOMAINS / ADMIN_ALLOWED_GITHUB_LOGINS: Comma-separated allowlists for who can access `/admin`
+- NEXTAUTH_SECRET: Secret used by NextAuth to encrypt cookies/JWTs (generate with `openssl rand -base64 32`)
+- ADMIN_PASS + ENABLE_ADMIN_PASSWORD_LOGIN (optional): Legacy password fallback; leave disabled in production if possible
+- ALLOW_ADMIN_WITHOUT_AUTH: Set to `true` only for local development when you want to bypass auth entirely
 - NEXT_PUBLIC_SENTRY_DSN / SENTRY_DSN: Client and server DSNs for Sentry error capture
 
 ## Contact form
@@ -99,6 +104,15 @@ Scanminers' brand book now lives in-version alongside the rest of the site.
 - **AI integration** – Lead reply drafting (`lib/ai/lead-replies.ts`) now injects the brand prompt so outbound emails inherit the right tone, guardrails, and proof points. Reuse `buildBrandSystemPrompt()` anywhere else you need branded AI output.
 
 If you need a new brand section, create another MDX file under `content/brand/`, fill the front matter fields, run `npm run contentlayer`, and the admin portal will pick it up automatically.
+
+## Admin authentication (NextAuth + GitHub SSO)
+
+- `/admin` is now guarded by NextAuth with a GitHub provider. Only accounts listed in `ADMIN_ALLOWED_EMAILS`, `ADMIN_ALLOWED_EMAIL_DOMAINS`, or `ADMIN_ALLOWED_GITHUB_LOGINS` can sign in.
+- The same GitHub OAuth App credentials used for Decap CMS (`GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET`) are also used here. Add the callback URLs documented in `docs/HANDOVER.md`.
+- Set `NEXTAUTH_SECRET` (generate with `openssl rand -base64 32`) so JWT cookies are signed consistently across deployments.
+- For local dev you can set `ALLOW_ADMIN_WITHOUT_AUTH=true` to bypass the guard, but disable it in preview/production.
+- A legacy password fallback still exists for emergencies: set `ADMIN_PASS` and leave `ENABLE_ADMIN_PASSWORD_LOGIN=true`. Consider setting it to `false` when everyone has working GitHub SSO.
+- After logging in, the system page (`/admin/system`) highlights missing env keys so you can double-check the configuration.
 
 ## Deploy: Cloudflare Pages
 

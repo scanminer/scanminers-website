@@ -43,6 +43,12 @@ const EnvSchema = z.object({
   // Admin basic auth
   ADMIN_USER: z.string().optional(),
   ADMIN_PASS: z.string().optional(),
+  ADMIN_ALLOWED_EMAILS: z.string().optional(),
+  ADMIN_ALLOWED_EMAIL_DOMAINS: z.string().optional(),
+  ADMIN_ALLOWED_GITHUB_LOGINS: z.string().optional(),
+  ALLOW_ADMIN_WITHOUT_AUTH: z.string().optional(),
+  ENABLE_ADMIN_PASSWORD_LOGIN: z.string().optional(),
+  NEXTAUTH_SECRET: z.string().optional(),
 
   // GitHub automation
   GH_REPO: z.string().optional(),
@@ -93,6 +99,12 @@ export const env: Env = EnvSchema.parse({
 
   ADMIN_USER: process.env.ADMIN_USER,
   ADMIN_PASS: process.env.ADMIN_PASS,
+  ADMIN_ALLOWED_EMAILS: process.env.ADMIN_ALLOWED_EMAILS,
+  ADMIN_ALLOWED_EMAIL_DOMAINS: process.env.ADMIN_ALLOWED_EMAIL_DOMAINS,
+  ADMIN_ALLOWED_GITHUB_LOGINS: process.env.ADMIN_ALLOWED_GITHUB_LOGINS,
+  ALLOW_ADMIN_WITHOUT_AUTH: process.env.ALLOW_ADMIN_WITHOUT_AUTH,
+  ENABLE_ADMIN_PASSWORD_LOGIN: process.env.ENABLE_ADMIN_PASSWORD_LOGIN,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
 
   GH_REPO: process.env.GH_REPO,
   GIT_DEFAULT_BRANCH: process.env.GIT_DEFAULT_BRANCH,
@@ -113,9 +125,21 @@ export function logEnvWarnings() {
   const missing: string[] = [];
   const hints: string[] = [];
 
-  // Admin basic auth
-  if (!env.ADMIN_USER) missing.push("ADMIN_USER");
-  if (!env.ADMIN_PASS) missing.push("ADMIN_PASS");
+  const hasAllowlist = Boolean(
+    env.ADMIN_ALLOWED_EMAILS || env.ADMIN_ALLOWED_EMAIL_DOMAINS || env.ADMIN_ALLOWED_GITHUB_LOGINS
+  );
+  const bypassEnabled = env.ALLOW_ADMIN_WITHOUT_AUTH === "true";
+
+  if (!env.NEXTAUTH_SECRET) missing.push("NEXTAUTH_SECRET");
+  if (!env.GITHUB_OAUTH_CLIENT_ID || !env.GITHUB_OAUTH_CLIENT_SECRET) {
+    hints.push("GITHUB_OAUTH_CLIENT_ID + GITHUB_OAUTH_CLIENT_SECRET (required for admin GitHub SSO)");
+  }
+  if (!hasAllowlist && !bypassEnabled) {
+    hints.push("ADMIN_ALLOWED_EMAILS / ADMIN_ALLOWED_EMAIL_DOMAINS / ADMIN_ALLOWED_GITHUB_LOGINS");
+  }
+  if (env.ENABLE_ADMIN_PASSWORD_LOGIN !== "false" && !env.ADMIN_PASS) {
+    hints.push("ADMIN_PASS (needed only if legacy password login stays enabled)");
+  }
 
   // Contact + funnel forms
   if (!env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || !env.TURNSTILE_SECRET_KEY) {

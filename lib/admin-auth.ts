@@ -1,24 +1,95 @@
-const COOKIE_SALT = "scanminers-admin-v1";
-export const ADMIN_COOKIE_NAME = "scanminers-admin";
+const LIST_DELIMITER = /[\n,]+/g;
 
-async function hashString(secret: string): Promise<string> {
-  const cryptoObj = globalThis.crypto;
-  if (!cryptoObj?.subtle) {
-    throw new Error("Web Crypto API is not available in this runtime");
+export type AdminAuthConfig = {
+  allowedEmails: string[];
+  allowedDomains: string[];
+  allowedGithubHandles: string[];
+  bypass: boolean;
+  passwordFallbackEnabled: boolean;
+  githubClientId: string;
+  githubClientSecret: string;
+  githubProviderEnabled: boolean;
+  hasAllowlist: boolean;
+};
+
+function normalizeEntry(value?: string | null): string {
+  return (value ?? "").trim().toLowerCase().replace(/^@/, "");
+}
+
+function parseList(value?: string | null): string[] {
+  if (!value) return [];
+  return value
+    .split(LIST_DELIMITER)
+    .map(normalizeEntry)
+    .filter(Boolean);
+}
+
+export function resolveAdminAuthConfig(): AdminAuthConfig {
+  const allowedEmails = parseList(process.env.ADMIN_ALLOWED_EMAILS ?? process.env.ADMIN_ALLOWLIST ?? "");
+  const allowedDomains = parseList(process.env.ADMIN_ALLOWED_EMAIL_DOMAINS ?? "");
+  const allowedGithubHandles = parseList(process.env.ADMIN_ALLOWED_GITHUB_LOGINS ?? "");
+  const bypass = process.env.NODE_ENV !== "production" && process.env.ALLOW_ADMIN_WITHOUT_AUTH === "true";
+  const passwordFallbackEnabled = Boolean(process.env.ADMIN_PASS && process.env.ENABLE_ADMIN_PASSWORD_LOGIN !== "false");
+  const githubClientId = (process.env.NEXTAUTH_GITHUB_CLIENT_ID ?? process.env.GITHUB_OAUTH_CLIENT_ID ?? "").trim();
+  const githubClientSecret = (process.env.NEXTAUTH_GITHUB_CLIENT_SECRET ?? process.env.GITHUB_OAUTH_CLIENT_SECRET ?? "").trim();
+  const githubProviderEnabled = Boolean(githubClientId && githubClientSecret);
+  const hasAllowlist = Boolean(allowedEmails.length || allowedDomains.length || allowedGithubHandles.length);
+
+  return {
+    allowedEmails,
+    allowedDomains,
+    allowedGithubHandles,
+    bypass,
+    passwordFallbackEnabled,
+    githubClientId,
+    githubClientSecret,
+    githubProviderEnabled,
+    hasAllowlist,
+  };
+}
+
+type MaybeUser = {
+  email?: string | null;
+  login?: string | null;
+} | null | undefined;
+
+export function isUserAllowlisted(user: MaybeUser, config?: AdminAuthConfig): boolean {
+  const settings = config ?? resolveAdminAuthConfig();
+  if (settings.bypass) return true;
+  const email = normalizeEntry(user?.email);
+  const login = normalizeEntry(user?.login);
+
+  if (!settings.hasAllowlist) {
+    // Without an explicit allowlist we deny by default (unless bypassing).
+    return false;
   }
-  const encoder = new TextEncoder();
-  const data = encoder.encode(`${COOKIE_SALT}:${secret}`);
-  const digest = await cryptoObj.subtle.digest("SHA-256", data);
-  const bytes = Array.from(new Uint8Array(digest));
-  return bytes.map((b) => b.toString(16).padStart(2, "0")).join("");
+
+  if (email && settings.allowedEmails.includes(email)) {
+    return true;
+  }
+
+  if (login && settings.allowedGithubHandles.includes(login)) {
+    return true;
+  }
+
+  if (email) {
+    const [, domain] = email.split("@");
+    if (domain && settings.allowedDomains.includes(domain)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
-export async function deriveAdminToken(passphrase: string): Promise<string> {
-  return hashString(passphrase);
-}
-
-export async function validateAdminToken(token: string | undefined | null, passphrase: string): Promise<boolean> {
-  if (!token) return false;
-  const expected = await deriveAdminToken(passphrase);
-  return token === expected;
+export function getAllowlistSummary(config?: AdminAuthConfig) {
+  const settings = config ?? resolveAdminAuthConfig();
+  return {
+    emails: settings.allowedEmails,
+    domains: settings.allowedDomains,
+    github: settings.allowedGithubHandles,
+    hasCustomRules: settings.hasAllowlist,
+    bypass: settings.bypass,
+    passwordFallbackEnabled: settings.passwordFallbackEnabled,
+  };
 }

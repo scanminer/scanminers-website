@@ -6,8 +6,8 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { AdminThemeBoot } from "@/components/admin/admin-theme-boot"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { signOut, useSession } from "next-auth/react"
 
 const nav = [
   { href: "/admin", label: "Review Queue" },
@@ -18,18 +18,11 @@ const nav = [
 ]
 
 function LogoutButton() {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   async function handleLogout() {
     setLoading(true)
-    try {
-      await fetch("/api/admin/login", { method: "DELETE" })
-    } finally {
-      setLoading(false)
-      router.push("/admin/login")
-      router.refresh()
-    }
+    await signOut({ callbackUrl: "/admin/login" })
   }
 
   return (
@@ -37,6 +30,18 @@ function LogoutButton() {
       <LogOut className="h-4 w-4" />
       {loading ? "Signing out" : "Sign out"}
     </Button>
+  )
+}
+
+function UserBadge() {
+  const { data } = useSession()
+  const name = data?.user?.name || data?.user?.login || data?.user?.email
+  if (!name) return null
+  return (
+    <div className="text-right">
+      <p className="text-sm font-medium text-foreground">{name}</p>
+      <p className="text-xs text-muted-foreground">Admin access</p>
+    </div>
   )
 }
 
@@ -62,7 +67,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </nav>
         <div className="p-3 border-t flex items-center justify-between gap-2">
-          <ModeToggle />
+          <div className="flex flex-col items-start gap-1">
+            <ModeToggle />
+            <UserBadge />
+          </div>
           <LogoutButton />
         </div>
       </aside>
@@ -97,7 +105,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Sheet>
             <span className="font-medium">Admin</span>
           </div>
-          <div className="hidden lg:block" />
+          <div className="hidden lg:flex flex-col items-end">
+            <UserBadge />
+          </div>
           <div className="flex items-center gap-2">
             <ModeToggle />
             <LogoutButton />

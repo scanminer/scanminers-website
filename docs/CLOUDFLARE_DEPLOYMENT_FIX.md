@@ -73,8 +73,11 @@ PERPLEXITY_MODEL=<if-using-draft-generation>
 CONTENT_BOT_TOKEN=<github-token-for-automation>
 ADMIN_ACTION_TOKEN=<token-for-admin-actions>
 WORKFLOW_DISPATCH_TOKEN=<token-for-workflow-triggers>
-ADMIN_USER=<basic-auth-user>
-ADMIN_PASS=<basic-auth-password>
+ADMIN_ALLOWED_EMAILS=you@scanminers.com
+ADMIN_ALLOWED_EMAIL_DOMAINS=scanminers.com
+ADMIN_ALLOWED_GITHUB_LOGINS=scanminers-founder
+NEXTAUTH_SECRET=<openssl-rand-base64-32>
+ADMIN_PASS=<optional-legacy-password>
 ```
 
 ---

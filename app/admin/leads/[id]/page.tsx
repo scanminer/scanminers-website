@@ -25,7 +25,8 @@ export default async function LeadDetailPage(props: { params: Promise<{ id: stri
 
   if (payload.lead.status === "new") {
     try {
-      await markLeadViewed(params.id, getAdminActorName());
+  const actor = await getAdminActorName();
+  await markLeadViewed(params.id, actor);
       const refreshed = await getLeadWithEvents(params.id);
       if (refreshed) {
         payload = refreshed;

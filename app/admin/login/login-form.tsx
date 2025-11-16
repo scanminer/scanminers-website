@@ -2,72 +2,96 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Shield } from "lucide-react";
-import type { ApiResponse } from "@/types/api";
+import { Loader2, Shield, Github } from "lucide-react";
+import { signIn } from "next-auth/react";
 
-export function LoginForm({ nextPath }: { nextPath: string }) {
+type LoginFormProps = {
+  nextPath: string;
+  allowPasswordLogin: boolean;
+  githubEnabled: boolean;
+};
+
+export function LoginForm({ nextPath, allowPasswordLogin, githubEnabled }: LoginFormProps) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [pending, setPending] = useState<"github" | "password" | null>(null);
+
+  function handleGitHubLogin() {
+    if (!githubEnabled) return;
+    setError(null);
+    setPending("github");
+    void signIn("github", { callbackUrl: nextPath || "/admin" });
+  }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!allowPasswordLogin) return;
     if (!password) {
       setError("Password is required");
       return;
     }
-    setLoading(true);
+    setPending("password");
     setError(null);
-    try {
-      const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-      const data = (await res.json().catch(() => ({}))) as ApiResponse<{ error?: string }>;
-      if (!res.ok || !data?.success) {
-        throw new Error(data?.message || data?.error || "Invalid password");
-      }
+    const result = await signIn("legacy-password", {
+      redirect: false,
+      callbackUrl: nextPath || "/admin",
+      password,
+    });
+    if (result?.ok && result.url) {
       setPassword("");
-      router.push(nextPath || "/admin");
+      router.push(result.url);
       router.refresh();
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Login failed";
-      setError(message);
-    } finally {
-      setLoading(false);
+    } else {
+      setError(result?.error || "Invalid password");
+      setPending(null);
     }
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <label className="flex flex-col gap-2 text-sm">
-        <span className="text-white/70">Admin password</span>
-        <div className="flex items-center gap-2 rounded-2xl border border-white/20 bg-black/20 px-4 py-3">
-          <Shield className="h-4 w-4 text-white/50" />
-          <input
-            type="password"
-            className="w-full bg-transparent text-base text-white placeholder-white/40 focus:outline-none"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />
-        </div>
-      </label>
-      {error && <p className="text-sm text-red-300">{error}</p>}
+    <div className="space-y-6">
       <button
-        type="submit"
-        className="flex w-full items-center justify-center rounded-2xl bg-white px-4 py-3 text-base font-medium text-slate-900 shadow-lg shadow-slate-900/20"
-        disabled={loading}
+        type="button"
+        onClick={handleGitHubLogin}
+        disabled={!githubEnabled || pending === "github"}
+        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-base font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {loading ? (
-          <span className="flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Checking…</span>
-        ) : (
-          "Enter admin"
-        )}
+        {pending === "github" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
+        {githubEnabled ? "Continue with GitHub" : "GitHub OAuth not configured"}
       </button>
-    </form>
+
+      {allowPasswordLogin ? (
+        <form onSubmit={onSubmit} className="space-y-4">
+          <label className="flex flex-col gap-2 text-sm">
+            <span className="text-white/70">Legacy admin password</span>
+            <div className="flex items-center gap-2 rounded-2xl border border-white/20 bg-black/20 px-4 py-3">
+              <Shield className="h-4 w-4 text-white/50" />
+              <input
+                type="password"
+                className="w-full bg-transparent text-base text-white placeholder-white/40 focus:outline-none"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+            </div>
+          </label>
+          {error && <p className="text-sm text-red-300">{error}</p>}
+          <button
+            type="submit"
+            className="flex w-full items-center justify-center rounded-2xl bg-white px-4 py-3 text-base font-medium text-slate-900 shadow-lg shadow-slate-900/20"
+            disabled={pending === "password"}
+          >
+            {pending === "password" ? (
+              <span className="flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" /> Checking…</span>
+            ) : (
+              "Use fallback password"
+            )}
+          </button>
+        </form>
+      ) : (
+        error && <p className="text-sm text-red-300">{error}</p>
+      )}
+    </div>
   );
 }
