@@ -50,15 +50,17 @@ export function LoginForm({ nextPath, allowPasswordLogin, githubEnabled }: Login
 
   return (
     <div className="space-y-6">
-      <button
-        type="button"
-        onClick={handleGitHubLogin}
-        disabled={!githubEnabled || pending === "github"}
-        className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-base font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {pending === "github" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
-        {githubEnabled ? "Continue with GitHub" : "GitHub OAuth not configured"}
-      </button>
+      {githubEnabled && (
+        <button
+          type="button"
+          onClick={handleGitHubLogin}
+          disabled={pending === "github"}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-base font-medium text-white transition hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {pending === "github" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
+          Continue with GitHub
+        </button>
+      )}
 
       {allowPasswordLogin ? (
         <form onSubmit={onSubmit} className="space-y-4">
