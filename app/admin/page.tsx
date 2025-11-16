@@ -3,6 +3,9 @@ import { RegenerateCoverButton } from "@/components/RegenerateCoverButton";
 import { allInsights, allCaseStudies, allBriefs } from "contentlayer/generated";
 import { ApprovePublishButton } from "@/components/ApprovePublishButton";
 
+// Force dynamic rendering to avoid build-time NextAuth initialization
+export const dynamic = 'force-dynamic';
+
 type QueueItem = {
   type: "insight" | "case-study" | "brief";
   title: string;

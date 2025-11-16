@@ -5,6 +5,9 @@ import { LoginForm } from "./login-form";
 import { getAdminSession } from "@/lib/admin-session";
 import { getAllowlistSummary, resolveAdminAuthConfig } from "@/lib/admin-auth";
 
+// Force dynamic rendering to avoid build-time NextAuth initialization
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Admin Login",
 };
