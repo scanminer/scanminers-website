@@ -60,7 +60,7 @@ function editUrlFor(item: QueueItem): string | null {
   return `https://github.com/${repo}/edit/main/${item.sourcePath}`;
 }
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic"; // Changed from force-static to avoid build-time NextAuth errors
 
 export default function AdminReviewQueuePage() {
   const queue = getQueue();
