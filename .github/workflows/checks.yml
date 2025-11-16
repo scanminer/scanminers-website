@@ -36,6 +36,9 @@ jobs:
   test-e2e:
     name: test:e2e
     runs-on: ubuntu-latest
+    env:
+      NEXTAUTH_SECRET: ci-e2e-secret-placeholder
+      NEXTAUTH_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -64,6 +67,9 @@ jobs:
   build:
     name: build
     runs-on: ubuntu-latest
+    env:
+      NEXTAUTH_SECRET: ci-build-secret-placeholder
+      NEXTAUTH_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

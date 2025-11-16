@@ -32,3 +32,6 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NEXTAUTH_SECRET: ci-build-secret-placeholder
+          NEXTAUTH_URL: http://localhost:3000
