@@ -14,6 +14,7 @@ import {
   getOctokit,
   openPr,
 } from '@/lib/github'
+import { requireAdminSession } from '@/lib/admin-session'
 
 const UpdateBrandSectionSchema = z.object({
   slug: z.string().min(2),
@@ -103,6 +104,7 @@ async function persistBrandDoc({
 
 export async function updateBrandSection(prevState: { ok: boolean; error?: string }, formData: FormData) {
   try {
+    await requireAdminSession()
     const payload = UpdateBrandSectionSchema.parse({
       slug: formData.get('slug')?.toString(),
       title: formData.get('title')?.toString(),

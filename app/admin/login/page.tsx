@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-import { ADMIN_COOKIE_NAME, validateAdminToken } from "@/lib/admin-auth";
 import { LoginForm } from "./login-form";
+import { getAdminSession } from "@/lib/admin-session";
+import { getAllowlistSummary, resolveAdminAuthConfig } from "@/lib/admin-auth";
 
 export const metadata: Metadata = {
   title: "Admin Login",
 };
+
+type SearchParams = Record<string, string | string[] | undefined>;
 
 function normalizeNextPath(next?: string | string[]): string {
   if (!next) return "/admin";
@@ -16,43 +18,67 @@ function normalizeNextPath(next?: string | string[]): string {
   return value;
 }
 
-export default async function AdminLoginPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const envPass = process.env.ADMIN_PASS;
-
-  if (!envPass) {
-    return (
-      <main className="min-h-screen px-6 py-20 sm:px-10">
-        <div className="mx-auto max-w-md rounded-2xl border bg-card p-6 text-center">
-          <p className="text-sm text-red-600">ADMIN_PASS is not configured. Set it in your environment to enable admin access.</p>
-        </div>
-      </main>
-    );
-  }
-
-  const cookieStore = await cookies();
-  const cookie = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
-  if (cookie) {
-    const isValid = await validateAdminToken(cookie, envPass);
-    if (isValid) {
-      redirect("/admin");
-    }
-  }
-
-  const resolvedSearchParams = await searchParams;
+export default async function AdminLoginPage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
+  const resolvedSearchParams = (await searchParams) ?? {};
   const nextPath = normalizeNextPath(resolvedSearchParams?.next);
+  const session = await getAdminSession();
+  if (session?.user?.isAdmin) {
+    redirect(nextPath);
+  }
+
+  const authConfig = resolveAdminAuthConfig();
+  const allowlist = getAllowlistSummary(authConfig);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 px-4 py-16 text-white">
       <div className="mx-auto flex max-w-md flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/30 backdrop-blur">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-white/70">Scanminers Admin</p>
-          <h1 className="mt-3 text-3xl font-semibold">Enter admin password</h1>
-          <p className="mt-2 text-sm text-white/70">This gates drafting tools, GitHub automation, and image regeneration.</p>
+          <h1 className="mt-3 text-3xl font-semibold">Sign in to admin tools</h1>
+          <p className="mt-2 text-sm text-white/70">Secure access for drafting tools, GitHub automation, and content workflows.</p>
         </div>
-        <LoginForm nextPath={nextPath} />
+        {!authConfig.githubProviderEnabled && (
+          <div className="rounded-2xl border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm text-yellow-100">
+            <p>GitHub OAuth isn&apos;t configured. Set <code className="bg-black/30 px-1">GITHUB_OAUTH_CLIENT_ID</code> and <code className="bg-black/30 px-1">GITHUB_OAUTH_CLIENT_SECRET</code> to enable SSO.</p>
+          </div>
+        )}
+        <LoginForm
+          nextPath={nextPath}
+          allowPasswordLogin={authConfig.passwordFallbackEnabled}
+          githubEnabled={authConfig.githubProviderEnabled}
+        />
+        <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-xs text-white/70">
+          <p className="font-semibold text-white">Access limited to:</p>
+          <ul className="mt-2 space-y-1">
+            <li>
+              Emails:{" "}
+              {allowlist.emails.length ? (
+                <span>{allowlist.emails.join(", ")}</span>
+              ) : (
+                <span className="italic">none configured</span>
+              )}
+            </li>
+            <li>
+              Domains:{" "}
+              {allowlist.domains.length ? (
+                <span>{allowlist.domains.join(", ")}</span>
+              ) : (
+                <span className="italic">none</span>
+              )}
+            </li>
+            <li>
+              GitHub handles:{" "}
+              {allowlist.github.length ? (
+                <span>{allowlist.github.join(", ")}</span>
+              ) : (
+                <span className="italic">none</span>
+              )}
+            </li>
+          </ul>
+        </div>
         <p className="text-xs text-white/50">
-          Lost access? Update <code className="rounded bg-black/30 px-1">ADMIN_PASS</code> in your deployment environment or see the {" "}
-          <Link className="underline" href="/admin/system">system page</Link> for diagnostics after login.
+          Need help? Update <code className="rounded bg-black/30 px-1">ADMIN_ALLOWED_EMAILS</code> / <code className="rounded bg-black/30 px-1">ADMIN_ALLOWED_GITHUB_LOGINS</code> and verify env health on the {" "}
+          <Link className="underline" href="/admin/system">system page</Link> after signing in.
         </p>
       </div>
     </main>

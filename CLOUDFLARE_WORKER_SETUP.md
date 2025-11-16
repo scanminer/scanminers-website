@@ -86,7 +86,7 @@ These are baked into the client bundle at build time:
 | `CONTENT_BOT_TOKEN` | `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` | GitHub automation |
 | `GH_TOKEN` | `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` | GitHub API |
 | `GITHUB_OAUTH_CLIENT_SECRET` | `983369da48f5ec06899b3540030fbdf7f36f24dc` | Decap CMS OAuth |
-| `ADMIN_PASS` | `Kualalumpur123!` | Admin basic auth |
+| `ADMIN_PASS` | `Kualalumpur123!` | Legacy admin password fallback (optional) |
 
 > **Important:** Set these as **Secrets** (not Variables) to encrypt them. Once saved, they cannot be viewed again.
 

@@ -7,6 +7,7 @@ import { getOctokit, createBranchFrom, commitFile, openPr } from "@/lib/github";
 import { getAdminActorName } from "@/lib/admin-actor";
 import { buildBrandSystemPrompt } from "@/lib/ai-brand";
 import { createChatCompletion } from "@/lib/ai/openai";
+import { requireAdminSession } from "@/lib/admin-session";
 
 export type ContentType = "insight" | "case-study";
 
@@ -71,6 +72,7 @@ function serializeFrontmatter(frontmatter: ContentFrontmatter): string {
 }
 
 async function persistContentViaGit(input: SaveContentInput): Promise<{ prUrl: string }> {
+  await requireAdminSession();
   const octokit = getOctokit();
   const owner = process.env.GITHUB_OWNER || process.env.GH_OWNER || "";
   const repoName = process.env.GITHUB_REPO || process.env.GH_REPO || "";
@@ -91,7 +93,7 @@ async function persistContentViaGit(input: SaveContentInput): Promise<{ prUrl: s
   const content = serializeFrontmatter(input.frontmatter) + input.body;
   
   // Commit file
-  const actor = getAdminActorName();
+  const actor = await getAdminActorName();
   const commitMessage = `feat(content): update ${input.type} - ${input.frontmatter.title}
 
 Updated by: ${actor}
@@ -204,6 +206,7 @@ function extractBodyExcerpt(body: string, maxWords = 150): string {
 
 // LinkedIn post generation
 export async function generateLinkedInPost(slug: string): Promise<SocialSnippetResponse> {
+  await requireAdminSession();
   try {
     const result = findContentBySlug(slug);
     if (!result) {
@@ -259,6 +262,7 @@ Requirements:
 
 // LinkedIn carousel outline generation
 export async function generateLinkedInCarousel(slug: string): Promise<SocialSnippetResponse> {
+  await requireAdminSession();
   try {
     const result = findContentBySlug(slug);
     if (!result) {
@@ -314,6 +318,7 @@ Requirements:
 
 // X (Twitter) post generation
 export async function generateXPost(slug: string): Promise<SocialSnippetResponse> {
+  await requireAdminSession();
   try {
     const result = findContentBySlug(slug);
     if (!result) {
@@ -365,6 +370,7 @@ Requirements:
 
 // Email teaser generation
 export async function generateEmailTeaser(slug: string): Promise<SocialSnippetResponse> {
+  await requireAdminSession();
   try {
     const result = findContentBySlug(slug);
     if (!result) {
@@ -419,6 +425,7 @@ Requirements:
 
 // OG image prompt generation (optional)
 export async function generateOgImagePrompt(slug: string): Promise<SocialSnippetResponse> {
+  await requireAdminSession();
   try {
     const result = findContentBySlug(slug);
     if (!result) {

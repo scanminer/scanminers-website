@@ -78,33 +78,36 @@ Image generation & admin actions:
 Local development:
 - Copy `.env.example` → `.env.local` and fill values
 
-### 3.1 Decap CMS login (GitHub OAuth)
+### 3.1 Admin portal & Decap CMS authentication (GitHub OAuth + NextAuth)
 
-This project uses Decap CMS at `/admin` with a custom GitHub OAuth flow implemented at `app/api/decap-auth/auth/route.ts` (Edge runtime). It does NOT use NextAuth/Auth.js.
+- The React admin portal (`/admin/login`) uses NextAuth with the GitHub provider. Only GitHub users in the allowlist (`ADMIN_ALLOWED_EMAILS`, `ADMIN_ALLOWED_EMAIL_DOMAINS`, `ADMIN_ALLOWED_GITHUB_LOGINS`) can sign in.
+- Decap CMS at `/admin` reuses the same GitHub OAuth App via the edge endpoint `app/api/decap-auth/auth/route.ts`.
+- Set `NEXTAUTH_SECRET` (e.g. `openssl rand -base64 32`) in every environment so JWT cookies remain valid.
+- Optional legacy password fallback exists for emergencies: set `ADMIN_PASS` and leave `ENABLE_ADMIN_PASSWORD_LOGIN=true`. Disable it (`false`) once everyone is on GitHub SSO. For local-only bypass you can set `ALLOW_ADMIN_WITHOUT_AUTH=true` (never enable that in production).
 
-Cloudflare Pages → Environment variables (set for both Production and Preview):
+Cloudflare Pages → Environment variables (Production + Preview):
 
-- `GITHUB_OAUTH_CLIENT_ID` — GitHub OAuth App Client ID (plaintext)
-- `GITHUB_OAUTH_CLIENT_SECRET` — GitHub OAuth App Client Secret (secret)
+- `GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET`
+- `ADMIN_ALLOWED_EMAILS`, `ADMIN_ALLOWED_EMAIL_DOMAINS`, `ADMIN_ALLOWED_GITHUB_LOGINS`
+- `NEXTAUTH_SECRET`
+- (optional) `ADMIN_PASS`, `ENABLE_ADMIN_PASSWORD_LOGIN`, `ALLOW_ADMIN_WITHOUT_AUTH`
 
 GitHub OAuth App (github.com → Settings → Developer settings → OAuth Apps):
 
 - Homepage URL: `https://scanminers.com/admin` (or `https://scanminers.com`)
-- Authorization callback URLs (add both):
+- Authorization callback URLs (add all that apply):
   - Production: `https://scanminers.com/api/decap-auth/auth`
   - Preview: `https://scanminers.pages.dev/api/decap-auth/auth`
-  - (Optional) Local dev: `http://localhost:3000/api/decap-auth/auth`
+  - Local dev: `http://localhost:3000/api/decap-auth/auth`
 
 Notes:
-- The Decap config points to the custom endpoint: `public/admin/config.yml` → `backend.auth_endpoint: api/decap-auth/auth`. The static `base_url` in that file is overridden at runtime by `public/admin/index.html` to the current origin.
-- If `backend.app_id` is present in `config.yml`, keep it in sync with your OAuth App Client ID for clarity. The custom endpoint uses `GITHUB_OAUTH_CLIENT_ID` from env when constructing the authorize URL.
-- Since NextAuth is not used here, you do not need `NEXTAUTH_URL` or `NEXTAUTH_SECRET`.
-
-Test login:
-1. Deploy with the env vars above set in Cloudflare Pages.
-2. Visit `/admin` and click “Login with GitHub”. A popup should open and close automatically, then Decap loads the collections.
-3. If you see “redirect URI mismatch,” add/update the exact callback URL(s) in the GitHub OAuth App.
-4. If you see state/CSRF issues, ensure the site is on HTTPS and that you are using the correct domain (Pages preview vs production). Cookies are `SameSite=Lax` and `Secure` on HTTPS.
+- `public/admin/config.yml` → `backend.auth_endpoint: api/decap-auth/auth`; the runtime injects the current origin.
+- Keep `backend.app_id` aligned with the GitHub OAuth Client ID for clarity.
+- Test flow:
+  1. Deploy with the env vars above.
+  2. Visit `/admin/login` and sign in with GitHub. You should land on the React admin dashboard.
+  3. Open `/admin` (Decap) in another tab; it will prompt the same GitHub OAuth flow and then load collections.
+  4. If you hit “redirect URI mismatch,” double-check the OAuth App callback URLs for the domain you’re using (production vs preview vs local).
 
 ---
 
@@ -239,7 +242,7 @@ Required checks to select (provided by `.github/workflows/checks.yml`):
 Husky + lint-staged run locally to prevent low-quality commits. If you need to bypass hooks for emergency fixes, use `--no-verify` and follow up with a quality pass.
 
 ### 10.2 Tagging a baseline release
-
+This project uses Decap CMS at `/admin` with a custom GitHub OAuth flow implemented at `app/api/decap-auth/auth/route.ts` (Edge runtime). It now uses NextAuth with the GitHub provider for multi-user SSO.
 After merging significant changes, create a lightweight tag:
 
 ```
@@ -258,6 +261,31 @@ Policy (recommended for solo):
 - Set “required approving reviews” = 0
 - Keep “enforce admins” enabled so rules apply to admins too
 
+ 
+Cloudflare Pages → Environment variables (Production + Preview):
+
+- `GITHUB_OAUTH_CLIENT_ID` / `GITHUB_OAUTH_CLIENT_SECRET`
+- `ADMIN_ALLOWED_EMAILS`, `ADMIN_ALLOWED_EMAIL_DOMAINS`, `ADMIN_ALLOWED_GITHUB_LOGINS`
+- `NEXTAUTH_SECRET`
+- (Optional) `ADMIN_PASS`, `ENABLE_ADMIN_PASSWORD_LOGIN`, `ALLOW_ADMIN_WITHOUT_AUTH`
+
+GitHub OAuth App (github.com → Settings → Developer settings → OAuth Apps):
+
+- Homepage URL: `https://scanminers.com/admin` (or `https://scanminers.com`)
+- Authorization callback URLs:
+  - Production: `https://scanminers.com/api/decap-auth/auth`
+  - Preview: `https://scanminers.pages.dev/api/decap-auth/auth`
+  - (Optional) Local: `http://localhost:3000/api/decap-auth/auth`
+
+Notes:
+
+- Decap’s `public/admin/config.yml` still points to `backend.auth_endpoint: api/decap-auth/auth`; the runtime injects the current origin.
+- Update `backend.app_id` to match your GitHub OAuth Client ID for easy audits.
+- Test flow:
+  1. Deploy with the env vars above.
+  2. Visit `/admin/login` and sign in with GitHub. You should land on the admin dashboard.
+  3. Open `/admin` (Decap) in a new tab; it should reuse the same OAuth credentials.
+  4. If you encounter “redirect URI mismatch,” ensure the exact Pages domain is listed in the OAuth App.
 CLI example to toggle:
 
 ```
