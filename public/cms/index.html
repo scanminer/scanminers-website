@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/cms/" />
+    <title>Content Manager | Scanminers</title>
+  </head>
+  <body>
+    <script>
+      // Prevent auto-init so we can supply dynamic config overrides
+      window.CMS_MANUAL_INIT = true;
+    </script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      // Initialize Decap CMS, loading config.yml but overriding backend auth to current origin
+      (function () {
+        const origin = window.location.origin;
+        if (window.CMS && typeof window.CMS.init === "function") {
+          window.CMS.init({
+            load_config_file: true,
+            config: {
+              backend: {
+                base_url: origin,
+                auth_endpoint: "api/decap-auth/auth",
+              },
+            },
+          });
+        }
+      })();
+    </script>
+    <script>
+      // Custom widget: Regenerate Cover button
+      (function () {
+        if (!window.CMS) return;
+        const control = ({ value, onChange, field, entry }) => {
+          const el = document.createElement("div");
+          // Try to resolve the actual slug used for the file:
+          // 1) explicit slug field in frontmatter (if present)
+          // 2) derive from file path (content/insights/<slug>.mdx)
+          // 3) fallback to title-derived slug
+          const getFallbackSlugFromTitle = () => {
+            const t = entry && entry.getIn(["data", "title"]);
+            return t
+              ? String(t)
+                  .toLowerCase()
+                  .replace(/[^a-z0-9\s-]/g, "")
+                  .replace(/\s+/g, "-")
+                  .slice(0, 50)
+              : "";
+          };
+          let slug = "";
+          if (entry) {
+            const explicit = entry.getIn(["data", "slug"]);
+            if (explicit) slug = String(explicit);
+            if (!slug) {
+              const pathVal = entry.get("path");
+              if (pathVal && typeof pathVal === "string") {
+                const m = pathVal.match(/content\/insights\/([^\/]+)\.mdx$/);
+                if (m) slug = m[1];
+              }
+            }
+            if (!slug) slug = getFallbackSlugFromTitle();
+          }
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = "Regenerate Cover (AI)";
+          btn.style.marginRight = "8px";
+          const input = document.createElement("input");
+          input.type = "text";
+          input.placeholder = "Optional prompt override";
+          input.style.minWidth = "280px";
+          const status = document.createElement("span");
+          status.style.marginLeft = "8px";
+
+          btn.onclick = async () => {
+            const token =
+              localStorage.getItem("ADMIN_ACTION_TOKEN") ||
+              prompt("Admin Action Token (one-time, stored locally)");
+            if (!token) {
+              status.textContent = "Missing token.";
+              return;
+            }
+            localStorage.setItem("ADMIN_ACTION_TOKEN", token);
+            status.textContent = "Dispatching…";
+            try {
+              const resp = await fetch("/api/images/regenerate", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/json",
+                  "x-admin-action-token": token,
+                },
+                body: JSON.stringify({
+                  slug,
+                  prompt: input.value || undefined,
+                }),
+              });
+              status.textContent = resp.ok
+                ? "Queued. Check GitHub Actions."
+                : "Failed: " + (await resp.text());
+            } catch (e) {
+              status.textContent = "Error: " + ((e && e.message) || e);
+            }
+          };
+
+          el.appendChild(btn);
+          el.appendChild(input);
+          el.appendChild(status);
+          return el;
+        };
+        const preview = () => null;
+        window.CMS.registerWidget("regenerateCover", control, preview);
+      })();
+    </script>
+  </body>
+</html>
