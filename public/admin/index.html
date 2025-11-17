@@ -5,8 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <base href="/admin/" />
   <title>Content Manager | Scanminers</title>
+  <style>
+    #admin-portal-link {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 10000;
+      background: #0066cc;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    #admin-portal-link:hover {
+      background: #0052a3;
+    }
+  </style>
 </head>
 <body>
+  <a id="admin-portal-link" href="/admin/login">🔐 Admin Portal (Google/Password Login)</a>
   <script>
     // Prevent auto-init so we can supply dynamic config overrides
     window.CMS_MANUAL_INIT = true;
