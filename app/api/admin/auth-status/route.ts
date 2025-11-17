@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { resolveAdminAuthConfig } from "@/lib/admin-auth";
 
-export const runtime = "edge";
-
 export async function GET() {
   const config = resolveAdminAuthConfig();
 
