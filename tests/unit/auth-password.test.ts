@@ -1,30 +1,30 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 async function loadHelper() {
-  const { authenticateLegacyPassword } = await import("@/auth");
-  return authenticateLegacyPassword;
+  const { authenticateAdminCredentials } = await import("@/auth");
+  return authenticateAdminCredentials;
 }
 
-describe("legacy password login", () => {
+describe("admin credentials authentication", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.resetModules();
   });
 
-  function stubPasswordEnv() {
+  function stubCredentialsEnv() {
     vi.stubEnv("ENABLE_ADMIN_PASSWORD_LOGIN", "true");
     vi.stubEnv("ADMIN_PASS", "qa-secret");
-    vi.stubEnv("ADMIN_USER", "QA Admin");
+    vi.stubEnv("ADMIN_USER", "qa-admin");
     vi.stubEnv("ADMIN_ACTOR_NAME", "QA Admin");
-    vi.stubEnv("NEXTAUTH_GITHUB_CLIENT_ID", "");
-    vi.stubEnv("NEXTAUTH_GITHUB_CLIENT_SECRET", "");
+    vi.stubEnv("GITHUB_OAUTH_CLIENT_ID", "");
+    vi.stubEnv("GITHUB_OAUTH_CLIENT_SECRET", "");
     vi.resetModules();
   }
 
-  it("authenticates with the correct password when enabled", async () => {
-    stubPasswordEnv();
-    const authenticateLegacyPassword = await loadHelper();
-    const user = authenticateLegacyPassword("qa-secret");
+  it("authenticates with the correct username and password", async () => {
+    stubCredentialsEnv();
+    const authenticateAdminCredentials = await loadHelper();
+    const user = authenticateAdminCredentials("qa-admin", "qa-secret");
     expect(user).toMatchObject({
       name: "QA Admin",
       email: expect.stringContaining("@"),
@@ -32,9 +32,38 @@ describe("legacy password login", () => {
   });
 
   it("rejects invalid passwords", async () => {
-    stubPasswordEnv();
-    const authenticateLegacyPassword = await loadHelper();
-    const user = authenticateLegacyPassword("nope");
+    stubCredentialsEnv();
+    const authenticateAdminCredentials = await loadHelper();
+    const user = authenticateAdminCredentials("qa-admin", "wrong-password");
     expect(user).toBeNull();
+  });
+
+  it("rejects invalid usernames", async () => {
+    stubCredentialsEnv();
+    const authenticateAdminCredentials = await loadHelper();
+    const user = authenticateAdminCredentials("wrong-user", "qa-secret");
+    expect(user).toBeNull();
+  });
+
+  it("is case-sensitive for usernames", async () => {
+    stubCredentialsEnv();
+    const authenticateAdminCredentials = await loadHelper();
+    const user = authenticateAdminCredentials("QA-ADMIN", "qa-secret");
+    expect(user).toBeNull(); // Should fail - username case matters
+  });
+
+  it("uses 'admin' as default username when ADMIN_USER not set", async () => {
+    vi.stubEnv("ENABLE_ADMIN_PASSWORD_LOGIN", "true");
+    vi.stubEnv("ADMIN_PASS", "qa-secret");
+    vi.stubEnv("ADMIN_USER", ""); // Empty - should default to 'admin'
+    vi.stubEnv("ADMIN_ACTOR_NAME", "Default Admin");
+    vi.resetModules();
+    
+    const authenticateAdminCredentials = await loadHelper();
+    const user = authenticateAdminCredentials("admin", "qa-secret");
+    expect(user).toMatchObject({
+      name: "Default Admin",
+      email: expect.stringContaining("@"),
+    });
   });
 });

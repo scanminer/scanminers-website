@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Menu, PanelsTopLeft, LogOut } from "lucide-react"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/components/mode-toggle"
-import { AdminThemeBoot } from "@/components/admin/admin-theme-boot"
-import { useState } from "react"
-import { signOut, useSession } from "next-auth/react"
+import Link from "next/link";
+import { Menu, PanelsTopLeft, LogOut } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
+import { AdminThemeBoot } from "@/components/admin/admin-theme-boot";
+import { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 
 const nav = [
   { href: "/admin", label: "Review Queue" },
@@ -15,37 +15,67 @@ const nav = [
   { href: "/admin/brand", label: "Brand" },
   { href: "/admin/drafts", label: "Drafts" },
   { href: "/admin/system", label: "System" },
-]
+];
 
 function LogoutButton() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   async function handleLogout() {
-    setLoading(true)
-    await signOut({ callbackUrl: "/admin/login" })
+    setLoading(true);
+    // Sign out and redirect immediately - don't wait for callback
+    await signOut({ redirect: true, callbackUrl: "/admin/login" });
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={handleLogout} disabled={loading} className="gap-1">
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={handleLogout}
+      disabled={loading}
+      className="gap-1"
+    >
       <LogOut className="h-4 w-4" />
-      {loading ? "Signing out" : "Sign out"}
+      {loading ? "Signing out..." : "Sign out"}
     </Button>
-  )
+  );
 }
 
 function UserBadge() {
-  const { data } = useSession()
-  const name = data?.user?.name || data?.user?.login || data?.user?.email
-  if (!name) return null
+  const { data } = useSession();
+  const name = data?.user?.name || data?.user?.login || data?.user?.email;
+  if (!name) return null;
   return (
     <div className="text-right">
       <p className="text-sm font-medium text-foreground">{name}</p>
       <p className="text-xs text-muted-foreground">Admin access</p>
     </div>
-  )
+  );
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const { data: session, status } = useSession();
+
+  // Don't render admin shell if loading or no session
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // If no session, don't render the admin shell at all
+  // (middleware should redirect, but this prevents flash of admin UI)
+  if (!session?.user?.isAdmin) {
+    return <>{children}</>;
+  }
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[260px_1fr]">
       <AdminThemeBoot />
@@ -119,5 +149,5 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
     </div>
-  )
+  );
 }
