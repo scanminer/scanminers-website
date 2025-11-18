@@ -9,22 +9,23 @@ Successfully implemented a fully working, persistent leads pipeline using Cloudf
 ### Files Modified/Created
 
 #### Core Implementation
+
 - **`lib/lead-store.ts`** (584 lines)
   - Already implemented with D1 and in-memory adapters
   - Handles lead creation, listing, filtering, and status management
   - Automatic fallback to in-memory store when D1 unavailable
 
 #### Database
+
 - **`database/migrations/001_init_leads.sql`**
   - Initial leads table schema with events tracking
-  
 - **`database/migrations/002_update_leads_schema.sql`**
   - Schema updates: rename columns, add commodities and reference fields
-  
 - **`database/migrations/003_consolidated_leads_schema.sql`** ✨ NEW
   - Consolidated schema for easier reference
 
 #### Configuration
+
 - **`wrangler.toml`**
   - D1 database binding already configured:
     ```toml
@@ -35,6 +36,7 @@ Successfully implemented a fully working, persistent leads pipeline using Cloudf
     ```
 
 #### Tests
+
 - **`tests/unit/lead-store.test.ts`** ✨ NEW (470 lines)
   - 25 comprehensive unit tests
   - Tests all lead types (contact, prospectivity_brief, consultation)
@@ -42,7 +44,9 @@ Successfully implemented a fully working, persistent leads pipeline using Cloudf
   - Properly isolated test cases with cleanup
 
 #### Admin UI
+
 - **`app/admin/leads/page.tsx`** (already implemented)
+
   - Lists all leads with filtering by status and type
   - Shows summary counts (total, active, replied)
   - Zero-state handling
@@ -53,23 +57,24 @@ Successfully implemented a fully working, persistent leads pipeline using Cloudf
   - AI-powered reply draft assistance
 
 #### API Endpoints
+
 - **`app/api/contact/route.ts`** (already implemented)
   - Creates contact leads via `createLead()`
-  
 - **`app/api/consultation/route.ts`** (already implemented)
   - Creates consultation leads with commodities and timing
-  
 - **`app/api/prospectivity-brief/route.ts`** (already implemented)
   - Creates prospectivity brief leads with goals and data sources
 
 ### Behavior Changes
 
 1. **Lead Capture**
+
    - All form submissions now persist to D1 database (or memory in dev)
    - Automatic status tracking: `new` → `viewed` → `replied`
    - Event timeline for every interaction
 
 2. **Admin Dashboard**
+
    - Real-time lead display with filtering
    - Summary metrics (total, active, replied)
    - Automatic "viewed" status when admin opens a lead
@@ -84,15 +89,18 @@ Successfully implemented a fully working, persistent leads pipeline using Cloudf
 ### Local Development
 
 **Option 1: In-Memory (No Setup)**
+
 ```bash
 # Just run the dev server
 npm run dev
 ```
+
 - Leads stored in memory
 - Data resets on server restart
 - Perfect for feature development
 
 **Option 2: Local D1 (Persistent)**
+
 ```bash
 # Initialize local D1 database
 bash scripts/setup-d1.sh
@@ -100,6 +108,7 @@ bash scripts/setup-d1.sh
 # Run dev server
 npm run dev
 ```
+
 - Leads persist in `.wrangler/state/v3/d1`
 - Survives server restarts
 - Better for testing workflows
@@ -165,6 +174,7 @@ npm run build
 ### Test Lead Creation
 
 1. **Contact Form**
+
    ```
    Visit: https://scanminers.com/contact
    Fill: Name, Email, Company (optional), Message
@@ -172,6 +182,7 @@ npm run build
    ```
 
 2. **Consultation Form**
+
    ```
    Visit: https://scanminers.com/consultation
    Fill: All required fields + commodities
@@ -188,6 +199,7 @@ npm run build
 ### Verify in Admin Panel
 
 4. **View Leads List**
+
    ```
    Visit: https://scanminers.com/admin/leads
    Check: New leads appear with "NEW" status
@@ -195,6 +207,7 @@ npm run build
    ```
 
 5. **Filter Leads**
+
    ```
    Click: Status filters (New, Viewed, Replied)
    Click: Type filters (Contact, Consultation, Brief)
@@ -202,6 +215,7 @@ npm run build
    ```
 
 6. **Lead Details**
+
    ```
    Click: Any lead from the list
    Check: Status auto-changes to "VIEWED"
@@ -210,6 +224,7 @@ npm run build
    ```
 
 7. **Draft Reply**
+
    ```
    On lead detail page:
    - Type draft in AI panel
@@ -229,12 +244,14 @@ npm run build
 ### Test Edge Cases
 
 9. **Zero State**
+
    ```
    - Apply filter with no results
    - Should see: "No leads for this filter yet."
    ```
 
 10. **Local Development (In-Memory)**
+
     ```
     - Stop dev server
     - Restart: npm run dev
@@ -251,41 +268,41 @@ npm run build
 
 ### `leads` Table
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | TEXT PRIMARY KEY | Unique lead ID (nanoid) |
-| `type` | TEXT | Lead type: `contact`, `prospectivity_brief`, `consultation` |
-| `source` | TEXT | Form source identifier |
-| `status` | TEXT | Status: `new`, `viewed`, `replied` |
-| `name` | TEXT | Contact name |
-| `email` | TEXT | Contact email |
-| `company` | TEXT | Company name (optional) |
-| `role` | TEXT | Job title (optional) |
-| `message` | TEXT | Contact message |
-| `goal` | TEXT | Project goal (briefs) |
-| `additional_context` | TEXT | Extra context/notes |
-| `region` | TEXT | Geographic region of interest |
-| `stage` | TEXT | Project stage |
-| `timing` | TEXT | Timeline (consultations) |
-| `commodities` | TEXT | JSON array of commodities |
-| `reference` | TEXT | Reference number (consultations) |
-| `metadata` | TEXT | JSON blob for extra fields |
-| `created_at` | TEXT | ISO timestamp |
-| `updated_at` | TEXT | ISO timestamp |
-| `viewed_at` | TEXT | First viewed timestamp |
-| `replied_at` | TEXT | Reply sent timestamp |
-| `last_reply_draft` | TEXT | Saved draft reply |
+| Column               | Type             | Description                                                 |
+| -------------------- | ---------------- | ----------------------------------------------------------- |
+| `id`                 | TEXT PRIMARY KEY | Unique lead ID (nanoid)                                     |
+| `type`               | TEXT             | Lead type: `contact`, `prospectivity_brief`, `consultation` |
+| `source`             | TEXT             | Form source identifier                                      |
+| `status`             | TEXT             | Status: `new`, `viewed`, `replied`                          |
+| `name`               | TEXT             | Contact name                                                |
+| `email`              | TEXT             | Contact email                                               |
+| `company`            | TEXT             | Company name (optional)                                     |
+| `role`               | TEXT             | Job title (optional)                                        |
+| `message`            | TEXT             | Contact message                                             |
+| `goal`               | TEXT             | Project goal (briefs)                                       |
+| `additional_context` | TEXT             | Extra context/notes                                         |
+| `region`             | TEXT             | Geographic region of interest                               |
+| `stage`              | TEXT             | Project stage                                               |
+| `timing`             | TEXT             | Timeline (consultations)                                    |
+| `commodities`        | TEXT             | JSON array of commodities                                   |
+| `reference`          | TEXT             | Reference number (consultations)                            |
+| `metadata`           | TEXT             | JSON blob for extra fields                                  |
+| `created_at`         | TEXT             | ISO timestamp                                               |
+| `updated_at`         | TEXT             | ISO timestamp                                               |
+| `viewed_at`          | TEXT             | First viewed timestamp                                      |
+| `replied_at`         | TEXT             | Reply sent timestamp                                        |
+| `last_reply_draft`   | TEXT             | Saved draft reply                                           |
 
 ### `lead_events` Table
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `id` | INTEGER PRIMARY KEY | Auto-increment ID |
-| `lead_id` | TEXT | Foreign key to leads |
-| `action` | TEXT | Event type: `submitted`, `viewed`, `drafted`, `replied`, `note` |
-| `actor` | TEXT | Who performed action |
-| `detail` | TEXT | Optional event details |
-| `created_at` | TEXT | ISO timestamp |
+| Column       | Type                | Description                                                     |
+| ------------ | ------------------- | --------------------------------------------------------------- |
+| `id`         | INTEGER PRIMARY KEY | Auto-increment ID                                               |
+| `lead_id`    | TEXT                | Foreign key to leads                                            |
+| `action`     | TEXT                | Event type: `submitted`, `viewed`, `drafted`, `replied`, `note` |
+| `actor`      | TEXT                | Who performed action                                            |
+| `detail`     | TEXT                | Optional event details                                          |
+| `created_at` | TEXT                | ISO timestamp                                                   |
 
 ## Testing
 
@@ -324,10 +341,10 @@ All 58 tests pass, including 25 lead-specific tests.
 createLead(input: LeadCreateInput): Promise<LeadRecord>
 
 // List leads with optional filters
-listLeads(options?: { 
+listLeads(options?: {
   status?: 'new' | 'viewed' | 'replied' | 'all',
   type?: 'contact' | 'prospectivity_brief' | 'consultation' | 'all',
-  limit?: number 
+  limit?: number
 }): Promise<ListLeadsResult>
 
 // Get single lead
@@ -352,11 +369,13 @@ addLeadEvent(id: string, action: LeadEventAction, detail?: string, actor?: strin
 ### "No leads appearing in admin panel"
 
 1. Check D1 binding in Cloudflare:
+
    ```bash
    wrangler d1 execute LEADS_DB --remote --command="SELECT COUNT(*) as total FROM leads"
    ```
 
 2. Verify environment:
+
    ```bash
    # Check binding name matches
    grep "binding" wrangler.toml
@@ -390,24 +409,29 @@ wrangler d1 create scanminers-leads
 ### Potential Enhancements
 
 1. **Email Notifications**
+
    - Notify team when new leads arrive
    - Use existing Resend integration
 
 2. **Lead Scoring**
+
    - Add priority field
    - Auto-score based on company size, commodities, etc.
 
 3. **Export/Reporting**
+
    - CSV export of leads
    - Weekly summary reports
    - Analytics dashboard
 
 4. **Integration**
+
    - Slack/Discord notifications
    - CRM sync (Salesforce, HubSpot)
    - Webhook support for custom integrations
 
 5. **Advanced Filtering**
+
    - Search by email/company
    - Date range filters
    - Commodity-based filtering

@@ -1,13 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getLead, markLeadReplied, saveLeadDraft } from "@/lib/lead-store";
+import {
+  getLead,
+  markLeadReplied,
+  saveLeadDraft,
+  markLeadContacted,
+} from "@/lib/lead-store";
 import { getAdminActorName } from "@/lib/admin-actor";
 import { reportServerError } from "@/lib/server-logger";
 import { generateLeadReplyDraft } from "@/lib/ai/lead-replies";
 import { requireAdminSession } from "@/lib/admin-session";
 
-export async function markLeadAsRepliedAction(leadId: string, detail?: string | null) {
+export async function markLeadAsRepliedAction(
+  leadId: string,
+  detail?: string | null
+) {
   if (!leadId) {
     return { success: false, message: "Missing lead ID." };
   }
@@ -46,5 +54,23 @@ export async function generateLeadReplyAction(leadId: string) {
   } catch (error) {
     await reportServerError(error, { action: "generateLeadReply", leadId });
     return { success: false, message: "Failed to generate reply." };
+  }
+}
+
+export async function markLeadContactedAction(leadId: string) {
+  if (!leadId) {
+    return { success: false, message: "Missing lead ID." };
+  }
+
+  await requireAdminSession();
+  try {
+    const actor = await getAdminActorName();
+    await markLeadContacted(leadId, actor);
+    revalidatePath("/admin/leads");
+    revalidatePath(`/admin/leads/${leadId}`);
+    return { success: true };
+  } catch (error) {
+    await reportServerError(error, { action: "markLeadContacted", leadId });
+    return { success: false, message: "Failed to mark lead as contacted." };
   }
 }

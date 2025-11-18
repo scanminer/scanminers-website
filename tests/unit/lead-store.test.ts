@@ -39,6 +39,10 @@ describe("Lead Store", () => {
     detail?: string | null,
     actor?: string
   ) => Promise<LeadRecord | null>;
+  let markLeadContacted: (
+    id: string,
+    actorEmail?: string | null
+  ) => Promise<LeadRecord | null>;
 
   beforeEach(async () => {
     // Clear the global memory store
@@ -55,6 +59,7 @@ describe("Lead Store", () => {
     markLeadViewed = leadStore.markLeadViewed;
     saveLeadDraft = leadStore.saveLeadDraft;
     markLeadReplied = leadStore.markLeadReplied;
+    markLeadContacted = leadStore.markLeadContacted;
   });
 
   afterEach(() => {
@@ -480,6 +485,45 @@ describe("Lead Store", () => {
       });
 
       expect(lead.reference).toBe("CONSULT-202501-1234");
+    });
+  });
+
+  describe("markLeadContacted", () => {
+    it("should mark a lead as contacted and record actor", async () => {
+      const lead = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@example.com",
+      });
+
+      const updated = await markLeadContacted(lead.id, "admin@example.com");
+
+      expect(updated).toBeDefined();
+      expect(updated?.contactStatus).toBe("contacted");
+      expect(updated?.lastContactedAt).toBeDefined();
+      expect(updated?.lastContactedBy).toBe("admin@example.com");
+    });
+
+    it("should handle missing actor email", async () => {
+      const lead = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@example.com",
+      });
+
+      const updated = await markLeadContacted(lead.id, null);
+
+      expect(updated).toBeDefined();
+      expect(updated?.contactStatus).toBe("contacted");
+      expect(updated?.lastContactedAt).toBeDefined();
+      expect(updated?.lastContactedBy).toBeNull();
+    });
+
+    it("should return null for non-existent lead", async () => {
+      const result = await markLeadContacted("nonexistent-id");
+      expect(result).toBeNull();
     });
   });
 });

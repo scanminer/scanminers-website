@@ -39,3 +39,4 @@ head_sampling_rate = 1
 binding = "LEADS_DB"
 database_name = "scanminers-leads"
 database_id = "ab5a9ca1-0c10-4ed4-8d04-8df2a910b9da"  # Update with your actual D1 database ID
+migrations_dir = "database/migrations"
