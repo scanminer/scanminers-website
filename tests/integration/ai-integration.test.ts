@@ -18,14 +18,16 @@ import type { ProjectRecord } from "@/lib/project-store";
 describe("AI Integration Tests", () => {
   beforeAll(() => {
     if (!process.env.OPENAI_API_KEY) {
-      throw new Error(
-        "OPENAI_API_KEY not set - cannot run AI integration tests"
+      console.warn(
+        "⚠️ OPENAI_API_KEY not set - skipping AI integration tests"
       );
     }
   });
 
   describe("Lead AI Classification", () => {
-    it("should generate lead summary and tags from lead data", async () => {
+    it.skipIf(!process.env.OPENAI_API_KEY)(
+      "should generate lead summary and tags from lead data",
+      async () => {
       const leadData: LeadRecord = {
         id: "test-lead-1",
         name: "John Smith",
@@ -68,9 +70,13 @@ describe("AI Integration Tests", () => {
       expect(result.fitScore).toBeLessThanOrEqual(100);
       expect(result.confidence).toBeGreaterThanOrEqual(0);
       expect(result.confidence).toBeLessThanOrEqual(1);
-    }, 30000); // 30s timeout for API call
+    },
+    30000
+  ); // 30s timeout for API call
 
-    it("should handle low-quality lead data gracefully", async () => {
+    it.skipIf(!process.env.OPENAI_API_KEY)(
+      "should handle low-quality lead data gracefully",
+      async () => {
       const leadData: LeadRecord = {
         id: "test-lead-2",
         name: "Test User",
@@ -99,11 +105,15 @@ describe("AI Integration Tests", () => {
       expect(result.summary).toBeTruthy();
       expect(result.valueTier).toMatch(/^(high|medium|low)$/);
       expect(result.urgency).toMatch(/^(high|medium|low)$/);
-    }, 30000);
+    },
+    30000
+  );
   });
 
   describe("Project AI Summary", () => {
-    it("should generate project summary from timeline", async () => {
+    it.skipIf(!process.env.OPENAI_API_KEY)(
+      "should generate project summary from timeline",
+      async () => {
       const project: ProjectRecord = {
         id: "test-project-1",
         leadId: "test-lead-1",
@@ -155,11 +165,15 @@ describe("AI Integration Tests", () => {
       expect(summary.length).toBeGreaterThan(100);
       expect(summary.toLowerCase()).toContain("lithium");
       expect(summary.toLowerCase()).toContain("pilbara");
-    }, 30000);
+    },
+    30000
+  );
   });
 
   describe("Email Generation", () => {
-    it("should generate kickoff email", async () => {
+    it.skipIf(!process.env.OPENAI_API_KEY)(
+      "should generate kickoff email",
+      async () => {
       const project: ProjectRecord = {
         id: "test-project-2",
         leadId: "test-lead-2",
@@ -186,9 +200,13 @@ describe("AI Integration Tests", () => {
       expect(email.length).toBeGreaterThan(100);
       expect(email.toLowerCase()).toContain("sarah");
       expect(email.toLowerCase()).toContain("pilbara");
-    }, 30000);
+    },
+    30000
+  );
 
-    it("should generate data request email", async () => {
+    it.skipIf(!process.env.OPENAI_API_KEY)(
+      "should generate data request email",
+      async () => {
       const project: ProjectRecord = {
         id: "test-project-3",
         leadId: "test-lead-3",
@@ -210,6 +228,8 @@ describe("AI Integration Tests", () => {
       expect(email.toLowerCase()).toContain("data");
       // Should contain some checklist or request items
       expect(email).toMatch(/[-•*]/); // Contains bullet points
-    }, 30000);
+    },
+    30000
+  );
   });
 });
