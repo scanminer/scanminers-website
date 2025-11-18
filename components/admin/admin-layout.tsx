@@ -12,6 +12,7 @@ import { signOut, useSession } from "next-auth/react";
 const nav = [
   { href: "/admin", label: "Review Queue" },
   { href: "/admin/leads", label: "Leads" },
+  { href: "/admin/projects", label: "Projects" },
   { href: "/admin/brand", label: "Brand" },
   { href: "/admin/drafts", label: "Drafts" },
   { href: "/admin/system", label: "System" },

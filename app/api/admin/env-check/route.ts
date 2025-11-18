@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 /**
  * Public diagnostic endpoint to check if Google OAuth environment variables are set.
@@ -6,7 +6,7 @@ import { type NextRequest, NextResponse } from "next/server";
  *
  * Visit: https://scanminers.com/api/admin/env-check
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   const envCheck = {
     timestamp: new Date().toISOString(),
     nodeEnv: process.env.NODE_ENV,
