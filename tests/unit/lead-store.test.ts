@@ -1,234 +1,485 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import type {
-  LeadRecord,
   LeadCreateInput,
+  LeadRecord,
   LeadStatus,
   LeadType,
 } from "@/lib/lead-store";
 
-// Mock the lead store for testing
-describe("Lead Store", () => {
-  describe("LeadRecord type", () => {
-    it("should have all required fields", () => {
-      const lead: LeadRecord = {
-        id: "test-123",
-        type: "contact",
-        source: "contact-form",
-        status: "new",
-        name: "Test User",
-        email: "test@example.com",
-        company: "Test Co",
-        role: "Engineer",
-        message: "Test message",
-        goal: null,
-        region: null,
-        regions: null,
-        stage: null,
-        timing: null,
-        additionalContext: null,
-        context: null,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        viewedAt: null,
-        repliedAt: null,
-        lastReplyDraft: null,
-        commodities: [],
-        reference: null,
-        metadata: {},
-      };
+// Mock the Cloudflare context
+vi.mock("@opennextjs/cloudflare", () => ({
+  getCloudflareContext: vi.fn(() => null),
+}));
 
-      expect(lead).toBeDefined();
-      expect(lead.id).toBe("test-123");
-      expect(lead.name).toBe("Test User");
-      expect(lead.email).toBe("test@example.com");
-    });
+// Clear the in-memory store between tests
+const memoryStoreSymbol = Symbol.for("scanminers.leads.memoryStore");
+
+describe("Lead Store", () => {
+  let createLead: (input: LeadCreateInput) => Promise<LeadRecord>;
+  let listLeads: (options?: {
+    status?: LeadStatus | "all";
+    type?: LeadType | "all";
+    limit?: number;
+  }) => Promise<{
+    leads: LeadRecord[];
+    summary: { total: number; new: number; viewed: number; replied: number };
+  }>;
+  let getLead: (id: string) => Promise<LeadRecord | null>;
+  let markLeadViewed: (
+    id: string,
+    actor?: string
+  ) => Promise<LeadRecord | null>;
+  let saveLeadDraft: (
+    id: string,
+    draft: string,
+    actor?: string
+  ) => Promise<LeadRecord | null>;
+  let markLeadReplied: (
+    id: string,
+    detail?: string | null,
+    actor?: string
+  ) => Promise<LeadRecord | null>;
+
+  beforeEach(async () => {
+    // Clear the global memory store
+    const globalAny = globalThis as typeof globalThis & {
+      [memoryStoreSymbol]?: unknown;
+    };
+    delete globalAny[memoryStoreSymbol];
+    // Reset module to clear in-memory store
+    vi.resetModules();
+    const leadStore = await import("@/lib/lead-store");
+    createLead = leadStore.createLead;
+    listLeads = leadStore.listLeads;
+    getLead = leadStore.getLead;
+    markLeadViewed = leadStore.markLeadViewed;
+    saveLeadDraft = leadStore.saveLeadDraft;
+    markLeadReplied = leadStore.markLeadReplied;
   });
 
-  describe("LeadCreateInput validation", () => {
-    it("should accept valid contact lead input", () => {
+  afterEach(() => {
+    // Ensure cleanup after each test
+    const globalAny = globalThis as typeof globalThis & {
+      [memoryStoreSymbol]?: unknown;
+    };
+    delete globalAny[memoryStoreSymbol];
+  });
+
+  describe("createLead", () => {
+    it("should create a contact lead with required fields", async () => {
       const input: LeadCreateInput = {
         type: "contact",
         source: "contact-form",
         name: "John Doe",
         email: "john@example.com",
-        company: "Example Inc",
+        company: "Acme Corp",
         message: "Interested in your services",
       };
 
-      expect(input.type).toBe("contact");
-      expect(input.name).toBe("John Doe");
-      expect(input.email).toBe("john@example.com");
+      const lead = await createLead(input);
+
+      expect(lead.id).toBeDefined();
+      expect(lead.type).toBe("contact");
+      expect(lead.source).toBe("contact-form");
+      expect(lead.name).toBe("John Doe");
+      expect(lead.email).toBe("john@example.com");
+      expect(lead.company).toBe("Acme Corp");
+      expect(lead.message).toBe("Interested in your services");
+      expect(lead.status).toBe("new");
+      expect(lead.createdAt).toBeDefined();
+      expect(lead.updatedAt).toBeDefined();
     });
 
-    it("should accept valid consultation lead input", () => {
-      const input: LeadCreateInput = {
-        type: "consultation",
-        source: "consultation-form",
-        name: "Jane Smith",
-        email: "jane@mining.com",
-        company: "Mining Corp",
-        role: "Geologist",
-        regions: "Western Australia",
-        stage: "Exploration",
-        timing: "Q1 2025",
-        commodities: ["gold", "copper"],
-        reference: "CONSULT-202501-1234",
-      };
-
-      expect(input.type).toBe("consultation");
-      expect(input.commodities).toEqual(["gold", "copper"]);
-      expect(input.reference).toBe("CONSULT-202501-1234");
-    });
-
-    it("should accept valid prospectivity brief input", () => {
+    it("should create a prospectivity_brief lead with commodities", async () => {
       const input: LeadCreateInput = {
         type: "prospectivity_brief",
         source: "prospectivity-brief-form",
-        name: "Bob Johnson",
-        email: "bob@exploration.com",
-        company: "Exploration Ltd",
-        role: "Project Manager",
-        goal: "Identify lithium prospects",
-        regions: "South America",
-        stage: "Early stage",
-        commodities: ["lithium", "rare earths"],
+        name: "Jane Smith",
+        email: "jane@mining.com",
+        company: "Mining Inc",
+        role: "Exploration Manager",
+        goal: "Find lithium deposits",
+        regions: "Western Australia",
+        stage: "early-stage",
+        commodities: ["lithium", "nickel"],
         metadata: {
-          dataSources: ["sentinel-2", "aster"],
-          expectation: true,
+          dataSources: ["Landsat", "ASTER"],
+          sourceCommodity: "lithium",
         },
       };
 
-      expect(input.type).toBe("prospectivity_brief");
-      expect(input.goal).toBe("Identify lithium prospects");
-      expect(input.metadata?.dataSources).toEqual(["sentinel-2", "aster"]);
+      const lead = await createLead(input);
+
+      expect(lead.type).toBe("prospectivity_brief");
+      expect(lead.goal).toBe("Find lithium deposits");
+      expect(lead.commodities).toEqual(["lithium", "nickel"]);
+      expect(lead.metadata?.dataSources).toEqual(["Landsat", "ASTER"]);
+      expect(lead.region).toBe("Western Australia");
+      expect(lead.stage).toBe("early-stage");
     });
-  });
 
-  describe("LeadStatus type", () => {
-    it("should accept valid status values", () => {
-      const statuses: LeadStatus[] = ["new", "viewed", "replied"];
-
-      statuses.forEach((status) => {
-        const lead: Partial<LeadRecord> = { status };
-        expect(lead.status).toBe(status);
-      });
-    });
-  });
-
-  describe("LeadType type", () => {
-    it("should accept valid type values", () => {
-      const types: LeadType[] = [
-        "contact",
-        "consultation",
-        "prospectivity_brief",
-      ];
-
-      types.forEach((type) => {
-        const lead: Partial<LeadRecord> = { type };
-        expect(lead.type).toBe(type);
-      });
-    });
-  });
-
-  describe("Metadata structure", () => {
-    it("should accept various metadata configurations", () => {
-      const metadata = {
-        commodities: ["gold", "silver"],
-        dataSources: ["landsat-8"],
-        consent: true,
-        expectation: true,
-        ip: "192.168.1.1",
-        userAgent: "Mozilla/5.0",
-        referer: "https://scanminers.com",
-      };
-
+    it("should create a consultation lead with timing", async () => {
       const input: LeadCreateInput = {
         type: "consultation",
-        source: "test",
-        name: "Test",
-        email: "test@test.com",
-        metadata,
+        source: "consultation-form",
+        name: "Bob Wilson",
+        email: "bob@exploration.com",
+        company: "Exploration Co",
+        role: "CEO",
+        regions: "Nevada, USA",
+        stage: "exploration",
+        timing: "Q2 2025",
+        commodities: ["gold", "silver"],
+        additionalContext: "Looking for advanced remote sensing analysis",
       };
 
-      expect(input.metadata).toEqual(metadata);
-      expect(input.metadata?.commodities).toEqual(["gold", "silver"]);
-      expect(input.metadata?.consent).toBe(true);
+      const lead = await createLead(input);
+
+      expect(lead.type).toBe("consultation");
+      expect(lead.timing).toBe("Q2 2025");
+      expect(lead.additionalContext).toBe(
+        "Looking for advanced remote sensing analysis"
+      );
+      expect(lead.context).toBe("Looking for advanced remote sensing analysis");
+    });
+
+    it("should normalize metadata and remove undefined values", async () => {
+      const input: LeadCreateInput = {
+        type: "contact",
+        source: "test",
+        name: "Test User",
+        email: "test@test.com",
+        metadata: {
+          consent: true,
+          notes: "Some notes",
+          emptyField: undefined,
+        },
+      };
+
+      const lead = await createLead(input);
+
+      expect(lead.metadata?.consent).toBe(true);
+      expect(lead.metadata?.notes).toBe("Some notes");
+      expect("emptyField" in (lead.metadata || {})).toBe(false);
     });
   });
-});
 
-// Integration-style tests (these would need actual database connection in real tests)
-describe("Lead Store Operations (mocked)", () => {
-  it("should create a lead with required fields", () => {
-    const input: LeadCreateInput = {
-      type: "contact",
-      source: "contact-form",
-      name: "Test User",
-      email: "test@example.com",
-      message: "Test message",
-    };
+  describe("listLeads", () => {
+    beforeEach(async () => {
+      // Create test leads
+      await createLead({
+        type: "contact",
+        source: "contact-form",
+        name: "Lead 1",
+        email: "lead1@test.com",
+        message: "Test message 1",
+      });
 
-    // In a real test, this would call createLead(input)
-    expect(input.name).toBe("Test User");
-    expect(input.type).toBe("contact");
+      await createLead({
+        type: "prospectivity_brief",
+        source: "brief-form",
+        name: "Lead 2",
+        email: "lead2@test.com",
+        goal: "Test goal",
+      });
+
+      await createLead({
+        type: "consultation",
+        source: "consultation-form",
+        name: "Lead 3",
+        email: "lead3@test.com",
+        regions: "Australia",
+        commodities: ["copper"],
+      });
+    });
+
+    it("should list all leads", async () => {
+      const result = await listLeads();
+
+      expect(result.leads).toHaveLength(3);
+      expect(result.summary.total).toBe(3);
+      expect(result.summary.new).toBe(3);
+      expect(result.summary.viewed).toBe(0);
+      expect(result.summary.replied).toBe(0);
+    });
+
+    it("should filter leads by type", async () => {
+      const result = await listLeads({ type: "contact" });
+
+      expect(result.leads).toHaveLength(1);
+      expect(result.leads[0]?.type).toBe("contact");
+      expect(result.summary.total).toBe(3); // Summary is total across all types
+    });
+
+    it("should filter leads by status", async () => {
+      // Mark one lead as viewed
+      const allLeads = await listLeads();
+      const firstLead = allLeads.leads[0];
+      if (firstLead) {
+        await markLeadViewed(firstLead.id);
+      }
+
+      const result = await listLeads({ status: "viewed" });
+
+      expect(result.leads).toHaveLength(1);
+      expect(result.leads[0]?.status).toBe("viewed");
+    });
+
+    it("should respect limit parameter", async () => {
+      const result = await listLeads({ limit: 2 });
+
+      expect(result.leads).toHaveLength(2);
+      expect(result.summary.total).toBe(3);
+    });
+
+    it("should sort leads by created date descending", async () => {
+      const result = await listLeads();
+
+      expect(result.leads).toHaveLength(3);
+      // Most recent first
+      expect(
+        new Date(result.leads[0]!.createdAt).getTime()
+      ).toBeGreaterThanOrEqual(new Date(result.leads[1]!.createdAt).getTime());
+    });
   });
 
-  it("should handle leads with all optional fields", () => {
-    const input: LeadCreateInput = {
-      type: "consultation",
-      source: "consultation-form",
-      name: "Full Data User",
-      email: "full@example.com",
-      company: "Test Mining",
-      role: "Senior Geologist",
-      message: "Detailed inquiry",
-      goal: "Find copper deposits",
-      context: "Looking in Nevada",
-      additionalContext: "Experienced team",
-      regions: "Nevada, USA",
-      region: "Nevada",
-      stage: "Advanced exploration",
-      timing: "2025 Q2",
-      commodities: ["copper", "molybdenum"],
-      reference: "TEST-2025-001",
-      metadata: {
-        dataSources: ["aster", "landsat"],
-        consent: true,
-      },
-    };
+  describe("getLead", () => {
+    it("should retrieve a lead by ID", async () => {
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
 
-    expect(input.company).toBe("Test Mining");
-    expect(input.commodities).toHaveLength(2);
-    expect(input.metadata?.consent).toBe(true);
+      const retrieved = await getLead(created.id);
+
+      expect(retrieved).not.toBeNull();
+      expect(retrieved?.id).toBe(created.id);
+      expect(retrieved?.name).toBe("Test Lead");
+    });
+
+    it("should return null for non-existent lead", async () => {
+      const result = await getLead("non-existent-id");
+
+      expect(result).toBeNull();
+    });
   });
 
-  it("should accept empty metadata object", () => {
-    const input: LeadCreateInput = {
-      type: "contact",
-      source: "test",
-      name: "Simple Lead",
-      email: "simple@test.com",
-      metadata: {},
-    };
+  describe("markLeadViewed", () => {
+    it("should mark a new lead as viewed", async () => {
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
 
-    expect(input.metadata).toEqual({});
+      expect(created.status).toBe("new");
+
+      const viewed = await markLeadViewed(created.id, "test-admin");
+
+      expect(viewed).not.toBeNull();
+      expect(viewed?.status).toBe("viewed");
+      expect(viewed?.viewedAt).toBeDefined();
+    });
+
+    it("should not change status if already replied", async () => {
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
+
+      await markLeadReplied(created.id, "Test reply");
+      const result = await markLeadViewed(created.id);
+
+      expect(result?.status).toBe("replied");
+    });
+
+    it("should return null for non-existent lead", async () => {
+      const result = await markLeadViewed("non-existent-id");
+
+      expect(result).toBeNull();
+    });
   });
 
-  it("should handle metadata with custom fields", () => {
-    const input: LeadCreateInput = {
-      type: "consultation",
-      source: "test",
-      name: "Custom",
-      email: "custom@test.com",
-      metadata: {
-        customField1: "value1",
-        customField2: 123,
-        customField3: true,
-      },
-    };
+  describe("saveLeadDraft", () => {
+    it("should save a reply draft", async () => {
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
 
-    expect(input.metadata?.customField1).toBe("value1");
-    expect(input.metadata?.customField2).toBe(123);
-    expect(input.metadata?.customField3).toBe(true);
+      const draft = "This is a draft reply";
+      const updated = await saveLeadDraft(created.id, draft, "test-admin");
+
+      expect(updated).not.toBeNull();
+      expect(updated?.lastReplyDraft).toBe(draft);
+    });
+
+    it("should return null for non-existent lead", async () => {
+      const result = await saveLeadDraft("non-existent-id", "draft");
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("markLeadReplied", () => {
+    it("should mark a lead as replied", async () => {
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
+
+      const reply = "Thank you for your inquiry";
+      const replied = await markLeadReplied(created.id, reply, "test-admin");
+
+      expect(replied).not.toBeNull();
+      expect(replied?.status).toBe("replied");
+      expect(replied?.repliedAt).toBeDefined();
+      expect(replied?.lastReplyDraft).toBe(reply);
+    });
+
+    it("should mark as replied without detail", async () => {
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
+
+      const replied = await markLeadReplied(created.id, null, "test-admin");
+
+      expect(replied).not.toBeNull();
+      expect(replied?.status).toBe("replied");
+      expect(replied?.repliedAt).toBeDefined();
+    });
+
+    it("should return null for non-existent lead", async () => {
+      const result = await markLeadReplied("non-existent-id", "reply");
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("getLeadWithEvents", () => {
+    it("should retrieve lead with event timeline", async () => {
+      const { getLeadWithEvents } = await import("@/lib/lead-store");
+
+      const created = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+      });
+
+      await markLeadViewed(created.id);
+      await saveLeadDraft(created.id, "Draft reply");
+      await markLeadReplied(created.id, "Final reply");
+
+      const result = await getLeadWithEvents(created.id);
+
+      expect(result).not.toBeNull();
+      expect(result?.lead.id).toBe(created.id);
+      expect(result?.events).toBeDefined();
+      expect(result?.events.length).toBeGreaterThan(0);
+
+      // Check event actions
+      const actions = result?.events.map((e) => e.action) || [];
+      expect(actions).toContain("submitted");
+      expect(actions).toContain("viewed");
+      expect(actions).toContain("drafted");
+      expect(actions).toContain("replied");
+    });
+
+    it("should return null for non-existent lead", async () => {
+      const { getLeadWithEvents } = await import("@/lib/lead-store");
+
+      const result = await getLeadWithEvents("non-existent-id");
+
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("field normalization", () => {
+    it("should handle region/regions aliasing", async () => {
+      const lead1 = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Lead 1",
+        email: "lead1@test.com",
+        region: "Nevada",
+      });
+
+      const lead2 = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Lead 2",
+        email: "lead2@test.com",
+        regions: "Australia",
+      });
+
+      expect(lead1.region).toBe("Nevada");
+      expect(lead1.regions).toBe("Nevada");
+      expect(lead2.region).toBe("Australia");
+      expect(lead2.regions).toBe("Australia");
+    });
+
+    it("should handle additionalContext/context aliasing", async () => {
+      const lead1 = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Lead 1",
+        email: "lead1@test.com",
+        additionalContext: "Extra context",
+      });
+
+      const lead2 = await createLead({
+        type: "contact",
+        source: "test",
+        name: "Lead 2",
+        email: "lead2@test.com",
+        context: "Some context",
+      });
+
+      expect(lead1.additionalContext).toBe("Extra context");
+      expect(lead1.context).toBe("Extra context");
+      expect(lead2.additionalContext).toBe("Some context");
+      expect(lead2.context).toBe("Some context");
+    });
+
+    it("should extract commodities from metadata if not provided directly", async () => {
+      const lead = await createLead({
+        type: "prospectivity_brief",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+        metadata: {
+          commodities: ["gold", "copper"],
+        },
+      });
+
+      expect(lead.commodities).toEqual(["gold", "copper"]);
+    });
+
+    it("should extract reference from metadata if not provided directly", async () => {
+      const lead = await createLead({
+        type: "consultation",
+        source: "test",
+        name: "Test Lead",
+        email: "test@test.com",
+        metadata: {
+          reference: "CONSULT-202501-1234",
+        },
+      });
+
+      expect(lead.reference).toBe("CONSULT-202501-1234");
+    });
   });
 });
