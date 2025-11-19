@@ -38,8 +38,7 @@ export async function updateProjectStatusAction(
       status,
     });
     return {
-      error:
-        error instanceof Error ? error.message : "Failed to update status",
+      error: error instanceof Error ? error.message : "Failed to update status",
     };
   }
 }

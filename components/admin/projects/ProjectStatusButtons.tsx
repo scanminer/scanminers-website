@@ -1,8 +1,7 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import type { ProjectStatus } from "@/lib/project-store";
 
 interface ProjectStatusButtonsProps {
@@ -19,73 +18,21 @@ export function ProjectStatusButtons({
   currentStatus,
   updateStatusAction,
 }: ProjectStatusButtonsProps) {
-  const { toast } = useToast();
-
   const [activeState, activeAction, activeIsPending] = useActionState(
     async () => {
-      try {
-        const result = await updateStatusAction(projectId, "active");
-        if (result?.error) {
-          return { error: result.error };
-        }
-        return { success: true };
-      } catch (error) {
-        return {
-          error:
-            error instanceof Error ? error.message : "Failed to update status",
-        };
-      }
+      const result = await updateStatusAction(projectId, "active");
+      return result?.error ? { error: result.error } : { success: true };
     },
     { success: false }
   );
 
   const [completedState, completedAction, completedIsPending] = useActionState(
     async () => {
-      try {
-        const result = await updateStatusAction(projectId, "completed");
-        if (result?.error) {
-          return { error: result.error };
-        }
-        return { success: true };
-      } catch (error) {
-        return {
-          error:
-            error instanceof Error ? error.message : "Failed to update status",
-        };
-      }
+      const result = await updateStatusAction(projectId, "completed");
+      return result?.error ? { error: result.error } : { success: true };
     },
     { success: false }
   );
-
-  useEffect(() => {
-    if (activeState.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: activeState.error,
-      });
-    } else if (activeState.success) {
-      toast({
-        title: "Success",
-        description: "Project marked as active",
-      });
-    }
-  }, [activeState, toast]);
-
-  useEffect(() => {
-    if (completedState.error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: completedState.error,
-      });
-    } else if (completedState.success) {
-      toast({
-        title: "Success",
-        description: "Project marked as completed",
-      });
-    }
-  }, [completedState, toast]);
 
   return (
     <div className="flex flex-wrap gap-2">
@@ -100,6 +47,9 @@ export function ProjectStatusButtons({
         >
           {activeIsPending ? "Updating..." : "Mark active"}
         </Button>
+        {activeState.error && (
+          <p className="text-sm text-destructive mt-1">{activeState.error}</p>
+        )}
       </form>
       <form action={completedAction}>
         <Button
@@ -109,6 +59,11 @@ export function ProjectStatusButtons({
         >
           {completedIsPending ? "Updating..." : "Mark completed"}
         </Button>
+        {completedState.error && (
+          <p className="text-sm text-destructive mt-1">
+            {completedState.error}
+          </p>
+        )}
       </form>
     </div>
   );
