@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ProjectStatusBadge } from "@/components/admin/projects/ProjectStatusBadge";
+import { ProjectStatusButtons } from "@/components/admin/projects/ProjectStatusButtons";
 import {
   getProjectById,
   listProjectTimelineEntries,
@@ -59,35 +60,11 @@ export default async function ProjectDetailPage(props: {
             </p>
           )}
         </div>
-        <div className="flex flex-wrap gap-2">
-          <form
-            action={updateProjectStatusAction.bind(null, project.id, "active")}
-          >
-            <Button
-              type="submit"
-              disabled={
-                project.status === "active" || project.status === "completed"
-              }
-            >
-              Mark active
-            </Button>
-          </form>
-          <form
-            action={updateProjectStatusAction.bind(
-              null,
-              project.id,
-              "completed"
-            )}
-          >
-            <Button
-              type="submit"
-              variant="secondary"
-              disabled={project.status === "completed"}
-            >
-              Mark completed
-            </Button>
-          </form>
-        </div>
+        <ProjectStatusButtons
+          projectId={project.id}
+          currentStatus={project.status}
+          updateStatusAction={updateProjectStatusAction}
+        />
       </div>
 
       <section className="grid gap-4 lg:grid-cols-[2fr_1fr]">

@@ -13,12 +13,16 @@ import { reportServerError } from "@/lib/server-logger";
 export async function updateProjectStatusAction(
   projectId: string,
   status: ProjectStatus
-) {
+): Promise<{ error?: string }> {
   if (!projectId) {
-    throw new Error("Project ID is required");
+    return { error: "Project ID is required" };
   }
 
-  await requireAdminSession();
+  try {
+    await requireAdminSession();
+  } catch {
+    return { error: "Unauthorized" };
+  }
 
   try {
     await assertProjectExists(projectId);
@@ -26,13 +30,17 @@ export async function updateProjectStatusAction(
     await addProjectTimelineEntry(projectId, `Status updated to ${status}`);
     revalidatePath("/admin/projects");
     revalidatePath(`/admin/projects/${projectId}`);
+    return {};
   } catch (error) {
     await reportServerError(error, {
       action: "updateProjectStatus",
       projectId,
       status,
     });
-    throw error;
+    return {
+      error:
+        error instanceof Error ? error.message : "Failed to update status",
+    };
   }
 }
 

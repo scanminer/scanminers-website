@@ -5,21 +5,21 @@ Production-ready Next.js 15 (App Router) site with MDX content (via Contentlayer
 ## Team
 
 **Founding Team:**
+
 - **Dr. Amin Beiranvand Pour** — Co-Founder & Chief Scientist  
   Scientific methodologies, multi-sensor remote sensing, critical minerals research
-  
 - **Mahmood Asadi** — Co-Founder & Chief AI & Product Architect  
   AI strategy, platform architecture, product vision, UX design
 
 ## Quick start
 
-1) Install dependencies
+1. Install dependencies
 
 ```bash
 npm ci
 ```
 
-2) Configure env vars
+2. Configure env vars
 
 - Copy `.env.example` to `.env.local` and fill values.
 - Required for local dev: `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`.
@@ -27,7 +27,7 @@ npm ci
 - Optional: `NEXT_PUBLIC_SITE_URL` for absolute URLs in metadata/sitemap.
 - Funnels/analytics: set `CONSULT_BANK_*` for consultation receipts and `NEXT_PUBLIC_GA_MEASUREMENT_ID` if you want GA4 events locally.
 
-3) Run locally
+3. Run locally
 
 ```bash
 npm run dev
@@ -45,7 +45,7 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 - RESEND_FROM: Verified sender address (e.g., contact@scanminers.com)
 - RESEND_TO: One or more recipient emails (comma-separated), ex: founders@scanminers.com
 - NEXT_PUBLIC_SITE_URL: Your site’s base URL (e.g., https://example.com)
-	- Important: Set this in production so sitemap/OG URLs use your domain, not localhost.
+  - Important: Set this in production so sitemap/OG URLs use your domain, not localhost.
 - NEXT_PUBLIC_GA_MEASUREMENT_ID: GA4 measurement ID used by `trackEvent`
 - NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN: Optional Cloudflare Web Analytics beacon token
 - CONSULT_BANK_ACCOUNT_NAME / CONSULT_BANK_ACCOUNT / CONSULT_BANK_IBAN / CONSULT_BANK_BIC / CONSULT_BANK_NOTE: Displayed in consultation confirmation emails
@@ -65,22 +65,25 @@ See `.env.example` for the full list. These same keys should be added in Cloudfl
 ### Using contact@scanminers.com and founders@scanminers.com
 
 Sending (Resend):
+
 - Add your domain to Resend and complete domain verification (SPF/DKIM records).
 - In Resend → Senders, add `contact@scanminers.com` and verify it (or verify the entire domain).
 - Create an API key and set `RESEND_API_KEY` in Cloudflare Pages and `.env.local`.
 - Set `RESEND_FROM=contact@scanminers.com` in env. The API route will fallback to this if `RESEND_FROM` is unset.
 
 Receiving (Cloudflare Email Routing or your mailbox provider):
+
 - If you don’t have a mailbox, use Cloudflare Email Routing:
-	- Cloudflare dashboard → Email → Email Routing → Add `contact@scanminers.com` and `founders@scanminers.com`.
-	- Create routing rules to forward incoming mail to your real inboxes (e.g., Gmail, Fastmail).
-	- Alternatively, provision real mailboxes at your provider and point MX to that provider.
+  - Cloudflare dashboard → Email → Email Routing → Add `contact@scanminers.com` and `founders@scanminers.com`.
+  - Create routing rules to forward incoming mail to your real inboxes (e.g., Gmail, Fastmail).
+  - Alternatively, provision real mailboxes at your provider and point MX to that provider.
 
 Production wiring:
+
 - In Cloudflare Pages (Production + Preview envs):
-	- RESEND_API_KEY, RESEND_FROM=contact@scanminers.com
-	- RESEND_TO=founders@scanminers.com (or a comma-separated list)
-	- NEXT_PUBLIC_TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY, NEXT_PUBLIC_SITE_URL
+  - RESEND_API_KEY, RESEND_FROM=contact@scanminers.com
+  - RESEND_TO=founders@scanminers.com (or a comma-separated list)
+  - NEXT_PUBLIC_TURNSTILE_SITE_KEY, TURNSTILE_SECRET_KEY, NEXT_PUBLIC_SITE_URL
 
 ## Content and SEO
 
@@ -96,11 +99,11 @@ Scanminers' brand book now lives in-version alongside the rest of the site.
 - **Source of truth** – Author/edit MDX directly under `content/brand/`. Run `npm run contentlayer` after adding new files so types regenerate.
 - **Admin portal** – Visit `/admin/brand` (same auth as other admin areas) to review sections, edit front matter/body, and copy the AI-ready system prompt. Saving from this UI writes back to the MDX file and revalidates Contentlayer data.
 - **Helper modules** – Shared helpers live under `lib/brand-*`:
-	- `lib/brand-content.ts`: loaders + typed aggregates (prompts, guardrails, palette, proof points).
-	- `lib/brand-core.ts`: mission, pillars, proof, and hero copy helpers.
-	- `lib/brand-voice.ts`: tone guardrails + reminder builder.
-	- `lib/brand-visual.ts`: color/typography exports.
-	- `lib/ai-brand.ts`: builds the canonical system prompt/context for AI workflows.
+  - `lib/brand-content.ts`: loaders + typed aggregates (prompts, guardrails, palette, proof points).
+  - `lib/brand-core.ts`: mission, pillars, proof, and hero copy helpers.
+  - `lib/brand-voice.ts`: tone guardrails + reminder builder.
+  - `lib/brand-visual.ts`: color/typography exports.
+  - `lib/ai-brand.ts`: builds the canonical system prompt/context for AI workflows.
 - **AI integration** – Lead reply drafting (`lib/ai/lead-replies.ts`) now injects the brand prompt so outbound emails inherit the right tone, guardrails, and proof points. Reuse `buildBrandSystemPrompt()` anywhere else you need branded AI output.
 
 If you need a new brand section, create another MDX file under `content/brand/`, fill the front matter fields, run `npm run contentlayer`, and the admin portal will pick it up automatically.
@@ -124,24 +127,25 @@ This repo is configured for Cloudflare Pages with Next on Pages.
 
 ### First-time setup
 
-1) In Cloudflare Pages → Settings → Environment variables (for both Production and Preview):
-	- NEXT_PUBLIC_TURNSTILE_SITE_KEY
-	- TURNSTILE_SECRET_KEY
-	- RESEND_API_KEY
-	- RESEND_FROM (recommended)
-	- RESEND_TO (recommended)
-	- NEXT_PUBLIC_SITE_URL (recommended)
+1. In Cloudflare Pages → Settings → Environment variables (for both Production and Preview):
 
-2) Trigger a new deploy by pushing to `main`.
+   - NEXT_PUBLIC_TURNSTILE_SITE_KEY
+   - TURNSTILE_SECRET_KEY
+   - RESEND_API_KEY
+   - RESEND_FROM (recommended)
+   - RESEND_TO (recommended)
+   - NEXT_PUBLIC_SITE_URL (recommended)
+
+2. Trigger a new deploy by pushing to `main`.
 
 ## Rotating secrets (recommended)
 
 If a secret is exposed or you wish to rotate periodically:
 
-1) Cloudflare Turnstile: generate a new secret key in the dashboard. Update `TURNSTILE_SECRET_KEY` in Cloudflare Pages and your local `.env.local`.
-2) Resend: create a new API key and revoke the old one. Update `RESEND_API_KEY` in Cloudflare Pages and `.env.local`.
-3) If you changed `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, update both Cloudflare Pages and `.env.local`.
-4) Redeploy to apply changes.
+1. Cloudflare Turnstile: generate a new secret key in the dashboard. Update `TURNSTILE_SECRET_KEY` in Cloudflare Pages and your local `.env.local`.
+2. Resend: create a new API key and revoke the old one. Update `RESEND_API_KEY` in Cloudflare Pages and `.env.local`.
+3. If you changed `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, update both Cloudflare Pages and `.env.local`.
+4. Redeploy to apply changes.
 
 ## Notes
 
@@ -151,6 +155,7 @@ If a secret is exposed or you wish to rotate periodically:
 ---
 
 Additional docs:
+
 - Handover: `docs/HANDOVER.md`
 - Changelog: `CHANGELOG.md`
 
@@ -162,17 +167,20 @@ This repo includes automation to generate and regenerate cover images for posts.
 - Regenerate a post image: run the workflow `.github/workflows/regenerate-image.yml` manually with inputs `post_slug` (e.g. `cobalt-in-battery-supply-chains`) and optional `prompt` to override. It opens a PR with the updated image and persists the last-used prompt to `imagePrompt`.
 
 CMS button:
+
 - In Decap CMS (`/admin` → Insights entry), use the "Regenerate Cover (AI)" button. You can optionally type a prompt override next to the button.
 - The button calls an Edge API route at `/api/images/regenerate` which dispatches the GitHub workflow.
 
 Required environment variables (Cloudflare Pages → Project settings → Environment variables):
+
 - `ADMIN_ACTION_TOKEN`: a strong random string. Editors will paste it once in the CMS; it's sent as an auth header to the API route.
 - One of the following for GitHub workflow dispatch from the API route:
-	- `WORKFLOW_DISPATCH_TOKEN`: a fine-grained PAT with repo and workflow scopes; or
-	- `CONTENT_BOT_TOKEN`: reuse the existing PAT used by generators.
+  - `WORKFLOW_DISPATCH_TOKEN`: a fine-grained PAT with repo and workflow scopes; or
+  - `CONTENT_BOT_TOKEN`: reuse the existing PAT used by generators.
 - Optional for image generation service: `STABILITY_API_KEY` (required for actual generation in CI).
 
 Notes:
+
 - The CMS widget derives the slug from the entry's frontmatter or file path; if not found, it falls back to a title-based slug. Ensure the file name under `content/insights/` matches the slug of the post.
 - The API route validates `x-admin-action-token` and returns 202 on success (queued). Check GitHub Actions for progress.
 
@@ -189,37 +197,42 @@ Notes:
 This project includes Sentry for client, server, and edge runtimes. DSNs are read from env.
 
 Env vars:
+
 - `NEXT_PUBLIC_SENTRY_DSN` (browser; public)
 - `SENTRY_DSN` (server/edge; secret)
 
 Local test:
+
 1. Add DSNs to `.env.local`.
 2. `npm run dev` and open `http://localhost:3000/sentry-example-page`.
 3. Click “Throw Sample Error”. This triggers a frontend error. Note: the sample backend route was disabled to avoid a Cloudflare Pages bundling issue.
 4. Check your Sentry project for the events. If you see a connectivity warning, disable ad blockers. A tunnel route `/monitoring` is configured to help avoid blocking.
 
 Production test:
+
 1. Set the same env vars in Cloudflare Pages (Production and Preview).
 2. After deploy, visit `/sentry-example-page` on your site and click the button.
 3. Confirm events in Sentry. Sampling is lower in production by default; adjust in the Sentry config files if needed.
 
 ### Troubleshooting
+
 - No events arriving:
-	- Ensure `NEXT_PUBLIC_SENTRY_DSN` (client) and `SENTRY_DSN` (server/edge) are set in the environment used to run the app.
-	- Try disabling ad blockers; while a tunnel route `/monitoring` is set up, some blockers may still interfere.
-	- Check that your Sentry project and DSNs match the environment.
+  - Ensure `NEXT_PUBLIC_SENTRY_DSN` (client) and `SENTRY_DSN` (server/edge) are set in the environment used to run the app.
+  - Try disabling ad blockers; while a tunnel route `/monitoring` is set up, some blockers may still interfere.
+  - Check that your Sentry project and DSNs match the environment.
 - Client errors blocked:
-	- Verify that `/monitoring` isn’t matched by `middleware.ts` or other rewrites. Our middleware currently only matches `/api/contact`.
+  - Verify that `/monitoring` isn’t matched by `middleware.ts` or other rewrites. Our middleware currently only matches `/api/contact`.
 - Edge/server errors missing:
-	- Confirm your failing route uses Edge or Node runtime and that `instrumentation.ts` is present at the repo root. We export `onRequestError` which should capture unhandled request errors.
+  - Confirm your failing route uses Edge or Node runtime and that `instrumentation.ts` is present at the repo root. We export `onRequestError` which should capture unhandled request errors.
 - CSP/CORS issues:
-	- If using a CSP, ensure Sentry ingest host and the tunnel path (`/monitoring`) are allowed.
+  - If using a CSP, ensure Sentry ingest host and the tunnel path (`/monitoring`) are allowed.
 - Sampling too low:
-	- In production we lower tracing and replay session sampling. Adjust values in `sentry.server.config.ts`, `sentry.edge.config.ts`, and `instrumentation-client.ts`.
+  - In production we lower tracing and replay session sampling. Adjust values in `sentry.server.config.ts`, `sentry.edge.config.ts`, and `instrumentation-client.ts`.
 - Source maps / stack traces:
-	- Source map upload is configured via `withSentryConfig` in `next.config.ts`. Ensure builds run in CI and network egress isn’t blocked. Check build logs for Sentry upload messages.
+  - Source map upload is configured via `withSentryConfig` in `next.config.ts`. Ensure builds run in CI and network egress isn’t blocked. Check build logs for Sentry upload messages.
 
 ### Sentry smoke test (quick)
+
 1. Ensure `NEXT_PUBLIC_SENTRY_DSN` and `SENTRY_DSN` are set (local or CF Pages).
 2. Open `/sentry-example-page` and click “Throw Sample Error”.
 3. Verify two events in Sentry: one frontend exception and one backend API request.
