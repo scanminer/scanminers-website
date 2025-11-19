@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Script from "next/script";
 import { trackEvent } from "@/lib/analytics";
+import { useTurnstileSiteKey } from "@/lib/hooks/use-turnstile-site-key";
 
 const COMMODITY_OPTIONS = [
   { value: "lithium", label: "Lithium (Li)" },
@@ -64,7 +65,11 @@ type Props = {
 };
 
 export function ConsultationForm({ defaultCommodity }: Props) {
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const {
+    siteKey,
+    loading: siteKeyLoading,
+    error: siteKeyError,
+  } = useTurnstileSiteKey();
   const [form, setForm] = useState<FormState>({
     name: "",
     email: "",
@@ -79,10 +84,14 @@ export function ConsultationForm({ defaultCommodity }: Props) {
   const defaultCommodityValue = useMemo(() => {
     if (!defaultCommodity) return undefined;
     const normalized = defaultCommodity.toLowerCase();
-    const match = COMMODITY_OPTIONS.find((option) => option.value === normalized);
+    const match = COMMODITY_OPTIONS.find(
+      (option) => option.value === normalized
+    );
     return match ? match.value : undefined;
   }, [defaultCommodity]);
-  const [commodities, setCommodities] = useState<string[]>(defaultCommodityValue ? [defaultCommodityValue] : []);
+  const [commodities, setCommodities] = useState<string[]>(
+    defaultCommodityValue ? [defaultCommodityValue] : []
+  );
   const [dataSources, setDataSources] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -91,7 +100,11 @@ export function ConsultationForm({ defaultCommodity }: Props) {
   const [scriptReady, setScriptReady] = useState(false);
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const onChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
     if (name === "consent" && "checked" in e.target) {
       const target = e.target as HTMLInputElement;
@@ -101,8 +114,16 @@ export function ConsultationForm({ defaultCommodity }: Props) {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const toggleValue = (value: string, list: string[], setList: (next: string[]) => void) => {
-    setList(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
+  const toggleValue = (
+    value: string,
+    list: string[],
+    setList: (next: string[]) => void
+  ) => {
+    setList(
+      list.includes(value)
+        ? list.filter((item) => item !== value)
+        : [...list, value]
+    );
   };
 
   const renderTurnstile = useCallback(() => {
@@ -197,7 +218,11 @@ export function ConsultationForm({ defaultCommodity }: Props) {
           sourceCommodity: defaultCommodityValue,
         }),
       });
-      const data = (await response.json()) as { success: boolean; message?: string; reference?: string };
+      const data = (await response.json()) as {
+        success: boolean;
+        message?: string;
+        reference?: string;
+      };
       if (!response.ok || !data.success) {
         throw new Error(data.message || "Submission failed");
       }
@@ -229,7 +254,10 @@ export function ConsultationForm({ defaultCommodity }: Props) {
       setDataSources([]);
       resetWidget();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.";
       setError(message);
     } finally {
       setSubmitting(false);
@@ -238,9 +266,12 @@ export function ConsultationForm({ defaultCommodity }: Props) {
 
   return (
     <div className="rounded-3xl border border-border bg-background/80 p-6 shadow-lg shadow-black/5">
-      <h2 className="text-2xl font-semibold tracking-tight">Request a paid consultation</h2>
+      <h2 className="text-2xl font-semibold tracking-tight">
+        Request a paid consultation
+      </h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Share a few details so we can confirm fit, prepare the right specialists, and send you payment instructions.
+        Share a few details so we can confirm fit, prepare the right
+        specialists, and send you payment instructions.
       </p>
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div className="grid gap-4 md:grid-cols-2">
@@ -328,12 +359,17 @@ export function ConsultationForm({ defaultCommodity }: Props) {
           <p className="text-sm font-semibold">Commodity focus</p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {COMMODITY_OPTIONS.map((option) => (
-              <label key={option.value} className="flex items-center gap-2 rounded-xl border border-border/60 bg-background px-3 py-2 text-sm">
+              <label
+                key={option.value}
+                className="flex items-center gap-2 rounded-xl border border-border/60 bg-background px-3 py-2 text-sm"
+              >
                 <input
                   type="checkbox"
                   className="rounded"
                   checked={commodities.includes(option.value)}
-                  onChange={() => toggleValue(option.value, commodities, setCommodities)}
+                  onChange={() =>
+                    toggleValue(option.value, commodities, setCommodities)
+                  }
                 />
                 {option.label}
               </label>
@@ -345,12 +381,17 @@ export function ConsultationForm({ defaultCommodity }: Props) {
           <p className="text-sm font-semibold">Current data available</p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             {DATA_OPTIONS.map((option) => (
-              <label key={option} className="flex items-center gap-2 rounded-xl border border-border/60 bg-background px-3 py-2 text-sm">
+              <label
+                key={option}
+                className="flex items-center gap-2 rounded-xl border border-border/60 bg-background px-3 py-2 text-sm"
+              >
                 <input
                   type="checkbox"
                   className="rounded"
                   checked={dataSources.includes(option)}
-                  onChange={() => toggleValue(option, dataSources, setDataSources)}
+                  onChange={() =>
+                    toggleValue(option, dataSources, setDataSources)
+                  }
                 />
                 {option}
               </label>
@@ -422,7 +463,10 @@ export function ConsultationForm({ defaultCommodity }: Props) {
             checked={form.consent}
             onChange={onChange}
           />
-          <span>I understand this is a paid consultation and my booking is confirmed once payment or proof of payment is received.</span>
+          <span>
+            I understand this is a paid consultation and my booking is confirmed
+            once payment or proof of payment is received.
+          </span>
         </label>
 
         {siteKey ? (
@@ -438,7 +482,10 @@ export function ConsultationForm({ defaultCommodity }: Props) {
           </div>
         ) : (
           <p className="text-sm text-amber-600">
-            Turnstile is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable submissions.
+            {siteKeyLoading
+              ? "Loading Turnstile challenge…"
+              : siteKeyError ||
+                "Turnstile is temporarily unavailable. Please refresh and try again."}
           </p>
         )}
 
@@ -448,7 +495,7 @@ export function ConsultationForm({ defaultCommodity }: Props) {
         <div className="pt-2">
           <button
             type="submit"
-            disabled={submitting}
+            disabled={submitting || !token || !siteKey}
             className="inline-flex w-full items-center justify-center rounded-xl bg-primary px-4 py-2 text-base font-semibold text-primary-foreground"
           >
             {submitting ? "Submitting…" : "Submit consultation request"}
