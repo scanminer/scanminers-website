@@ -35,8 +35,17 @@ export function useTurnstileSiteKey(): TurnstileSiteKeyState {
           cache: "no-store",
         });
         if (!response.ok) {
-          throw new Error("Failed to fetch Turnstile config");
+          throw new Error(
+            `Failed to fetch Turnstile config: ${response.status}`
+          );
         }
+
+        // Check content type before parsing JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error("Invalid response format from config endpoint");
+        }
+
         const data: { turnstileSiteKey?: string | null } =
           await response.json();
         if (!cancelled) {
