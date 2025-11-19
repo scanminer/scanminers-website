@@ -1,6 +1,6 @@
 ## Scanminers Website
 
-Production-ready Next.js 15 (App Router) site with MDX content (via Contentlayer), SEO (sitemap, robots, RSS), a Turnstile-protected contact form, and Cloudflare Pages deployment using Next on Pages.
+Production-ready Next.js 15 (App Router) site with MDX content (via Contentlayer), SEO (sitemap, robots, RSS), a Turnstile-protected contact form, AI-powered lead management, and Cloudflare Pages deployment using Next on Pages.
 
 ## Team
 
