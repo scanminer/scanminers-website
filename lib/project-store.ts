@@ -25,6 +25,19 @@ export type ProjectTimelineEntry = {
   createdAt: string;
 };
 
+export type ProjectEmail = {
+  id: string;
+  projectId: string;
+  direction: "inbound" | "outbound";
+  subject: string;
+  body: string;
+  fromEmail?: string | null;
+  toEmail?: string | null;
+  resendId?: string | null;
+  status: "sent" | "delivered" | "failed" | "bounced";
+  createdAt: string;
+};
+
 export type ListProjectsOptions = {
   status?: ProjectStatus | "all";
   limit?: number;
@@ -187,6 +200,12 @@ class D1ProjectStore implements ProjectStoreAdapter {
         null
       )
       .run();
+
+    // Link historical lead events to this project
+    if (lead.id) {
+      await linkLeadEventsToProject(lead.id, project.id);
+    }
+
     return project;
   }
 
@@ -450,4 +469,64 @@ export async function saveProjectAISummary(
   summary: string
 ): Promise<ProjectRecord | null> {
   return resolveStore().saveAIProjectSummary(id, summary);
+}
+
+export async function listProjectEmails(
+  projectId: string
+): Promise<ProjectEmail[]> {
+  const db = getD1Binding();
+  if (!db) return [];
+
+  const results = await db
+    .prepare(
+      `SELECT id, project_id, direction, subject, body, from_email, to_email, resend_id, status, created_at
+       FROM project_emails
+       WHERE project_id = ?
+       ORDER BY created_at DESC`
+    )
+    .bind(projectId)
+    .all();
+
+  type EmailRow = {
+    id: string;
+    project_id: string;
+    direction: string;
+    subject: string;
+    body: string;
+    from_email: string | null;
+    to_email: string | null;
+    resend_id: string | null;
+    status: string;
+    created_at: string;
+  };
+
+  return ((results.results || []) as EmailRow[]).map((row) => ({
+    id: row.id,
+    projectId: row.project_id,
+    direction: row.direction as "inbound" | "outbound",
+    subject: row.subject,
+    body: row.body,
+    fromEmail: row.from_email,
+    toEmail: row.to_email,
+    resendId: row.resend_id,
+    status: row.status as "sent" | "delivered" | "failed" | "bounced",
+    createdAt: row.created_at,
+  }));
+}
+
+export async function linkLeadEventsToProject(
+  leadId: string,
+  projectId: string
+): Promise<void> {
+  const db = getD1Binding();
+  if (!db) return;
+
+  await db
+    .prepare(
+      `UPDATE lead_events
+       SET project_id = ?
+       WHERE lead_id = ? AND project_id IS NULL`
+    )
+    .bind(projectId, leadId)
+    .run();
 }

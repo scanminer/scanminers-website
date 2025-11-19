@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ProjectStatusBadge } from "@/components/admin/projects/ProjectStatusBadge";
+import { ProjectEmailsList } from "@/components/admin/projects/ProjectEmailsList";
 import {
   getProjectById,
   listProjectTimelineEntries,
+  listProjectEmails,
 } from "@/lib/project-store";
 import {
   addProjectTimelineEntryAction,
@@ -25,6 +27,7 @@ export default async function ProjectDetailPage(props: {
   }
 
   const timeline = await listProjectTimelineEntries(project.id);
+  const emails = await listProjectEmails(project.id);
 
   return (
     <div className="space-y-6">
@@ -121,6 +124,7 @@ export default async function ProjectDetailPage(props: {
           )}
         </div>
         <div className="space-y-4">
+          <ProjectEmailsList emails={emails} />
           <div className="rounded-xl border bg-card p-4 shadow-sm">
             <h2 className="text-sm font-semibold">Add timeline update</h2>
             <form
