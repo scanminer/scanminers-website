@@ -31,12 +31,36 @@ enabled = true
 persist = true
 head_sampling_rate = 1
 
+# Environment variables (non-secret)
+[vars]
+NEXTAUTH_URL = "https://scanminers.com"
+NEXT_PUBLIC_SITE_URL = "https://scanminers.com"
+ADMIN_ALLOWED_EMAIL_DOMAINS = "scanminers.com"
+ADMIN_ALLOWED_EMAILS = "admin@scanminers.com,mehrtash@scanminers.com,amin@scanminers.com"
+ADMIN_ALLOWED_GITHUB_LOGINS = "scanminers-founder"
+ADMIN_USER = "admin"
+ADMIN_ACTOR_NAME = "Mahmood Asadi"
+ENABLE_ADMIN_PASSWORD_LOGIN = "true"
+ALLOW_ADMIN_WITHOUT_AUTH = "false"
+GH_REPO = "scanminer/scanminers-website"
+GIT_DEFAULT_BRANCH = "main"
+CONTENT_AUTHOR_NAME = "ScanminersBot"
+CONTENT_AUTHOR_EMAIL = "bot@scanminers.com"
+SENTRY_ENVIRONMENT = "production"
+RESEND_FROM = "contact@scanminers.com"
+RESEND_TO = "founders@scanminers.com"
+OPENAI_MODEL = "gpt-4o"
+PERPLEXITY_MODEL = "sonar-pro"
+ENABLE_INITIATE_API = "true"
+WEEKLY_TOKENS = "6000"
+MONTHLY_TOKENS = "20000"
+
 # D1 Database for Leads
 # To set up: run `bash scripts/setup-d1.sh`
 # Local dev: automatically creates .wrangler/state/v3/d1 directory
 # Production: create with `wrangler d1 create scanminers-leads` and update database_id below
 [[d1_databases]]
 binding = "LEADS_DB"
-database_name = "scanminers-leads"
-database_id = "ab5a9ca1-0c10-4ed4-8d04-8df2a910b9da"  # Update with your actual D1 database ID
+database_name = "scanminers-leads-v2"
+database_id = "d919665a-c650-4f1c-817f-bc6a3f729c54"  # Update with your actual D1 database ID
 migrations_dir = "database/migrations"
