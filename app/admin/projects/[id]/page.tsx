@@ -48,6 +48,16 @@ export default async function ProjectDetailPage(props: {
           <p className="text-sm text-muted-foreground">
             Client · {project.clientName}
           </p>
+          {project.clientEmail && (
+            <p className="text-sm text-muted-foreground">
+              Email · {project.clientEmail}
+            </p>
+          )}
+          {project.clientPhone && (
+            <p className="text-sm text-muted-foreground">
+              Phone · {project.clientPhone}
+            </p>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           <form
@@ -130,7 +140,7 @@ export default async function ProjectDetailPage(props: {
           <ProjectAiPanel
             projectId={project.id}
             initialSummary={project.aiProjectSummary}
-            clientEmail={undefined}
+            clientEmail={project.clientEmail ?? undefined}
           />
         </div>
       </section>
