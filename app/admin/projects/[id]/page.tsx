@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ProjectStatusBadge } from "@/components/admin/projects/ProjectStatusBadge";
+import { ProjectEmailsList } from "@/components/admin/projects/ProjectEmailsList";
 import {
   getProjectById,
   listProjectTimelineEntries,
+  listProjectEmails,
 } from "@/lib/project-store";
 import {
   addProjectTimelineEntryAction,
@@ -25,6 +27,7 @@ export default async function ProjectDetailPage(props: {
   }
 
   const timeline = await listProjectTimelineEntries(project.id);
+  const emails = await listProjectEmails(project.id);
 
   return (
     <div className="space-y-6">
@@ -48,6 +51,16 @@ export default async function ProjectDetailPage(props: {
           <p className="text-sm text-muted-foreground">
             Client · {project.clientName}
           </p>
+          {project.clientEmail && (
+            <p className="text-sm text-muted-foreground">
+              Email · {project.clientEmail}
+            </p>
+          )}
+          {project.clientPhone && (
+            <p className="text-sm text-muted-foreground">
+              Phone · {project.clientPhone}
+            </p>
+          )}
         </div>
         <div className="flex flex-wrap gap-2">
           <form
@@ -111,6 +124,7 @@ export default async function ProjectDetailPage(props: {
           )}
         </div>
         <div className="space-y-4">
+          <ProjectEmailsList emails={emails} />
           <div className="rounded-xl border bg-card p-4 shadow-sm">
             <h2 className="text-sm font-semibold">Add timeline update</h2>
             <form
@@ -130,7 +144,7 @@ export default async function ProjectDetailPage(props: {
           <ProjectAiPanel
             projectId={project.id}
             initialSummary={project.aiProjectSummary}
-            clientEmail={undefined}
+            clientEmail={project.clientEmail ?? undefined}
           />
         </div>
       </section>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { useTurnstileSiteKey } from "@/lib/hooks/use-turnstile-site-key";
 
 declare global {
   interface Window {
@@ -30,16 +31,27 @@ type FormState = {
 };
 
 export function ContactForm() {
-  const [form, setForm] = useState<FormState>({ name: "", email: "", company: "", message: "" });
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    email: "",
+    company: "",
+    message: "",
+  });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [scriptReady, setScriptReady] = useState(false);
   const widgetRef = useRef<HTMLDivElement | null>(null);
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const {
+    siteKey,
+    loading: siteKeyLoading,
+    error: siteKeyError,
+  } = useTurnstileSiteKey();
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
@@ -103,7 +115,9 @@ export function ContactForm() {
       if (!res.ok || !data.success) {
         throw new Error(data.message || "Submission failed");
       }
-      setSuccess("Thanks! Your message has been received. We'll be in touch shortly.");
+      setSuccess(
+        "Thanks! Your message has been received. We'll be in touch shortly."
+      );
       setForm({ name: "", email: "", company: "", message: "" });
       setToken(null);
       // Reset the widget if available
@@ -113,7 +127,10 @@ export function ContactForm() {
         } catch {}
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong. Please try again.";
       setError(message);
     } finally {
       setSubmitting(false);
@@ -123,10 +140,14 @@ export function ContactForm() {
   return (
     <div className="rounded-md border border-black/10 dark:border-white/10 p-4">
       <h2 className="text-xl font-semibold">Contact</h2>
-      <p className="mt-2">Team Lead: <strong>Dr. Amin Beiranvand Pour</strong></p>
+      <p className="mt-2">
+        Team Lead: <strong>Dr. Amin Beiranvand Pour</strong>
+      </p>
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
+          <label htmlFor="name" className="block text-sm font-medium mb-1">
+            Full Name
+          </label>
           <input
             id="name"
             name="name"
@@ -140,7 +161,9 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
+          <label htmlFor="email" className="block text-sm font-medium mb-1">
+            Email
+          </label>
           <input
             id="email"
             name="email"
@@ -154,7 +177,9 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="company" className="block text-sm font-medium mb-1">Company</label>
+          <label htmlFor="company" className="block text-sm font-medium mb-1">
+            Company
+          </label>
           <input
             id="company"
             name="company"
@@ -167,7 +192,9 @@ export function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium mb-1">Message</label>
+          <label htmlFor="message" className="block text-sm font-medium mb-1">
+            Message
+          </label>
           <textarea
             id="message"
             name="message"
@@ -194,18 +221,30 @@ export function ContactForm() {
             <div ref={widgetRef} className="cf-turnstile" />
           </div>
         ) : (
-          <p role="alert" className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900 dark:border-amber-500/50 dark:bg-amber-950/40 dark:text-amber-100">
-            Turnstile is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY to enable submissions.
+          <p
+            role="alert"
+            className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900 dark:border-amber-500/50 dark:bg-amber-950/40 dark:text-amber-100"
+          >
+            {siteKeyLoading
+              ? "Loading Turnstile challenge…"
+              : siteKeyError ||
+                "Turnstile is temporarily unavailable. Please refresh and try again."}
           </p>
         )}
 
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
-        {success && <p className="text-sm text-green-700 dark:text-green-400">{success}</p>}
+        {error && (
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        )}
+        {success && (
+          <p className="text-sm text-green-700 dark:text-green-400">
+            {success}
+          </p>
+        )}
 
         <div className="pt-2">
           <button
             type="submit"
-            disabled={submitting || !token}
+            disabled={submitting || !token || !siteKey}
             className="inline-flex items-center justify-center rounded-md bg-black text-white dark:bg-white dark:text-black px-4 py-2 disabled:opacity-60"
           >
             {submitting ? "Sending…" : "Send Message"}

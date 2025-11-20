@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Setup script for Scanminers Leads D1 Database
 
-set -e
+set -euo pipefail
 
 echo "🗄️  Scanminers Leads Database Setup"
 echo "===================================="
 echo ""
 
-DB_NAME="scanminers-leads"
-MIGRATION_FILE="database/migrations/0001_init_leads.sql"
+DB_NAME="${DB_NAME:-scanminers-leads-v2}"
+MIGRATIONS_DIR="database/migrations"
 
 # Check if wrangler is installed
 if ! command -v wrangler &> /dev/null; then
@@ -17,20 +17,16 @@ if ! command -v wrangler &> /dev/null; then
     exit 1
 fi
 
-# Check if migration file exists
-if [ ! -f "$MIGRATION_FILE" ]; then
-    echo "❌ Error: Migration file not found at $MIGRATION_FILE"
+# Check if migrations directory exists
+if [ ! -d "$MIGRATIONS_DIR" ]; then
+    echo "❌ Error: Migrations directory not found at $MIGRATIONS_DIR"
     exit 1
 fi
 
-echo "📋 Step 1: Create D1 database (if it doesn't exist)"
+echo "📋 Step 1: Ensure D1 database exists"
 echo "----------------------------------------------------"
-echo "Run this command to create the database:"
-echo ""
+echo "Run this command if you still need to create the database:"
 echo "  wrangler d1 create $DB_NAME"
-echo ""
-echo "After creating, copy the database_id from the output and update wrangler.toml"
-echo ""
 read -p "Have you created the database and updated wrangler.toml? (y/N) " -n 1 -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -39,23 +35,23 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 echo ""
-echo "📋 Step 2: Run migrations locally"
+echo "📋 Step 2: Apply migrations locally"
 echo "----------------------------------------------------"
-wrangler d1 execute $DB_NAME --local --file=$MIGRATION_FILE
-echo "✅ Local database initialized"
+wrangler d1 migrations apply "$DB_NAME" --local
+echo "✅ Local database synchronized with $MIGRATIONS_DIR"
 
 echo ""
-echo "📋 Step 3: Run migrations in production (optional)"
+echo "📋 Step 3: Apply migrations to remote database (optional)"
 echo "----------------------------------------------------"
-read -p "Apply migrations to production database? (y/N) " -n 1 -r
+read -p "Apply migrations to remote database $DB_NAME? (y/N) " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    wrangler d1 execute $DB_NAME --remote --file=$MIGRATION_FILE
-    echo "✅ Production database initialized"
+    wrangler d1 migrations apply "$DB_NAME" --remote
+    echo "✅ Remote database synchronized with $MIGRATIONS_DIR"
 else
-    echo "⏭️  Skipped production migration"
+    echo "⏭️  Skipped remote migration"
     echo "To apply later, run:"
-    echo "  wrangler d1 execute $DB_NAME --remote --file=$MIGRATION_FILE"
+    echo "  wrangler d1 migrations apply $DB_NAME --remote"
 fi
 
 echo ""

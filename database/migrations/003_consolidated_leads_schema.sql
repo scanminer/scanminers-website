@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS leads (
   id TEXT PRIMARY KEY,
-  kind TEXT NOT NULL,
+  type TEXT NOT NULL,
   source TEXT NOT NULL,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS leads (
   role TEXT,
   message TEXT,
   goal TEXT,
-  context TEXT,
-  regions TEXT,
+  additional_context TEXT,
+  region TEXT,
   stage TEXT,
   timing TEXT,
   status TEXT NOT NULL DEFAULT 'new',
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS leads (
 
 CREATE INDEX IF NOT EXISTS idx_leads_created_at ON leads(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status, created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_leads_kind ON leads(kind);
+CREATE INDEX IF NOT EXISTS idx_leads_type ON leads(type);
 
 CREATE TABLE IF NOT EXISTS lead_events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,18 +36,3 @@ CREATE TABLE IF NOT EXISTS lead_events (
 );
 
 CREATE INDEX IF NOT EXISTS idx_lead_events_lead_id ON lead_events(lead_id);
--- Rename legacy columns to the new canonical names
-ALTER TABLE leads RENAME COLUMN kind TO type;
-ALTER TABLE leads RENAME COLUMN regions TO region;
-ALTER TABLE leads RENAME COLUMN context TO additional_context;
-
--- Normalize stored type values to snake_case
-UPDATE leads SET type = REPLACE(type, '-', '_');
-
--- Add new structured columns for richer lead data
-ALTER TABLE leads ADD COLUMN commodities TEXT;
-ALTER TABLE leads ADD COLUMN reference TEXT;
-
--- Refresh indexes for the renamed columns
-DROP INDEX IF EXISTS idx_leads_kind;
-CREATE INDEX IF NOT EXISTS idx_leads_type ON leads(type);

@@ -10,6 +10,8 @@ export type ProjectRecord = {
   leadId: string | null;
   clientName: string;
   projectName: string;
+  clientEmail?: string | null;
+  clientPhone?: string | null;
   status: ProjectStatus;
   createdAt: string;
   updatedAt: string;
@@ -20,6 +22,19 @@ export type ProjectTimelineEntry = {
   id: string;
   projectId: string;
   message: string;
+  createdAt: string;
+};
+
+export type ProjectEmail = {
+  id: string;
+  projectId: string;
+  direction: "inbound" | "outbound";
+  subject: string;
+  body: string;
+  fromEmail?: string | null;
+  toEmail?: string | null;
+  resendId?: string | null;
+  status: "sent" | "delivered" | "failed" | "bounced";
   createdAt: string;
 };
 
@@ -169,20 +184,28 @@ class D1ProjectStore implements ProjectStoreAdapter {
     const project = buildProjectRecordFromLead(lead);
     await this.db
       .prepare(
-        `INSERT INTO projects (id, lead_id, client_name, project_name, status, created_at, updated_at, ai_project_summary)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+        `INSERT INTO projects (id, lead_id, client_name, project_name, client_email, client_phone, status, created_at, updated_at, ai_project_summary)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .bind(
         project.id,
         lead.id ?? null,
         project.clientName,
         project.projectName,
+        project.clientEmail ?? null,
+        project.clientPhone ?? null,
         project.status,
         project.createdAt,
         project.updatedAt,
         null
       )
       .run();
+
+    // Link historical lead events to this project
+    if (lead.id) {
+      await linkLeadEventsToProject(lead.id, project.id);
+    }
+
     return project;
   }
 
@@ -284,6 +307,8 @@ export function toProjectRecord(row: ProjectRow): ProjectRecord {
     leadId: row.lead_id ?? null,
     clientName: row.client_name,
     projectName: row.project_name,
+    clientEmail: row.client_email ?? null,
+    clientPhone: row.client_phone ?? null,
     status: normalizeStatus(row.status),
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -296,6 +321,8 @@ type ProjectRow = {
   lead_id: string | null;
   client_name: string;
   project_name: string;
+  client_email?: string | null;
+  client_phone?: string | null;
   status: string;
   created_at: string;
   updated_at: string;
@@ -316,6 +343,9 @@ function buildProjectRecordFromLead(lead: LeadRecord): ProjectRecord {
     leadId: lead.id ?? null,
     clientName: deriveClientName(lead),
     projectName: deriveProjectName(lead),
+    clientEmail: lead.email || null,
+    clientPhone:
+      typeof lead.metadata?.phone === "string" ? lead.metadata.phone : null,
     status: "new",
     createdAt: now,
     updatedAt: now,
@@ -330,13 +360,15 @@ function deriveClientName(lead: LeadRecord): string {
 
 function deriveProjectName(lead: LeadRecord): string {
   const fallback = `${formatLeadType(lead.type)} project`;
+  // Prioritize goal and context over message to avoid email content showing as project title
   const candidates = [
     lead.goal,
-    lead.message,
-    typeof lead.metadata?.notes === "string" ? lead.metadata.notes : undefined,
     typeof lead.metadata?.additionalContext === "string"
       ? lead.metadata.additionalContext
       : undefined,
+    typeof lead.metadata?.notes === "string" ? lead.metadata.notes : undefined,
+    // Only use company name with prefix if nothing else is available
+    lead.company ? `${lead.company} project` : undefined,
   ];
   const primary = candidates
     .find((value) => typeof value === "string" && value.trim().length > 0)
@@ -437,4 +469,64 @@ export async function saveProjectAISummary(
   summary: string
 ): Promise<ProjectRecord | null> {
   return resolveStore().saveAIProjectSummary(id, summary);
+}
+
+export async function listProjectEmails(
+  projectId: string
+): Promise<ProjectEmail[]> {
+  const db = getD1Binding();
+  if (!db) return [];
+
+  const results = await db
+    .prepare(
+      `SELECT id, project_id, direction, subject, body, from_email, to_email, resend_id, status, created_at
+       FROM project_emails
+       WHERE project_id = ?
+       ORDER BY created_at DESC`
+    )
+    .bind(projectId)
+    .all();
+
+  type EmailRow = {
+    id: string;
+    project_id: string;
+    direction: string;
+    subject: string;
+    body: string;
+    from_email: string | null;
+    to_email: string | null;
+    resend_id: string | null;
+    status: string;
+    created_at: string;
+  };
+
+  return ((results.results || []) as EmailRow[]).map((row) => ({
+    id: row.id,
+    projectId: row.project_id,
+    direction: row.direction as "inbound" | "outbound",
+    subject: row.subject,
+    body: row.body,
+    fromEmail: row.from_email,
+    toEmail: row.to_email,
+    resendId: row.resend_id,
+    status: row.status as "sent" | "delivered" | "failed" | "bounced",
+    createdAt: row.created_at,
+  }));
+}
+
+export async function linkLeadEventsToProject(
+  leadId: string,
+  projectId: string
+): Promise<void> {
+  const db = getD1Binding();
+  if (!db) return;
+
+  await db
+    .prepare(
+      `UPDATE lead_events
+       SET project_id = ?
+       WHERE lead_id = ? AND project_id IS NULL`
+    )
+    .bind(projectId, leadId)
+    .run();
 }
