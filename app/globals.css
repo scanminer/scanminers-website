@@ -10,19 +10,19 @@
 @layer base {
   :root {
     /* Light theme — Scanminers brand palette */
-    --brand-blue-deep: 0 60 109;        /* #003C6D */
-    --brand-green-mineral: 0 122 90;    /* #007A5A */
-    --brand-black-ai: 10 10 10;         /* #0A0A0A */
-    --brand-blue-accent: 30 143 251;    /* #1E8FFB */
+    --brand-blue-deep: 0 60 109; /* #003C6D */
+    --brand-green-mineral: 0 122 90; /* #007A5A */
+    --brand-black-ai: 10 10 10; /* #0A0A0A */
+    --brand-blue-accent: 30 143 251; /* #1E8FFB */
     --brand-orange-terrain: 240 138 36; /* #F08A24 */
-    --brand-grey-fog: 243 245 247;      /* #F3F5F7 */
+    --brand-grey-fog: 243 245 247; /* #F3F5F7 */
 
     /* Stone/mineral palette for dark signature */
-    --gold: 212 175 55;                 /* #D4AF37 */
-    --pyrite: 198 166 103;              /* #C6A667 */
-    --stone: 153 145 122;               /* #99917A */
-    --basalt: 26 26 29;                 /* #1A1A1D */
-    --ore: 42 42 48;                    /* #2A2A30 */
+    --gold: 212 175 55; /* #D4AF37 */
+    --pyrite: 198 166 103; /* #C6A667 */
+    --stone: 153 145 122; /* #99917A */
+    --basalt: 26 26 29; /* #1A1A1D */
+    --ore: 42 42 48; /* #2A2A30 */
 
     --bg: 255 255 255;
     --fg: 28 25 23;
@@ -50,11 +50,11 @@
     --brand-grey-fog: 18 18 20;
 
     /* Stone/mineral palette for dark signature (slightly brighter for dark bg) */
-    --gold: 220 185 85;                 /* Brighter for dark */
-    --pyrite: 208 176 123;              /* Brighter for dark */
-    --stone: 163 155 132;               /* Brighter for dark */
-    --basalt: 16 16 19;                 /* Darker basalt */
-    --ore: 32 32 38;                    /* Darker ore */
+    --gold: 220 185 85; /* Brighter for dark */
+    --pyrite: 208 176 123; /* Brighter for dark */
+    --stone: 163 155 132; /* Brighter for dark */
+    --basalt: 16 16 19; /* Darker basalt */
+    --ore: 32 32 38; /* Darker ore */
 
     --bg: 8 9 12;
     --fg: 236 236 238;
@@ -70,10 +70,68 @@
     --border: 48 53 68;
     --ring: var(--brand-blue-accent);
     --radius: 12px;
+
+    /* Scanminers signature theme tokens (Finura-inspired, geology-focused) */
+    --sm-bg: 2 6 23; /* #020617 – deep navy (main page bg) */
+    --sm-bg-elevated: 9 9 23; /* #090917 – slightly lighter navy */
+    --sm-surface: 15 23 42; /* #0f172a – charcoal cards / panels */
+    --sm-surface-alt: 17 24 39; /* #111827 – alt surface */
+    --sm-surface-elevated: 15 23 42; /* elevated cards */
+
+    /* Text */
+    --sm-text: 241 245 249; /* #f1f5f9 – primary text */
+    --sm-text-primary: 241 245 249; /* #f1f5f9 – alias for primary text */
+    --sm-text-muted: 148 163 184; /* #94a3b8 – muted text */
+    --sm-text-subtle: 107 114 128; /* #6b7280 – subtle text */
+
+    /* Primary accent (cyan/teal) */
+    --sm-primary: 34 211 238; /* #22d3ee – cyan/teal */
+    --sm-accent: 34 211 238; /* #22d3ee – same as primary */
+    --sm-accent-soft: 56 189 248; /* #38bdf8 – softer cyan */
+
+    /* Secondary accent (deep green – use sparingly) */
+    --sm-accent-green: 16 185 129; /* #10b981 – emerald green */
+
+    /* Borders / strokes */
+    --sm-border-subtle: 30 41 59; /* #1e293b */
+    --sm-border-strong: 51 65 85; /* #334155 */
+
+    /* Optional supporting accents */
+    --sm-accent-amber: 245 158 11; /* #f59e0b */
+    --sm-accent-red: 248 113 113; /* #f87171 */
+
+    --sm-focus-ring: 34 211 238; /* Focus ring */
   }
 
-  html, body {
-    @apply bg-bg text-fg antialiased;
+  /* Base background gradient for deep navy feel */
+  body {
+    background-color: rgb(var(--sm-bg));
+    background-image: radial-gradient(
+      circle at top,
+      rgba(15, 23, 42, 0.9) 0,
+      rgba(2, 6, 23, 1) 45%,
+      rgba(2, 6, 23, 1) 100%
+    );
+    color: rgb(var(--sm-text-primary));
+    position: relative;
+  }
+
+  /* Subtle starfield overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: url("/images/brand/stars-soft.webp");
+    background-repeat: repeat;
+    background-size: 600px 600px;
+    opacity: 0.12;
+  }
+
+  html,
+  body {
+    @apply antialiased;
   }
 
   * {
@@ -97,7 +155,9 @@
   --color-brand-green-mineral: rgb(var(--brand-green-mineral) / <alpha-value>);
   --color-brand-black-ai: rgb(var(--brand-black-ai) / <alpha-value>);
   --color-brand-blue-accent: rgb(var(--brand-blue-accent) / <alpha-value>);
-  --color-brand-orange-terrain: rgb(var(--brand-orange-terrain) / <alpha-value>);
+  --color-brand-orange-terrain: rgb(
+    var(--brand-orange-terrain) / <alpha-value>
+  );
   --color-brand-grey-fog: rgb(var(--brand-grey-fog) / <alpha-value>);
   --color-success: rgb(var(--success) / <alpha-value>);
   --color-card: rgb(var(--card) / <alpha-value>);
@@ -111,19 +171,57 @@
   --color-basalt: rgb(var(--basalt) / <alpha-value>);
   --color-ore: rgb(var(--ore) / <alpha-value>);
 
+  /* Scanminers signature theme (sm-*) */
+  --color-sm-bg: rgb(var(--sm-bg) / <alpha-value>);
+  --color-sm-surface: rgb(var(--sm-surface) / <alpha-value>);
+  --color-sm-surface-elevated: rgb(var(--sm-surface-elevated) / <alpha-value>);
+  --color-sm-primary: rgb(var(--sm-primary) / <alpha-value>);
+  --color-sm-accent: rgb(var(--sm-accent) / <alpha-value>);
+  --color-sm-text: rgb(var(--sm-text) / <alpha-value>);
+  --color-sm-muted: rgb(var(--sm-text-muted) / <alpha-value>);
+  --color-sm-subtle: rgb(var(--sm-text-subtle) / <alpha-value>);
+  --color-sm-border-subtle: rgba(var(--sm-border-subtle) / 0.35);
+  --color-sm-border-strong: rgba(var(--sm-border-strong) / 0.65);
+
   /* Shadows and radius */
-  --shadow-soft: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
   --shadow-glow: 0 0 20px rgba(12, 63, 107, 0.18);
+  --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.75);
+  --shadow-glow-sm: 0 0 40px rgba(34, 211, 238, 0.2);
   --radius: var(--radius);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 6px);
   --radius-2xl: calc(var(--radius) + 12px);
+
+  /* Timing functions */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Preserve system fonts as fallback; Geist fonts are loaded in layout */
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: rgb(var(--fg));
+  background-color: rgb(var(--sm-bg));
+  background-image: radial-gradient(
+    circle at top,
+    rgba(15, 23, 42, 0.9) 0,
+    rgba(2, 6, 23, 1) 45%,
+    rgba(2, 6, 23, 1) 100%
+  );
+  position: relative;
+}
+
+/* Starfield overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("/images/brand/stars-soft.webp");
+  background-repeat: repeat;
+  background-size: 600px 600px;
+  opacity: 0.12;
 }
 
 h1,
@@ -167,29 +265,67 @@ small,
   scroll-margin-top: 100px;
 }
 
-.mdx h1 { font-size: 2rem; margin-top: 1.75rem; margin-bottom: 1rem; }
-.mdx h2 { font-size: 1.5rem; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-.mdx h3 { font-size: 1.25rem; margin-top: 1.25rem; margin-bottom: 0.5rem; }
-.mdx h4 { font-size: 1.125rem; margin-top: 1rem; margin-bottom: 0.5rem; }
+.mdx h1 {
+  font-size: 2rem;
+  margin-top: 1.75rem;
+  margin-bottom: 1rem;
+}
+.mdx h2 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.mdx h3 {
+  font-size: 1.25rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.mdx h4 {
+  font-size: 1.125rem;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
 
-.mdx p { margin: 1rem 0; }
+.mdx p {
+  margin: 1rem 0;
+}
 .mdx ul,
-.mdx ol { margin: 0.75rem 0 1rem 1.25rem; }
-.mdx ul { list-style: disc; }
-.mdx ol { list-style: decimal; }
-.mdx li { margin: 0.25rem 0; }
+.mdx ol {
+  margin: 0.75rem 0 1rem 1.25rem;
+}
+.mdx ul {
+  list-style: disc;
+}
+.mdx ol {
+  list-style: decimal;
+}
+.mdx li {
+  margin: 0.25rem 0;
+}
 
 .mdx a {
   color: rgb(var(--primary));
   text-underline-offset: 3px;
 }
-.mdx a:hover { text-decoration: underline; }
+.mdx a:hover {
+  text-decoration: underline;
+}
 
 .mdx code:not(pre code) {
-  background: rgba(0,0,0,0.05);
+  background: rgba(0, 0, 0, 0.05);
   padding: 0.15rem 0.35rem;
   border-radius: 0.25rem;
-  font-family: var(--font-geist-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+  font-family: var(
+    --font-geist-mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace
+  );
   font-size: 0.95em;
 }
 
@@ -199,11 +335,11 @@ small,
   padding: 1rem;
   border-radius: 0.5rem;
   overflow-x: auto;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .mdx blockquote {
-  border-left: 3px solid rgba(0,0,0,0.15);
+  border-left: 3px solid rgba(0, 0, 0, 0.15);
   padding-left: 0.75rem;
   margin: 1rem 0;
   color: #525252; /* neutral-600 */
@@ -212,7 +348,7 @@ small,
 
 .mdx hr {
   border: none;
-  border-top: 1px solid rgba(0,0,0,0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   margin: 2rem 0;
 }
 
@@ -223,10 +359,13 @@ small,
 }
 .mdx th,
 .mdx td {
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0.5rem 0.75rem;
 }
-.mdx thead th { background: rgba(0,0,0,0.03); text-align: left; }
+.mdx thead th {
+  background: rgba(0, 0, 0, 0.03);
+  text-align: left;
+}
 
 .mdx img {
   display: block;
@@ -237,18 +376,32 @@ small,
 }
 
 @media (prefers-color-scheme: dark) {
-  .mdx a { color: rgb(var(--primary)); }
-  .mdx code:not(pre code) { background: rgba(255,255,255,0.08); }
-  .mdx blockquote { border-left-color: rgba(255,255,255,0.2); color: #a3a3a3; }
-  .mdx hr { border-top-color: rgba(255,255,255,0.12); }
+  .mdx a {
+    color: rgb(var(--primary));
+  }
+  .mdx code:not(pre code) {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .mdx blockquote {
+    border-left-color: rgba(255, 255, 255, 0.2);
+    color: #a3a3a3;
+  }
+  .mdx hr {
+    border-top-color: rgba(255, 255, 255, 0.12);
+  }
   .mdx th,
-  .mdx td { border-color: rgba(255,255,255,0.12); }
-  .mdx thead th { background: rgba(255,255,255,0.05); }
+  .mdx td {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .mdx thead th {
+    background: rgba(255, 255, 255, 0.05);
+  }
 }
 
 /* Consistent, reduced-motion-safe hover/tap micro-interactions */
 .pressable {
-  transition: transform .2s cubic-bezier(0.22,1,0.36,1), box-shadow .2s ease;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.2s ease;
   will-change: transform;
 }
 .pressable:hover {
@@ -268,18 +421,30 @@ small,
 
 /* Custom animations for cinematic hero */
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes spin-slower {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes spin-slowest {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-spin-slow {
@@ -317,4 +482,3 @@ small,
 :is(.dark .bg-mineral-overlay) {
   background-color: rgba(0, 0, 0, 0.6);
 }
-

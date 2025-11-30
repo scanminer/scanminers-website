@@ -6,6 +6,7 @@ import { LeadContactBadge } from "@/components/admin/leads/LeadContactBadge";
 import { LeadTimeline } from "@/components/admin/leads/LeadTimeline";
 import { LeadAiPanel } from "@/components/admin/leads/LeadAiPanel";
 import { LeadAiInsightPanel } from "@/components/admin/leads/LeadAiInsightPanel";
+import { LeadBrainPanel } from "@/components/admin/leads/LeadBrainPanel";
 import { LeadActions } from "@/components/admin/leads/LeadActions";
 import { getAdminActorName } from "@/lib/admin-actor";
 import { reportServerError } from "@/lib/server-logger";
@@ -159,6 +160,14 @@ export default async function LeadDetailPage(props: {
             aiUrgency={lead.aiUrgency}
             aiFitScore={lead.aiFitScore}
             aiConfidence={lead.aiConfidence}
+          />
+          <LeadBrainPanel
+            leadId={lead.id}
+            leadTitle={lead.goal || lead.message || lead.name}
+            leadDescription={lead.message || lead.additionalContext || ""}
+            commodities={lead.commodities}
+            region={lead.region || lead.regions || ""}
+            context={resolvedContext || ""}
           />
         </div>
       </section>

@@ -1,40 +1,15 @@
-name = "scanminers"
+name = "scanminers-website"
 main = ".open-next/worker.js"
 compatibility_date = "2025-09-23"
 compatibility_flags = ["nodejs_compat"]
 
-# OpenNext Cloudflare adapter configuration
-# The adapter builds a Worker for dynamic routes/API and serves static assets
-# This is the recommended deployment method for full-stack Next.js on Cloudflare
-
-# Assets configuration
-# OpenNext generates static assets in .open-next/assets
-# run_worker_first=false (default) keeps asset hits off billed Worker - recommended
 [assets]
 directory = ".open-next/assets"
 binding = "ASSETS"
 
-# Observability configuration
-# Enable logs and traces for debugging and monitoring
-[observability]
-enabled = true
-head_sampling_rate = 1
-
-[observability.logs]
-enabled = true
-head_sampling_rate = 1
-persist = true
-invocation_logs = true
-
-[observability.traces]
-enabled = true
-persist = true
-head_sampling_rate = 1
-
-# Environment variables (non-secret)
 [vars]
-NEXTAUTH_URL = "https://scanminers.com"
-NEXT_PUBLIC_SITE_URL = "https://scanminers.com"
+NEXTAUTH_URL = "https://scanminers-website.workers.dev"
+NEXT_PUBLIC_SITE_URL = "https://scanminers-website.workers.dev"
 ADMIN_ALLOWED_EMAIL_DOMAINS = "scanminers.com"
 ADMIN_ALLOWED_EMAILS = "admin@scanminers.com,mehrtash@scanminers.com,amin@scanminers.com"
 ADMIN_ALLOWED_GITHUB_LOGINS = "scanminers-founder"
@@ -55,12 +30,8 @@ ENABLE_INITIATE_API = "true"
 WEEKLY_TOKENS = "6000"
 MONTHLY_TOKENS = "20000"
 
-# D1 Database for Leads
-# To set up: run `bash scripts/setup-d1.sh`
-# Local dev: automatically creates .wrangler/state/v3/d1 directory
-# Production: create with `wrangler d1 create scanminers-leads` and update database_id below
 [[d1_databases]]
 binding = "LEADS_DB"
 database_name = "scanminers-leads-v2"
-database_id = "d919665a-c650-4f1c-817f-bc6a3f729c54"  # Update with your actual D1 database ID
+database_id = "d919665a-c650-4f1c-817f-bc6a3f729c54"
 migrations_dir = "database/migrations"

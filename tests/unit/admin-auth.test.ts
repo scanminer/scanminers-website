@@ -10,6 +10,9 @@ const baseConfig: AdminAuthConfig = {
   githubClientId: "",
   githubClientSecret: "",
   githubProviderEnabled: false,
+  googleClientId: "",
+  googleClientSecret: "",
+  googleProviderEnabled: false,
   hasAllowlist: false,
 };
 
@@ -20,8 +23,12 @@ describe("isUserAllowlisted", () => {
       allowedEmails: ["ops@scanminers.com"],
       hasAllowlist: true,
     };
-    expect(isUserAllowlisted({ email: "ops@scanminers.com" }, config)).toBe(true);
-    expect(isUserAllowlisted({ email: "OPS@SCANMINERS.COM" }, config)).toBe(true);
+    expect(isUserAllowlisted({ email: "ops@scanminers.com" }, config)).toBe(
+      true
+    );
+    expect(isUserAllowlisted({ email: "OPS@SCANMINERS.COM" }, config)).toBe(
+      true
+    );
   });
 
   it("matches GitHub handle", () => {
@@ -40,7 +47,9 @@ describe("isUserAllowlisted", () => {
       allowedDomains: ["scanminers.com"],
       hasAllowlist: true,
     };
-    expect(isUserAllowlisted({ email: "team@scanminers.com" }, config)).toBe(true);
+    expect(isUserAllowlisted({ email: "team@scanminers.com" }, config)).toBe(
+      true
+    );
     expect(isUserAllowlisted({ email: "team@other.com" }, config)).toBe(false);
   });
 
@@ -50,7 +59,9 @@ describe("isUserAllowlisted", () => {
       allowedDomains: ["scanminers.com"],
       hasAllowlist: true,
     };
-    expect(isUserAllowlisted({ email: "Ops@Scanminers.com" }, config)).toBe(true);
+    expect(isUserAllowlisted({ email: "Ops@Scanminers.com" }, config)).toBe(
+      true
+    );
   });
 
   it("denies users without identifiers when allowlist is set", () => {
@@ -64,7 +75,9 @@ describe("isUserAllowlisted", () => {
   });
 
   it("denies when allowlist empty and no bypass", () => {
-    expect(isUserAllowlisted({ email: "anyone@scanminers.com" }, baseConfig)).toBe(false);
+    expect(
+      isUserAllowlisted({ email: "anyone@scanminers.com" }, baseConfig)
+    ).toBe(false);
   });
 
   it("allows all when bypass flag true", () => {

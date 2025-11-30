@@ -1,52 +1,100 @@
 ---
 slug: bauxite-payas-islahiye
-title: "Bauxite Prospectivity in Payas–İslahiye, SE Turkey"
+title: "Remote sensing study for bauxite exploration in the Payas–İslahiye region, SE Turkey"
 publishedAt: 2025-11-01
-summary: "Proprietary analysis using multisensor fusion identified 7 high-potential zones and 183 priority points for bauxite exploration in SE Turkey, mapping 33 existing mines."
-region: "Payas–İslahiye, Turkey"
+summary: "A multi-sensor remote sensing and fusion mapping study to highlight new bauxite potential in a complex, vegetated terrain — delivering ranked zones, target points and context for existing mines."
+region: "Payas–İslahiye, SE Turkey"
 commodity:
-  - Aluminum
   - Bauxite
+  - Aluminum
 provenance:
-  - "Methodology: Proprietary Scanminers AI-MPM Fusion"
-  - "Data Sources: Landsat-8, ASTER, PALSAR"
-  - "Validation: Correlated with known mine locations"
+  - "Multi-sensor satellite stack: optical, radar, elevation and hyperspectral sources"
+  - "Derived alteration and lithological indicators relevant to bauxite (clay, carbonate, iron-rich signatures)"
+  - "Mapped structural and morphological features (lineaments, slopes, terrain breaks)"
+  - "Applied fusion framework to weight evidence layers and generate continuous prospectivity maps"
 citations:
   - "USGS Mineral Commodity Summaries 2024"
-image: "/images/case-studies/bauxite-turkey-map.jpg"
-imageAlt: "A prospectivity map of the Payas–İslahiye region in Turkey showing bauxite potential in red and yellow zones."
+  - "Regional geology and bauxite deposits of SE Turkey (published literature)"
+image: "/images/maps/bauxite-fusion-regional.png"
+imageAlt: "Prospectivity map showing high-potential bauxite zones in the Payas–İslahiye region of Southeast Turkey"
 imagePrompt: >-
   A high-resolution prospectivity map with glowing target cells across the
   Payas–İslahiye range, annotated with mines and confidence bands.
 tags:
-  - Turkey
   - Bauxite
-  - Prospectivity
+  - Remote sensing
+  - Multi-sensor fusion
+  - Prospectivity mapping
+  - Turkey
 review_status: approved
 ai_generated: false
 ---
-## Objective
 
-To delineate bauxite-rich zones in the Payas–İslahiye region of Southeast Turkey using a rapid, data-driven approach that minimizes initial fieldwork.
+## Project at a glance
 
-## Methodology
+The client asked Scanminers to run a remote sensing study over the Payas–İslahiye region in Southeast Turkey, a bauxite province with dense vegetation and complex geology. The goal was to identify new bauxite potential beyond known mines, and to produce fusion maps and target lists that could guide future fieldwork and drilling.
 
-Our AI-MPM engine executed a multi-stage workflow consistent with our core technology stack:
+**Key outcomes:**
 
-1.  **Ingest & Harmonize**: We processed ASTER, Landsat-8, and PALSAR satellite data. This included radiometric and atmospheric corrections (QUAC, Log-Residual) to ensure data consistency.
-2.  **AI & Statistical Fusion**: Key techniques included Directed Principal Component Analysis (DPCA) and Mixture-Tuned Matched Filtering (MTMF) to identify mineralogical signatures associated with bauxite. Structural features were extracted using ALE & FPCS.
-3.  **Rank & Validate**: An Analytical Hierarchy Process (AHP) model was used to transparently weight the evidence layers, producing a final prospectivity map.
+- **7** high-potential zones identified
+- **183** high-priority target points pinpointed
+- **33** existing mines mapped for context
+- Regional-scale study covering the **Payas–İslahiye bauxite province**
 
-## Results
+---
 
-The analysis successfully identified:
-- **7 high-potential zones** for targeted exploration.
-- **183 priority points** with coordinates for field verification (within 500-1000m buffers).
-- **33 known mines** were accurately mapped, validating the model's predictive power.
+## Challenge
 
-Quantitative validation:
-- Cross-validated hit rate of predicted targets against known mines: **92%** within a 1 km radius.
-- Area under curve (AUC) for the prospectivity ranking vs. ground truth: **0.91**.
-- Aggregate extent of top-ranked zones: **~145 km²**.
+The Payas–İslahiye region hosts significant bauxite mineralisation but is covered by dense vegetation and complex topography. Traditional mapping alone makes it difficult to see the full extent of the system or to prioritise ground for follow-up. The client needed a way to look across the region consistently, highlight where new bauxite might occur, and understand how potential zones relate to existing mines and geological controls.
 
-This case demonstrates the engine's capability to rapidly narrow down vast regions into actionable, high-probability targets, supporting faster and lower-impact mineral discovery.
+**Key challenges:**
+
+- Dense vegetation and rugged terrain obscure surface geology
+- Existing mines and prospects provide clues, but don't show the full opportunity
+- The client needed regional-scale visibility to focus limited exploration budgets
+
+---
+
+## Approach: multi-sensor fusion tuned to bauxite
+
+Scanminers combined geological research on the local bauxite system with multi-sensor satellite data to build a set of evidence layers tailored to bauxite. These layers were then fused using a structured, explainable approach to produce prospectivity maps and ranked targets.
+
+**What we did:**
+
+1. Reviewed geology, mineralogical and structural context of the Payas–İslahiye bauxite province
+2. Assembled a **multi-sensor satellite stack** (optical, radar, elevation, and other relevant sources) covering the study area
+3. Derived **alteration and lithological indicators** relevant to bauxite (e.g. clay, carbonate and iron-rich signatures)
+4. Mapped **structural and morphological features** (lineaments, slopes, terrain breaks) that can control bauxite accumulation
+5. Applied a **fusion framework** to weight evidence layers and generate continuous prospectivity maps for bauxite
+
+---
+
+## Results: high-potential zones, target points and mine context
+
+The fusion maps revealed patterns in alteration, structure and existing mining that are not obvious from any single dataset. They provided the client with a clear set of zones and points to prioritise in the next phase of exploration.
+
+**Delivered outputs:**
+
+- **Seven high-potential zones** for bauxite mineralisation were identified across the study area
+- Within these zones, **183 high-priority target points** were pinpointed as potential sites for follow-up work
+- **33 existing mines** were mapped and integrated into the analysis, providing essential context and validation for the detected patterns
+- The outputs were delivered as **fusion maps, target lists with coordinates, and a structured report**, ready to load into GIS and use for planning
+
+---
+
+## How the client can use the outputs
+
+The study doesn't replace fieldwork — it focuses it. The client can now use the fusion maps, zones and target lists to plan a staged exploration program.
+
+**Next steps:**
+
+- Prioritise field verification in the seven high-potential zones
+- Use ranked target points to design **geochemical, geophysical and mapping campaigns**
+- Compare new field observations and drill results with the fusion maps to refine the model over time
+- Extend the same workflow to **adjacent areas** or new licences if results are encouraging
+
+---
+
+## Want a similar study for your ground?
+
+If you're exploring for bauxite or other critical minerals in complex or covered terrain, Scanminers can run a similar remote sensing and AI study for your region — from multi-sensor fusion maps to ranked targets and decision-ready reports.

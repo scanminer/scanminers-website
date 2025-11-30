@@ -1,0 +1,31 @@
+{
+  "contact_form": {
+    "name": "Test User",
+    "email": "test@example.com",
+    "company": "Test Mining Corp",
+    "message": "This is a test submission to verify the contact form is working correctly."
+  },
+  "consultation_form": {
+    "name": "Jane Smith",
+    "email": "jane.smith@testmining.com",
+    "company": "Global Minerals Ltd",
+    "role": "Exploration Manager",
+    "regions": "Western Australia, Nevada",
+    "commodities": ["Copper", "Gold", "Lithium"],
+    "dataSources": ["Sentinel-2", "Landsat-8"],
+    "stage": "Advanced Exploration",
+    "timing": "Q1 2026",
+    "context": "Looking for prospectivity mapping in our tenements",
+    "consent": true
+  },
+  "prospectivity_brief": {
+    "name": "John Doe",
+    "email": "john.doe@explorationco.com",
+    "company": "Discovery Exploration Inc",
+    "goal": "Identify high-priority lithium targets",
+    "region": "James Bay, Quebec",
+    "commodity": "Lithium",
+    "additionalContext": "We have 50km² of tenements and need to prioritize drill targets",
+    "expectation": true
+  }
+}
