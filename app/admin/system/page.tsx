@@ -80,13 +80,13 @@ export default function SystemPage() {
       <h2 className="mb-4 text-xl font-medium">System</h2>
       
       {/* Authentication Status Section */}
-      <div className="mb-6 rounded-lg border border-slate-300 bg-slate-50 p-4">
-        <h3 className="mb-3 text-lg font-medium">Authentication Status</h3>
+      <div className="mb-6 rounded-lg border border-slate-700 bg-slate-800/50 p-4">
+        <h3 className="mb-3 text-lg font-medium text-slate-100">Authentication Status</h3>
         
         {warnings.length > 0 && (
           <div className="mb-4 space-y-2">
             {warnings.map((warning, i) => (
-              <div key={i} className="rounded border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              <div key={i} className="rounded border border-red-500/50 bg-red-900/30 px-3 py-2 text-sm text-red-300">
                 {warning}
               </div>
             ))}
@@ -95,50 +95,50 @@ export default function SystemPage() {
         
         <dl className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <dt className="font-medium">Environment:</dt>
-            <dd className={isProduction ? "text-red-600 font-semibold" : "text-green-600"}>
+            <dt className="font-medium text-slate-300">Environment:</dt>
+            <dd className={isProduction ? "text-red-400 font-semibold" : "text-green-400"}>
               {isProduction ? "PRODUCTION" : "Development"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="font-medium">NEXTAUTH_SECRET:</dt>
-            <dd className={nexauthSecretPresent ? "text-green-600" : "text-red-600"}>
+            <dt className="font-medium text-slate-300">NEXTAUTH_SECRET:</dt>
+            <dd className={nexauthSecretPresent ? "text-green-400" : "text-red-400"}>
               {nexauthSecretPresent ? "✅ Configured" : "❌ Missing"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="font-medium">ADMIN_USER:</dt>
-            <dd className={adminUserPresent ? "text-green-600" : "text-amber-600"}>
+            <dt className="font-medium text-slate-300">ADMIN_USER:</dt>
+            <dd className={adminUserPresent ? "text-green-400" : "text-amber-400"}>
               {adminUserPresent ? "✅ Configured" : "⚠️ Using default"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="font-medium">ADMIN_PASS:</dt>
-            <dd className={adminPassPresent ? "text-green-600" : "text-red-600"}>
+            <dt className="font-medium text-slate-300">ADMIN_PASS:</dt>
+            <dd className={adminPassPresent ? "text-green-400" : "text-red-400"}>
               {adminPassPresent ? "✅ Configured" : "❌ Missing"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="font-medium">Password Login:</dt>
-            <dd className={authConfig.passwordFallbackEnabled ? "text-green-600" : "text-amber-600"}>
+            <dt className="font-medium text-slate-300">Password Login:</dt>
+            <dd className={authConfig.passwordFallbackEnabled ? "text-green-400" : "text-amber-400"}>
               {authConfig.passwordFallbackEnabled ? "✅ Enabled" : "⚠️ Disabled"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="font-medium">GitHub OAuth:</dt>
-            <dd className={authConfig.githubProviderEnabled ? "text-green-600" : "text-slate-500"}>
+            <dt className="font-medium text-slate-300">GitHub OAuth:</dt>
+            <dd className={authConfig.githubProviderEnabled ? "text-green-400" : "text-slate-500"}>
               {authConfig.githubProviderEnabled ? "✅ Enabled" : "— Not configured"}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="font-medium">Auth Bypass:</dt>
-            <dd className={authConfig.bypass ? "text-red-600 font-semibold" : "text-green-600"}>
+            <dt className="font-medium text-slate-300">Auth Bypass:</dt>
+            <dd className={authConfig.bypass ? "text-red-400 font-semibold" : "text-green-400"}>
               {authConfig.bypass ? "🚨 ACTIVE" : "✅ Disabled"}
             </dd>
           </div>
         </dl>
         
-        <div className="mt-4 rounded border border-blue-200 bg-blue-50 px-3 py-2 text-xs text-blue-800">
+        <div className="mt-4 rounded border border-blue-500/30 bg-blue-900/20 px-3 py-2 text-xs text-blue-300">
           <strong>Primary auth method:</strong> {adminPassPresent ? "Password (credentials)" : "Not configured"}<br/>
           <strong>Secondary auth method:</strong> {authConfig.githubProviderEnabled ? "GitHub OAuth" : "Not configured"}
         </div>
