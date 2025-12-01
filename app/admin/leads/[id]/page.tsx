@@ -77,6 +77,7 @@ export default async function LeadDetailPage(props: {
         </div>
         <LeadActions
           leadId={lead.id}
+          leadName={lead.name}
           status={lead.status}
           type={lead.type}
           source={lead.source}

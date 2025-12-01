@@ -33,7 +33,7 @@ export default async function ConsultationPage({ searchParams }: PageProps) {
               </div>
               <h1 className="text-4xl font-bold tracking-tight text-fg">
                 60-Minute{" "}
-                <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent font-extrabold">
+                <span className="bg-gradient-to-r from-teal-400 to-teal-300 bg-clip-text text-transparent font-extrabold">
                   Critical Minerals
                 </span>{" "}
                 Prospectivity Consultation
