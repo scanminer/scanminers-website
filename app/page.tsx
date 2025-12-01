@@ -460,7 +460,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl font-bold">
                 From raw data to{" "}
-                <span className="bg-gradient-to-r from-accent to-secondary bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent font-extrabold">
                   drill-ready targets
                 </span>
               </h2>
