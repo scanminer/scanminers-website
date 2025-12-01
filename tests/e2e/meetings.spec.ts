@@ -48,7 +48,7 @@ test.describe.skip("Meetings Feature E2E Tests", () => {
     // Check participants are shown
     await expect(page.getByText(/mahmood/i)).toBeVisible();
     await expect(page.getByText(/dr\. amin/i)).toBeVisible();
-    await expect(page.getByText(/mehrtash/i)).toBeVisible();
+    await expect(page.getByText(/dr\. mehrtash/i)).toBeVisible();
   });
 
   test("meeting notes display actual seed content", async ({ page }) => {
