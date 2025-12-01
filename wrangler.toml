@@ -8,8 +8,8 @@ directory = ".open-next/assets"
 binding = "ASSETS"
 
 [vars]
-NEXTAUTH_URL = "https://scanminers-website.workers.dev"
-NEXT_PUBLIC_SITE_URL = "https://scanminers-website.workers.dev"
+NEXTAUTH_URL = "https://scanminers.com"
+NEXT_PUBLIC_SITE_URL = "https://scanminers.com"
 ADMIN_ALLOWED_EMAIL_DOMAINS = "scanminers.com"
 ADMIN_ALLOWED_EMAILS = "admin@scanminers.com,mehrtash@scanminers.com,amin@scanminers.com"
 ADMIN_ALLOWED_GITHUB_LOGINS = "scanminers-founder"
