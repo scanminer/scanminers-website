@@ -206,7 +206,7 @@ export default function AboutPage() {
           </div>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             Our{" "}
-            <span className="bg-gradient-to-r from-earth via-accent to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 bg-clip-text text-transparent font-extrabold">
               scientific backbone
             </span>
           </h2>
@@ -404,7 +404,7 @@ export default function AboutPage() {
           </div>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             What{" "}
-            <span className="bg-gradient-to-r from-secondary via-accent to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent font-extrabold">
               we believe
             </span>
           </h2>
@@ -449,7 +449,7 @@ export default function AboutPage() {
           </div>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
             How we{" "}
-            <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent font-extrabold">
               work with you
             </span>
           </h2>

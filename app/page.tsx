@@ -359,7 +359,7 @@ export default function Home() {
                     {card.body}
                   </p>
                   <div className="border-t border-border/50 pt-4">
-                    <p className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    <p className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
                       {card.stat}
                     </p>
                     <p className="mt-1 text-xs font-medium uppercase tracking-[0.2em] text-muted">
@@ -492,7 +492,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl font-bold">
                 Technical implementation{" "}
-                <span className="bg-gradient-to-r from-earth to-primary bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 bg-clip-text text-transparent font-extrabold">
                   by the numbers
                 </span>
               </h2>
@@ -550,7 +550,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl font-bold">
                 Two fast paths{" "}
-                <span className="bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent font-extrabold">
                   into the funnel
                 </span>
               </h2>
@@ -618,7 +618,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl font-bold">
                 Active programs and{" "}
-                <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 bg-clip-text text-transparent font-extrabold">
                   upcoming slots
                 </span>
               </h2>
@@ -651,7 +651,7 @@ export default function Home() {
               </div>
               <h2 className="text-3xl font-bold">
                 Latest work{" "}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-400 bg-clip-text text-transparent font-extrabold">
                   from the team
                 </span>
               </h2>
