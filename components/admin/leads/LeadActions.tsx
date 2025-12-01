@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
-import { Mail } from "lucide-react";
+import { Mail, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import type { LeadStatus, LeadType } from "@/lib/lead-store";
@@ -15,6 +16,7 @@ import { convertLeadToProjectAction } from "@/app/admin/leads/[id]/actions";
 
 type LeadActionsProps = {
   leadId: string;
+  leadName: string;
   status: LeadStatus;
   type: LeadType;
   source: string;
@@ -24,6 +26,7 @@ type LeadActionsProps = {
 
 export function LeadActions({
   leadId,
+  leadName,
   status,
   type,
   source,
@@ -126,6 +129,17 @@ export function LeadActions({
         disabled={converting}
       >
         {converting ? "Creating project…" : "Convert to project"}
+      </Button>
+      <Button asChild variant="outline">
+        <Link
+          href={`/admin/meetings/new?leadId=${leadId}&leadName=${encodeURIComponent(
+            leadName
+          )}`}
+          className="gap-2"
+        >
+          <Calendar className="h-4 w-4" />
+          Log meeting
+        </Link>
       </Button>
       {draft ? (
         <p className="text-xs text-muted-foreground">

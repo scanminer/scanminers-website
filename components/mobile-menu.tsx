@@ -39,10 +39,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   if (!isOpen) return null;
 
   const navLinks = [
-    { href: "/about", label: "About" },
-    { href: "/technologies", label: "Technologies" },
-    { href: "/insights", label: "Insights" },
+    { href: "/solutions", label: "Solutions" },
+    { href: "/how-it-works", label: "How It Works" },
     { href: "/case-studies", label: "Case Studies" },
+    { href: "/insights", label: "Insights" },
+    { href: "/about", label: "About" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -65,7 +66,11 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         <div className="flex h-full flex-col gap-6 border-l-2 border-primary/20 bg-background p-6 shadow-2xl">
           {/* Header */}
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5" onClick={onClose}>
+            <Link
+              href="/"
+              className="flex items-center gap-2.5"
+              onClick={onClose}
+            >
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-brand-blue-deep to-brand-green-mineral shadow-md">
                 <span className="text-base font-bold text-white">S</span>
               </div>
@@ -157,15 +162,24 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               AI-Powered Critical Minerals Prospectivity
             </p>
             <div className="flex items-center gap-4 text-xs text-muted">
-              <Link href="/legal/privacy" className="hover:text-fg/80 transition-colors">
+              <Link
+                href="/legal/privacy"
+                className="hover:text-fg/80 transition-colors"
+              >
                 Privacy
               </Link>
               <span>•</span>
-              <Link href="/legal/terms" className="hover:text-fg/80 transition-colors">
+              <Link
+                href="/legal/terms"
+                className="hover:text-fg/80 transition-colors"
+              >
                 Terms
               </Link>
               <span>•</span>
-              <Link href="/contact" className="hover:text-fg/80 transition-colors">
+              <Link
+                href="/contact"
+                className="hover:text-fg/80 transition-colors"
+              >
                 Contact
               </Link>
             </div>

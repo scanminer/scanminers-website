@@ -22,28 +22,30 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Scanminers",
-  description: "Geospatial AI for mineral exploration: insights, case studies, and research.",
+  description:
+    "Geospatial AI for mineral exploration: insights, case studies, and research.",
   other: {
     "application/ld+json": JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Organization",
-      "name": "Scanminers",
-      "url": "https://www.scanminers.com",
-      "description": "GeoAI platform for critical minerals exploration using multi-sensor remote sensing and explainable AI.",
-      "founder": [
+      name: "Scanminers",
+      url: "https://www.scanminers.com",
+      description:
+        "GeoAI platform for critical minerals exploration using multi-sensor remote sensing and explainable AI.",
+      founder: [
         {
           "@type": "Person",
-          "name": "Dr. Amin Beiranvand Pour",
-          "jobTitle": "Co-Founder & Chief Scientist"
+          name: "Dr. Amin Beiranvand Pour",
+          jobTitle: "Co-Founder & Chief Scientist",
         },
         {
           "@type": "Person",
-          "name": "Mahmood Asadi",
-          "jobTitle": "Co-Founder & Chief AI & Product Architect"
-        }
-      ]
-    })
-  }
+          name: "Mahmood Asadi",
+          jobTitle: "Co-Founder & Chief AI & Product Architect",
+        },
+      ],
+    }),
+  },
 };
 
 export default function RootLayout({
@@ -54,8 +56,12 @@ export default function RootLayout({
   const cfAnalyticsToken = process.env.NEXT_PUBLIC_CF_WEB_ANALYTICS_TOKEN;
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}>
-        <Suspense fallback={null}><SentryInit /></Suspense>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} bg-[rgb(var(--sm-bg))] text-[rgb(var(--sm-text))] antialiased overflow-x-hidden`}
+      >
+        <Suspense fallback={null}>
+          <SentryInit />
+        </Suspense>
         <ThemeProvider>
           <Providers>
             <Header />
@@ -68,20 +74,31 @@ export default function RootLayout({
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                   {/* Company */}
                   <div>
-                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Company</h3>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
+                      Company
+                    </h3>
                     <ul className="space-y-2">
                       <li>
-                        <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/about"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           About
                         </Link>
                       </li>
                       <li>
-                        <Link href="/technologies" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/technologies"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Technologies
                         </Link>
                       </li>
                       <li>
-                        <Link href="/partners" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/partners"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Partners
                         </Link>
                       </li>
@@ -90,30 +107,47 @@ export default function RootLayout({
 
                   {/* Resources */}
                   <div>
-                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Resources</h3>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
+                      Resources
+                    </h3>
                     <ul className="space-y-2">
                       <li>
-                        <Link href="/insights" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/insights"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Insights
                         </Link>
                       </li>
                       <li>
-                        <Link href="/case-studies" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/case-studies"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Case Studies
                         </Link>
                       </li>
                       <li>
-                        <Link href="/prospectivity-brief" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/prospectivity-brief"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Prospectivity Brief
                         </Link>
                       </li>
                       <li>
-                        <Link href="/consultation" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/consultation"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Consultation
                         </Link>
                       </li>
                       <li>
-                        <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/contact"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Contact
                         </Link>
                       </li>
@@ -122,20 +156,31 @@ export default function RootLayout({
 
                   {/* Legal */}
                   <div>
-                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Legal</h3>
+                    <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">
+                      Legal
+                    </h3>
                     <ul className="space-y-2">
                       <li>
-                        <Link href="/legal/terms" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/legal/terms"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Terms of Use
                         </Link>
                       </li>
                       <li>
-                        <Link href="/legal/privacy" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/legal/privacy"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Privacy Policy
                         </Link>
                       </li>
                       <li>
-                        <Link href="/legal/cookies" className="text-sm text-muted-foreground hover:text-foreground">
+                        <Link
+                          href="/legal/cookies"
+                          className="text-sm text-muted-foreground hover:text-foreground"
+                        >
                           Cookie Policy
                         </Link>
                       </li>
@@ -145,7 +190,8 @@ export default function RootLayout({
 
                 <div className="mt-8 pt-8 border-t border-border">
                   <p className="text-xs text-muted-foreground text-center">
-                    © {new Date().getFullYear()} Scanminers. All rights reserved.
+                    © {new Date().getFullYear()} Scanminers. All rights
+                    reserved.
                   </p>
                 </div>
               </div>

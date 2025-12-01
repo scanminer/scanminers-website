@@ -1,97 +1,366 @@
-import type { Metadata } from "next";
-import { absoluteUrl } from "@/lib/url";
-import { ContactForm } from "@/components/contact-form";
-import { ArrowUpRight, CheckCircle2, Clock } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Contact | Scanminers",
-  description: "Request a demo or talk with our team about your exploration program.",
-  alternates: { canonical: absoluteUrl("/contact") },
-  openGraph: {
-    title: "Contact | Scanminers",
-    description: "Request a demo or talk with our team about your exploration program.",
-    url: absoluteUrl("/contact"),
-    type: "website",
-    images: [{ url: absoluteUrl("/og-default.svg") }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Contact | Scanminers",
-    description: "Request a demo or talk with our team about your exploration program.",
-    images: [absoluteUrl("/og-default.svg")],
-  },
-};
-
-const steps = [
-  { label: "Scoping call", detail: "30 minutes with geology + data leads to define AOI, commodity mandate, and data custody." },
-  { label: "Data sync", detail: "Secure upload, GitHub PAT, or S3 presigned links—your choice. Turnaround starts immediately." },
-  { label: "Prospectivity board", detail: "Draft target tiers, rationale layers, and CMS-ready copy in ≤10 business days." },
-];
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ScrollReveal } from "@/components/marketing/scroll-reveal";
 
 export default function ContactPage() {
-  return (
-    <main className="min-h-screen px-6 py-12 sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-5xl space-y-10">
-        <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 via-primary/20 to-slate-900/60 px-6 py-10 text-white sm:px-10">
-          <p className="text-[0.65rem] uppercase tracking-[0.4em] text-white/70">Start a project</p>
-          <h1 className="mt-4 text-4xl font-semibold leading-tight sm:text-5xl">Share your area of interest and we’ll build the first board</h1>
-          <p className="mt-4 text-base text-white/85 sm:text-lg">
-            Send coordinates, existing datasets, or even a Decap brief link. The admin tools spin up a draft, regenerate imagery, and open a PR you can approve inside the CMS.
-          </p>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {steps.map((step) => (
-              <div key={step.label} className="rounded-2xl border border-white/15 bg-white/5 p-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">{step.label}</p>
-                <p className="mt-2 text-sm text-white/85">{step.detail}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    role: "",
+    location: "",
+    commodity: "",
+    stage: "concept",
+    message: "",
+  });
 
-        <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px]">
-          <div className="space-y-6 rounded-3xl border bg-card/70 p-6">
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-muted">What to include</p>
-              <h2 className="mt-2 text-2xl font-semibold text-foreground">Your note gets faster when we receive:</h2>
-            </div>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>AOI boundaries (KML/GeoJSON) or a simple description of the belt and commodity.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>Data inventory links—satellite scenes, airborne surveys, drill logs, ESG constraints.</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-primary" />
-                <span>Stakeholders we should invite (JV partners, regulators, marketing) so workflows stay governed.</span>
-              </li>
-            </ul>
-            <div className="rounded-2xl border border-border/70 bg-background/80 p-4 text-sm text-muted-foreground">
-              <p className="font-medium text-foreground">Need an NDA first?</p>
-              <p className="mt-1">We’ll countersign within one business day. Attach a link in the form or email <span className="font-semibold">legal@scanminers.com</span>.</p>
-            </div>
-            <div className="flex flex-wrap gap-3 text-sm text-muted">
-              <span className="inline-flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                Responses in <strong>≤24 hours</strong> on business days
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Dummy handler - just log and show success message
+    console.log("Form submission:", formData);
+    setSubmitted(true);
+
+    // Reset after 5 seconds
+    setTimeout(() => {
+      setSubmitted(false);
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        role: "",
+        location: "",
+        commodity: "",
+        stage: "concept",
+        message: "",
+      });
+    }, 5000);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero */}
+      <ScrollReveal>
+        <section className="py-20 lg:py-32">
+          <div className="container mx-auto max-w-4xl px-6 lg:px-8 text-center">
+            <Badge variant="primary" className="mb-6">
+              Request a Scan
+            </Badge>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              Tell us about your{" "}
+              <span className="text-[rgb(var(--sm-primary))]">
+                exploration project
               </span>
-              <span className="inline-flex items-center gap-2">
-                <ArrowUpRight className="h-4 w-4" />
-                Prefer email? contact@scanminers.com
-              </span>
-            </div>
+            </h1>
+            <p className="text-lg md:text-xl text-[rgb(var(--sm-text-muted))] mb-8 leading-relaxed max-w-3xl mx-auto">
+              Share your area of interest, target commodities, and project
+              stage.{" "}
+              <strong className="text-[rgb(var(--sm-text))]">
+                We&apos;ll respond with what a Scanminers remote sensing study
+                would deliver
+              </strong>
+              —typically within 48 hours.
+            </p>
           </div>
-          <div className="rounded-3xl border border-border/60 bg-background/90 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.12)]">
-            <h2 className="text-xl font-semibold text-foreground">Secure request form</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Protected by Cloudflare Turnstile. We reply via Resend with a scheduling link.</p>
-            <div className="mt-4">
-              <ContactForm />
+        </section>
+      </ScrollReveal>
+
+      {/* Form Section */}
+      <ScrollReveal>
+        <section className="py-16">
+          <div className="container mx-auto max-w-3xl px-6 lg:px-8">
+            <Card variant="elevated" className="p-8 md:p-12">
+              {submitted ? (
+                <div className="text-center py-12">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[rgba(var(--sm-primary)/0.15)] mx-auto mb-6">
+                    <svg
+                      className="h-8 w-8 text-[rgb(var(--sm-primary))]"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold mb-4">
+                    Thanks! We&apos;ll be in touch soon.
+                  </h2>
+                  <p className="text-[rgb(var(--sm-text-muted))] mb-8">
+                    We&apos;ve received your inquiry and will respond within 48
+                    hours with a preliminary assessment of what a Scanminers
+                    study could deliver for your project.
+                  </p>
+                  <Button
+                    onClick={() => setSubmitted(false)}
+                    variant="sm-secondary"
+                    size="lg"
+                  >
+                    Submit Another Request
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {/* Name */}
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                      >
+                        Name *
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                        placeholder="Your full name"
+                      />
+                    </div>
+
+                    {/* Email */}
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                      >
+                        Email *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                        placeholder="you@company.com"
+                      />
+                    </div>
+
+                    {/* Company */}
+                    <div>
+                      <label
+                        htmlFor="company"
+                        className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                      >
+                        Company *
+                      </label>
+                      <input
+                        type="text"
+                        id="company"
+                        name="company"
+                        required
+                        value={formData.company}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                        placeholder="Your company or organization"
+                      />
+                    </div>
+
+                    {/* Role */}
+                    <div>
+                      <label
+                        htmlFor="role"
+                        className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                      >
+                        Role
+                      </label>
+                      <input
+                        type="text"
+                        id="role"
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                        placeholder="e.g., Exploration Manager, Geologist"
+                      />
+                    </div>
+
+                    {/* Location */}
+                    <div>
+                      <label
+                        htmlFor="location"
+                        className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                      >
+                        Project Location *
+                      </label>
+                      <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        required
+                        value={formData.location}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                        placeholder="Region, country, or coordinates"
+                      />
+                    </div>
+
+                    {/* Commodity */}
+                    <div>
+                      <label
+                        htmlFor="commodity"
+                        className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                      >
+                        Target Commodity *
+                      </label>
+                      <input
+                        type="text"
+                        id="commodity"
+                        name="commodity"
+                        required
+                        value={formData.commodity}
+                        onChange={handleChange}
+                        className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                        placeholder="e.g., Lithium, Copper, REEs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Project Stage */}
+                  <div>
+                    <label
+                      htmlFor="stage"
+                      className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                    >
+                      Project Stage *
+                    </label>
+                    <select
+                      id="stage"
+                      name="stage"
+                      required
+                      value={formData.stage}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)]"
+                    >
+                      <option value="concept">Concept / Greenfield</option>
+                      <option value="early">Early Exploration</option>
+                      <option value="advanced">Advanced Exploration</option>
+                      <option value="production">
+                        Near Production / Development
+                      </option>
+                    </select>
+                  </div>
+
+                  {/* Message */}
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-semibold text-[rgb(var(--sm-text))] mb-2"
+                    >
+                      Additional Details
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border border-[rgba(var(--sm-border-subtle)/0.7)] bg-[rgba(var(--sm-surface)/0.5)] px-4 py-3 text-[rgb(var(--sm-text))] placeholder:text-[rgb(var(--sm-text-subtle))] focus:border-[rgb(var(--sm-primary))] focus:outline-none focus:ring-2 focus:ring-[rgba(var(--sm-primary)/0.2)] resize-none"
+                      placeholder="Tell us more about your project, existing data, or specific questions..."
+                    />
+                  </div>
+
+                  <div className="pt-4">
+                    <Button
+                      type="submit"
+                      variant="sm-primary"
+                      size="lg"
+                      className="w-full"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        Submit Request
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                    </Button>
+                  </div>
+
+                  <p className="text-xs text-center text-[rgb(var(--sm-text-subtle))]">
+                    By submitting this form, you agree to be contacted about
+                    Scanminers services.
+                  </p>
+                </form>
+              )}
+            </Card>
+          </div>
+        </section>
+      </ScrollReveal>
+
+      {/* Secondary Contact Info */}
+      <ScrollReveal>
+        <section className="py-16 pb-24">
+          <div className="container mx-auto max-w-3xl px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-4">
+                Prefer to reach out directly?
+              </h2>
+              <p className="text-[rgb(var(--sm-text-muted))]">
+                We&apos;re here to answer questions about prospectivity mapping,
+                data requirements, or engagement models.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card variant="default" className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(var(--sm-primary)/0.15)]">
+                    <Mail className="h-5 w-5 text-[rgb(var(--sm-primary))]" />
+                  </div>
+                  <h3 className="font-bold">Email</h3>
+                </div>
+                <a
+                  href="mailto:hello@scanminers.com"
+                  className="text-sm text-[rgb(var(--sm-primary))] hover:underline"
+                >
+                  hello@scanminers.com
+                </a>
+              </Card>
+
+              <Card variant="default" className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(var(--sm-accent)/0.15)]">
+                    <MapPin className="h-5 w-5 text-[rgb(var(--sm-accent))]" />
+                  </div>
+                  <h3 className="font-bold">Resources</h3>
+                </div>
+                <Link
+                  href="/case-studies"
+                  className="text-sm text-[rgb(var(--sm-accent))] hover:underline"
+                >
+                  View Case Studies →
+                </Link>
+              </Card>
             </div>
           </div>
         </section>
-      </div>
-    </main>
+      </ScrollReveal>
+    </div>
   );
 }

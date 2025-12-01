@@ -22,7 +22,9 @@
     "test:e2e": "playwright test",
     "prepare": "husky",
     "og:fetch": "node scripts/fetch-og-covers.mjs",
-    "generate-mineral-textures": "tsx scripts/generate-mineral-textures.ts"
+    "generate-mineral-textures": "tsx scripts/generate-mineral-textures.ts",
+    "brain:etl": "tsx scripts/brain-etl.ts",
+    "brain:etl:force": "tsx scripts/brain-etl.ts --force"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.2.2",
