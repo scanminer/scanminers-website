@@ -74,7 +74,11 @@ export type MeetingWithActions = MeetingRecord & {
 };
 
 // Known participants for the team
-export const KNOWN_PARTICIPANTS = ["Mahmood", "Dr. Amin", "Mehrtash"] as const;
+export const KNOWN_PARTICIPANTS = [
+  "Mahmood",
+  "Dr. Amin",
+  "Dr. Mehrtash",
+] as const;
 
 export type KnownParticipant = (typeof KNOWN_PARTICIPANTS)[number];
 

@@ -21,7 +21,7 @@ async function seedFirstMeeting() {
     title: "Core Team Alignment – Roles & Next 30 Days",
     type: "internal",
     dateTime,
-    participants: ["Mahmood", "Dr. Amin", "Mehrtash"],
+    participants: ["Mahmood", "Dr. Amin", "Dr. Mehrtash"],
     notes: NOTES,
     relatedLeadId: null,
     relatedProjectId: null,

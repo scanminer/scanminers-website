@@ -19,7 +19,7 @@ INSERT INTO meetings (
   'Core Team Alignment – Roles & Next 30 Days',
   '2025-12-01T10:30:00.000Z',
   'internal',
-  '["Mahmood", "Dr. Amin", "Mehrtash"]',
+  '["Mahmood", "Dr. Amin", "Dr. Mehrtash"]',
   NULL,
   NULL,
   '**Context**
