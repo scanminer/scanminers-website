@@ -1,26 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckCircle2, ArrowLeft } from "lucide-react";
-import { getMeetingWithActions, type MeetingType } from "@/lib/meeting-store";
+import { getMeetingWithActions } from "@/lib/meeting-store";
 import { MeetingOverviewCard } from "@/components/admin/meetings/MeetingOverviewCard";
 import { MeetingNotesCard } from "@/components/admin/meetings/MeetingNotesCard";
 import { MeetingActionsCard } from "@/components/admin/meetings/MeetingActionsCard";
 import { MeetingContextCard } from "@/components/admin/meetings/MeetingContextCard";
 
 export const revalidate = 0;
-
-function getTypeStyles(type: MeetingType) {
-  switch (type) {
-    case "internal":
-      return "bg-slate-700/60 text-slate-200 border-slate-600";
-    case "prospect":
-      return "bg-cyan-950/60 text-cyan-300 border-cyan-800";
-    case "client":
-      return "bg-emerald-950/60 text-emerald-300 border-emerald-800";
-    default:
-      return "bg-slate-800 text-slate-300";
-  }
-}
 
 function formatHeaderDate(value: string) {
   try {
