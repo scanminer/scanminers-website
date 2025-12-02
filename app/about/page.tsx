@@ -7,6 +7,8 @@ import {
   Lightbulb,
   Handshake,
   ExternalLink,
+  Brain,
+  Workflow,
 } from "lucide-react";
 import { absoluteUrl } from "@/lib/url";
 import { Button } from "@/components/ui/button";
@@ -202,25 +204,26 @@ export default function AboutPage() {
 
         <div className="mb-12 text-center relative z-10">
           <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full bg-earth/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-earth">
-            Leadership Team
+            Our Team
           </div>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Our{" "}
+            Scientific &{" "}
             <span className="bg-gradient-to-r from-teal-400 to-teal-300 bg-clip-text text-transparent font-extrabold">
-              scientific backbone
+              Operating Backbone
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Scanminers is built on{" "}
             <strong className="text-fg">
-              deep expertise in remote sensing, geoscience, and AI-driven
-              prospectivity modeling
+              deep expertise in remote sensing, geoscience, AI-driven
+              prospectivity modeling, and product engineering
             </strong>
-            —combining academic rigor with practical exploration experience.
+            —combining academic rigor with practical exploration and business
+            development experience.
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 relative z-10">
+        <div className="grid gap-8 md:grid-cols-3 relative z-10">
           {/* Dr. Amin */}
           <div className="group relative rounded-2xl border-2 border-primary/30 bg-gradient-to-br from-card via-card/70 to-background p-8 lg:p-10 shadow-xl transition hover:border-primary/50 hover:shadow-2xl">
             <div className="absolute right-6 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
@@ -234,7 +237,7 @@ export default function AboutPage() {
                 Dr. Amin Beiranvand Pour
               </h3>
               <p className="text-sm font-semibold text-primary">
-                Chief Scientist
+                Chief Scientist & Scientific Backbone
               </p>
             </div>
             <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
@@ -251,13 +254,14 @@ export default function AboutPage() {
                 .
               </p>
               <p>
-                His work forms the{" "}
+                His research forms the{" "}
                 <strong className="text-fg">
                   scientific backbone of the Scanminers GeoAI platform
                 </strong>
-                , enabling explainable, data-rich prospectivity mapping for rare
+                —enabling explainable, data-rich prospectivity mapping for rare
                 earth elements, lithium, PGEs, and other energy-transition
-                minerals.
+                minerals. Every model, every workflow, and every insight we
+                deliver is grounded in his peer-reviewed methodologies.
               </p>
               <div className="pt-4 border-t border-border/50">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
@@ -302,35 +306,32 @@ export default function AboutPage() {
               </div>
               <h3 className="text-2xl font-bold mb-1">Mahmood Asadi</h3>
               <p className="text-sm font-semibold text-accent">
-                Chief AI & Product Architect
+                Product & Operations Lead
               </p>
             </div>
             <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
               <p>
                 <strong className="text-fg">
-                  Mahmood Asadi is the Co-Founder & Chief AI & Product Architect
-                  at Scanminers
+                  Mahmood Asadi is the Co-Founder & Product & Operations Lead at
+                  Scanminers
                 </strong>
                 , responsible for translating{" "}
                 <strong className="text-fg">
                   deep geoscientific expertise into scalable, intelligent
                   exploration technology
-                </strong>
-                .
+                </strong>{" "}
+                and ensuring the business runs smoothly.
               </p>
               <p>
-                He designs and architects the{" "}
+                He architects the{" "}
                 <strong className="text-fg">
                   Scanminers platform end-to-end
                 </strong>
                 —integrating AI-assisted prospectivity modeling, multi-sensor
-                workflows, automated pipelines, and modern UX frameworks.
-                Mahmood bridges the gap between scientific innovation and
-                real-world usability, ensuring the platform delivers{" "}
-                <strong className="text-fg">
-                  explainable, high-confidence insights
-                </strong>{" "}
-                for critical minerals targeting.
+                workflows, automated pipelines, and modern UX frameworks. Beyond
+                product, Mahmood oversees day-to-day operations, partnership
+                development, and strategic planning—bridging the gap between
+                scientific innovation and real-world execution.
               </p>
               <div className="pt-4 border-t border-border/50">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
@@ -340,12 +341,72 @@ export default function AboutPage() {
                   {[
                     "AI Architecture",
                     "Product Design",
-                    "MLOps",
+                    "Operations",
                     "Platform Engineering",
                   ].map((skill) => (
                     <span
                       key={skill}
                       className="rounded-full border border-accent/30 bg-accent/5 px-3 py-1 text-xs font-semibold text-accent"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Dr. Mehrtash */}
+          <div className="group relative rounded-2xl border-2 border-secondary/30 bg-gradient-to-br from-card via-card/70 to-background p-8 lg:p-10 shadow-xl transition hover:border-secondary/50 hover:shadow-2xl">
+            <div className="absolute right-6 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-secondary/10 text-lg font-bold text-secondary">
+              3
+            </div>
+            <div className="mb-6">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
+                Core Team
+              </div>
+              <h3 className="text-2xl font-bold mb-1">Dr. Mehrtash Soltani</h3>
+              <p className="text-sm font-semibold text-secondary">
+                Brand & Business Development Lead
+              </p>
+            </div>
+            <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+              <p>
+                <strong className="text-fg">
+                  Dr. Mehrtash Soltani leads brand strategy and business
+                  development at Scanminers
+                </strong>
+                , shaping how we communicate our value to the exploration
+                industry and{" "}
+                <strong className="text-fg">
+                  building relationships with partners and clients
+                </strong>
+                .
+              </p>
+              <p>
+                With a background spanning{" "}
+                <strong className="text-fg">
+                  technical research and commercial development
+                </strong>
+                , Dr. Mehrtash ensures our brand voice reflects scientific
+                credibility while resonating with exploration teams and
+                investors. He focuses on partnership cultivation, market
+                positioning, and strategic growth initiatives.
+              </p>
+              <div className="pt-4 border-t border-border/50">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
+                  Expertise
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "Brand Strategy",
+                    "Business Development",
+                    "Partnerships",
+                    "Market Analysis",
+                  ].map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-secondary/30 bg-secondary/5 px-3 py-1 text-xs font-semibold text-secondary"
                     >
                       {skill}
                     </span>
@@ -389,6 +450,105 @@ export default function AboutPage() {
                     worldwide
                   </strong>
                   , spanning multiple continents and commodity types.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Inside Scanminers: Brain & Workflow */}
+      <section className="mb-16 lg:mb-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 rounded-3xl pointer-events-none" />
+
+        <div className="relative z-10 rounded-3xl border-2 border-primary/20 bg-gradient-to-br from-card/80 via-card/60 to-background p-8 lg:p-12">
+          <div className="mb-10 text-center">
+            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              Behind the Platform
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
+              Inside Scanminers:{" "}
+              <span className="bg-gradient-to-r from-teal-400 to-teal-300 bg-clip-text text-transparent font-extrabold">
+                Brain & Workflow
+              </span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Our platform is powered by an{" "}
+              <strong className="text-fg">
+                internal intelligence layer we call the Scanminers Brain
+              </strong>
+              —connecting leads, insights, and case studies for smarter
+              decision-making.
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            {/* Brain Card */}
+            <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 lg:p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/20">
+                  <Brain className="h-7 w-7 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">Scanminers Brain</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Internal Intelligence Layer
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+                <p>
+                  The Scanminers Brain is our{" "}
+                  <strong className="text-fg">
+                    internal knowledge system that connects incoming leads with
+                    relevant insights, case studies, and domain expertise
+                  </strong>
+                  . When a new inquiry arrives, the Brain surfaces related
+                  content, assesses fit, and identifies potential risks or
+                  opportunities.
+                </p>
+                <p>
+                  This isn&apos;t a customer-facing chatbot—it&apos;s an{" "}
+                  <strong className="text-fg">
+                    operational tool that helps our team respond faster and more
+                    intelligently
+                  </strong>{" "}
+                  to partnership opportunities and client questions.
+                </p>
+              </div>
+            </div>
+
+            {/* Workflow Card */}
+            <div className="rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-accent/5 to-transparent p-6 lg:p-8">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/20">
+                  <Workflow className="h-7 w-7 text-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">Integrated Workflow</h3>
+                  <p className="text-sm text-muted-foreground">
+                    How We Stay Organized
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+                <p>
+                  Every lead, meeting, and deliverable flows through a{" "}
+                  <strong className="text-fg">
+                    unified internal dashboard
+                  </strong>
+                  —ensuring nothing falls through the cracks. Notes, follow-ups,
+                  and context are preserved so any team member can pick up where
+                  another left off.
+                </p>
+                <p>
+                  The result:{" "}
+                  <strong className="text-fg">
+                    faster response times, better-prepared meetings, and
+                    continuity across engagements
+                  </strong>
+                  . Clients benefit from a team that remembers every
+                  conversation and builds on prior work.
                 </p>
               </div>
             </div>
