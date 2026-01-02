@@ -33,9 +33,21 @@ bucket_name = "scanminers-evidence"
 
 # Production environment overrides
 [env.production]
-# BRAIN_REVIEWER_EMAIL set via: npx wrangler secret put BRAIN_REVIEWER_EMAIL
-# Value: amin80@gmail.com
+# BRAIN_REVIEWER_EMAIL set via: npx wrangler secret put BRAIN_REVIEWER_EMAIL --env production
+# Value: amin80@gmail.com (2026-01-02)
 
 [env.production.vars]
 BRAIN_REGION = "Turkey"
 BRAIN_VERSION = "0.1.0"
+
+# Production D1 Database (same DB, explicit binding required per CF env rules)
+[[env.production.d1_databases]]
+binding = "BRAIN_DB"
+database_name = "scanminers-brain"
+database_id = "c6a0a33f-4f08-4a01-b10a-15ebf01cd139"
+migrations_dir = "database/migrations"
+
+# Production R2 Bucket (same bucket, explicit binding required per CF env rules)
+[[env.production.r2_buckets]]
+binding = "BRAIN_DOCS"
+bucket_name = "scanminers-evidence"
