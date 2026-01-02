@@ -31,11 +31,44 @@ bucket_name = "scanminers-evidence"
 # binding = "WEBSITE"
 # service = "scanminers-website"
 
-# Production environment overrides
-[env.production]
-# BRAIN_REVIEWER_EMAIL set via: npx wrangler secret put BRAIN_REVIEWER_EMAIL
-# Value: amin80@gmail.com
+# ─────────────────────────────────────────────────────────────────────────────
+# ENVIRONMENT STRATEGY (Option A: top-level = production)
+# ─────────────────────────────────────────────────────────────────────────────
+# 
+# Production: `wrangler deploy` (no --env flag)
+#   - Worker name: scanminers-brain
+#   - Secrets: Set via `npx wrangler secret put <NAME>`
+#   - D1/R2: Top-level bindings apply
+#
+# Staging: `wrangler deploy --env staging`
+#   - Worker name: scanminers-brain-staging  
+#   - Secrets: Set via `npx wrangler secret put <NAME> --env staging`
+#   - D1/R2: Must be explicitly declared in [env.staging]
+#
+# Rationale: Avoids `-production` suffix in Worker name, simpler routing.
+# See: https://developers.cloudflare.com/workers/wrangler/environments/
+# ─────────────────────────────────────────────────────────────────────────────
 
-[env.production.vars]
+# Production secrets (set via CLI, not in repo):
+# - BRAIN_REVIEWER_EMAIL: amin80@gmail.com (Dr. Amin - canonical reviewer)
+#   Command: npx wrangler secret put BRAIN_REVIEWER_EMAIL
+
+# Staging environment (optional, for preview deployments)
+[env.staging]
+name = "scanminers-brain-staging"
+
+[env.staging.vars]
 BRAIN_REGION = "Turkey"
-BRAIN_VERSION = "0.1.0"
+BRAIN_VERSION = "0.1.0-staging"
+
+# Staging D1 (same database for now, could be separate for isolation)
+[[env.staging.d1_databases]]
+binding = "BRAIN_DB"
+database_name = "scanminers-brain"
+database_id = "c6a0a33f-4f08-4a01-b10a-15ebf01cd139"
+migrations_dir = "database/migrations"
+
+# Staging R2 (same bucket for now)
+[[env.staging.r2_buckets]]
+binding = "BRAIN_DOCS"
+bucket_name = "scanminers-evidence"
