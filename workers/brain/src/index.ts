@@ -18,6 +18,8 @@ import {
   wrapError,
   parseReviewerIdentity,
   requireReviewerAuth,
+  requireInternalAuth,
+  InternalAuthError,
   type BrainEnv,
 } from './lib/api-guard';
 
@@ -115,8 +117,24 @@ async function routeRequest(
   }
 
   // =========================================================================
-  // ADMIN ENDPOINTS (require authentication)
+  // ADMIN ENDPOINTS (require internal authentication)
   // =========================================================================
+  
+  // P0.1 SECURITY: All admin routes require internal auth
+  // This prevents client-side forgery of X-Reviewer-Identity header
+  if (path.startsWith('/admin/')) {
+    try {
+      requireInternalAuth(request, env);
+    } catch (error) {
+      if (error instanceof InternalAuthError) {
+        return Response.json(
+          wrapError('UNAUTHORIZED', error.message),
+          { status: 401 }
+        );
+      }
+      throw error;
+    }
+  }
 
   // POST /admin/sources - Upload/register a document
   if (path === '/admin/sources' && method === 'POST') {

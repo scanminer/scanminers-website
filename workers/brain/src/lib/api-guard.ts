@@ -284,6 +284,79 @@ export interface BrainEnv {
    * For v0, Dr. Amin's email is used as canonical reviewer.
    */
   BRAIN_REVIEWER_EMAIL?: string;
+
+  /**
+   * SECURITY (P0.1): Internal secret for admin endpoint authentication.
+   * 
+   * ALL admin endpoints require: Authorization: Bearer <BRAIN_INTERNAL_SECRET>
+   * 
+   * This prevents client-side forgery of X-Reviewer-Identity header.
+   * Only the Website Worker (server-side) should know this secret.
+   * 
+   * Set via: npx wrangler secret put BRAIN_INTERNAL_SECRET
+   */
+  BRAIN_INTERNAL_SECRET?: string;
+}
+
+// =============================================================================
+// INTERNAL AUTH GUARD (P0.1 Security Fix)
+// =============================================================================
+
+/**
+ * CRITICAL: Verifies internal authentication for admin endpoints.
+ * 
+ * Admin routes are NOT public. They must be called from:
+ * - Website Worker (via Service Binding with shared secret)
+ * - Authenticated admin backend (with secret in Authorization header)
+ * 
+ * @throws InternalAuthError if auth fails
+ */
+export function requireInternalAuth(request: Request, env: BrainEnv): void {
+  // Check if internal secret is configured
+  if (!env.BRAIN_INTERNAL_SECRET) {
+    console.error('[Brain Auth] BRAIN_INTERNAL_SECRET not configured - admin endpoints DISABLED');
+    throw new InternalAuthError('Admin endpoints disabled (no internal secret configured)');
+  }
+
+  // Extract Bearer token from Authorization header
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader) {
+    console.warn('[Brain Auth] Missing Authorization header on admin request');
+    throw new InternalAuthError('Authorization required for admin endpoints');
+  }
+
+  const [scheme, token] = authHeader.split(' ');
+  if (scheme !== 'Bearer' || !token) {
+    console.warn('[Brain Auth] Invalid Authorization header format');
+    throw new InternalAuthError('Invalid authorization format (expected: Bearer <token>)');
+  }
+
+  // Constant-time comparison to prevent timing attacks
+  if (!constantTimeEqual(token, env.BRAIN_INTERNAL_SECRET)) {
+    console.warn('[Brain Auth] Invalid internal secret provided');
+    throw new InternalAuthError('Invalid authorization token');
+  }
+
+  console.log('[Brain Auth] Internal auth successful');
+}
+
+export class InternalAuthError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InternalAuthError';
+  }
+}
+
+/**
+ * Constant-time string comparison to prevent timing attacks.
+ */
+function constantTimeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
 }
 
 /**
