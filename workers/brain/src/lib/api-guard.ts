@@ -243,34 +243,45 @@ export function wrapError(
 }
 
 // =============================================================================
-// Reviewer Authorization (HARDENED: uses stable userId + provider, not email)
+// Reviewer Authorization
 // =============================================================================
 
 /**
- * Reviewer identity is defined by a stable identifier, not email.
- * This prevents spoofing if email is not guaranteed by the auth provider.
+ * Reviewer identity supports two authorization methods:
  * 
- * Supported identity formats:
- * - `credentials:admin-{username}` - Admin password login
- * - `github:{github_user_id}` - GitHub OAuth (numeric ID, not login)
- * - `google:{google_sub}` - Google OAuth (sub claim)
+ * 1. STABLE userId (preferred): `provider:userId` format
+ *    - `credentials:admin-{username}` - Admin password login
+ *    - `github:{github_user_id}` - GitHub OAuth (numeric ID, not login)
+ *    - `google:{google_sub}` - Google OAuth (sub claim)
+ * 
+ * 2. EMAIL (v0 fallback): email address from auth provider
+ *    - Less secure but simpler for initial deployment
+ *    - Requires auth provider to verify email
  */
 export interface ReviewerIdentity {
   provider: 'credentials' | 'github' | 'google';
-  userId: string;  // Stable ID from auth provider (NOT email)
+  userId: string;  // Stable ID from auth provider
+  email?: string;  // Email (for fallback, less secure)
 }
 
 export interface BrainEnv {
   /**
-   * Comma-separated list of allowed reviewer identities.
+   * Comma-separated list of allowed reviewer identities (PREFERRED).
    * Format: "provider:userId,provider:userId,..."
    * 
    * Example: "credentials:admin-admin,github:12345678,google:109234567890123456789"
    */
   BRAIN_REVIEWER_IDS?: string;
-  
+
   /**
-   * @deprecated Use BRAIN_REVIEWER_IDS instead. Email is not a stable identifier.
+   * Email-based reviewer allowlist (v0 FALLBACK).
+   * Simpler but less secure than BRAIN_REVIEWER_IDS.
+   * 
+   * Format: "email1,email2,..."
+   * Example: "amin80@gmail.com"
+   * 
+   * NOTE: Email verification depends on auth provider's email_verified claim.
+   * For v0, Dr. Amin's email is used as canonical reviewer.
    */
   BRAIN_REVIEWER_EMAIL?: string;
 }
@@ -279,33 +290,32 @@ export interface BrainEnv {
  * Parses the reviewer identity from session token.
  */
 export function parseReviewerIdentity(
-  token: { provider?: string; sub?: string; id?: string; login?: string } | null
+  token: { provider?: string; sub?: string; id?: string; login?: string; email?: string } | null
 ): ReviewerIdentity | null {
   if (!token || !token.provider) return null;
-
+  
+  const email = token.email || undefined;
   const provider = token.provider as ReviewerIdentity['provider'];
   
   // For credentials, the ID is `admin-{username}` set by authenticateAdminCredentials
   if (provider === 'credentials') {
-    // The user.id from credentials provider is `admin-{username}`
     const userId = token.sub || token.id;
     if (!userId) return null;
-    return { provider, userId };
+    return { provider, userId, email };
   }
   
   // For GitHub, use the numeric user ID (stable), not login (can change)
   if (provider === 'github') {
-    // GitHub profile.id is numeric and stable
     const userId = token.sub || token.id;
     if (!userId) return null;
-    return { provider, userId };
+    return { provider, userId, email };
   }
   
   // For Google, use the `sub` claim (stable Google account ID)
   if (provider === 'google') {
     const userId = token.sub;
     if (!userId) return null;
-    return { provider, userId };
+    return { provider, userId, email };
   }
 
   return null;
@@ -320,7 +330,10 @@ export function formatReviewerIdentity(identity: ReviewerIdentity): string {
 
 /**
  * Checks if the actor is authorized to approve/reject claims.
- * Uses stable userId, not email.
+ * 
+ * Authorization checks (in order):
+ * 1. BRAIN_REVIEWER_IDS - Stable userId allowlist (preferred)
+ * 2. BRAIN_REVIEWER_EMAIL - Email allowlist (v0 fallback)
  */
 export function isAuthorizedReviewer(
   identity: ReviewerIdentity | null,
@@ -331,32 +344,36 @@ export function isAuthorizedReviewer(
     return false;
   }
 
-  const allowedIds = env.BRAIN_REVIEWER_IDS;
-  
-  if (!allowedIds) {
-    // Fallback to deprecated email check (with warning)
-    if (env.BRAIN_REVIEWER_EMAIL) {
-      console.warn(
-        '[Brain Auth] BRAIN_REVIEWER_EMAIL is deprecated. Use BRAIN_REVIEWER_IDS for stable identity.'
-      );
-      // Cannot reliably check email from identity - reject
-      return false;
+  // Method 1: Check against stable userId allowlist (preferred)
+  if (env.BRAIN_REVIEWER_IDS) {
+    const identityString = formatReviewerIdentity(identity);
+    const allowedList = env.BRAIN_REVIEWER_IDS.split(',').map(s => s.trim().toLowerCase());
+    const isAllowed = allowedList.includes(identityString.toLowerCase());
+    if (isAllowed) {
+      console.log(`[Brain Auth] Reviewer ${identityString} authorized via userId allowlist`);
+      return true;
     }
-    
-    console.error('[Brain Auth] BRAIN_REVIEWER_IDS not configured');
+    // Fall through to email check if userId not matched
+  }
+
+  // Method 2: Check against email allowlist (v0 fallback for Dr. Amin)
+  if (env.BRAIN_REVIEWER_EMAIL && identity.email) {
+    const allowedEmails = env.BRAIN_REVIEWER_EMAIL.split(',').map(s => s.trim().toLowerCase());
+    const isAllowed = allowedEmails.includes(identity.email.toLowerCase());
+    if (isAllowed) {
+      console.log(`[Brain Auth] Reviewer ${identity.email} authorized via email allowlist`);
+      return true;
+    }
+  }
+
+  // Neither method matched
+  if (!env.BRAIN_REVIEWER_IDS && !env.BRAIN_REVIEWER_EMAIL) {
+    console.error('[Brain Auth] No reviewer allowlist configured (set BRAIN_REVIEWER_IDS or BRAIN_REVIEWER_EMAIL)');
     return false;
   }
-  
-  const identityString = formatReviewerIdentity(identity);
-  const allowedList = allowedIds.split(',').map(s => s.trim().toLowerCase());
-  
-  const isAllowed = allowedList.includes(identityString.toLowerCase());
-  
-  if (!isAllowed) {
-    console.warn(`[Brain Auth] Reviewer ${identityString} not in allowlist`);
-  }
-  
-  return isAllowed;
+
+  console.warn(`[Brain Auth] Reviewer ${formatReviewerIdentity(identity)} (email: ${identity.email || 'none'}) not in any allowlist`);
+  return false;
 }
 
 /**

@@ -41,3 +41,13 @@ binding = "LEADS_DB"
 database_name = "scanminers-leads-v2"
 database_id = "d919665a-c650-4f1c-817f-bc6a3f729c54"
 migrations_dir = "database/migrations"
+
+# ============================================================================
+# Service Binding to Scanminers Brain Worker (P1: internal API calls)
+# Source: ADR-0012 — Equira as Control Plane, Brain as Science Plane
+# ============================================================================
+[[services]]
+binding = "BRAIN"
+service = "scanminers-brain"
+# Note: Requires scanminers-brain Worker to be deployed first
+# Deploy order: 1) Brain Worker  2) Website Worker
