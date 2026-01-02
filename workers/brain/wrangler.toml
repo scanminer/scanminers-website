@@ -13,16 +13,18 @@ BRAIN_REGION = "Turkey"
 BRAIN_VERSION = "0.1.0"
 
 # D1 Database for Brain data (separate from LEADS_DB)
+# Created: 2026-01-02 via `wrangler d1 create scanminers-brain`
 [[d1_databases]]
 binding = "BRAIN_DB"
 database_name = "scanminers-brain"
-database_id = "TO_BE_CREATED"
+database_id = "c6a0a33f-4f08-4a01-b10a-15ebf01cd139"
 migrations_dir = "database/migrations"
 
-# R2 Bucket for document storage
+# R2 Bucket for document/evidence storage
+# Created: 2026-01-02 via `wrangler r2 bucket create scanminers-evidence`
 [[r2_buckets]]
 binding = "BRAIN_DOCS"
-bucket_name = "scanminers-brain-docs"
+bucket_name = "scanminers-evidence"
 
 # Service binding back to main website (for auth validation if needed)
 # [[services]]
@@ -31,8 +33,8 @@ bucket_name = "scanminers-brain-docs"
 
 # Production environment overrides
 [env.production]
-# BRAIN_REVIEWER_IDS will be set via dashboard (secret)
-# Format: "credentials:admin-admin,github:12345678"
+# BRAIN_REVIEWER_EMAIL set via: npx wrangler secret put BRAIN_REVIEWER_EMAIL
+# Value: amin80@gmail.com
 
 [env.production.vars]
 BRAIN_REGION = "Turkey"
