@@ -31,7 +31,7 @@ import {
   isTransitionAllowed,
 } from './lib/validation';
 
-import type { Source, Claim, Hypothesis, WorkflowStatus } from './lib/types';
+import type { Source, Claim, Hypothesis, WorkflowStatus, CreateSourceInput } from './lib/types';
 
 export interface Env extends BrainEnv {
   BRAIN_DB: D1Database;
@@ -183,7 +183,7 @@ async function handleGetApprovedClaims(env: Env): Promise<Response> {
 
   // Double-check: filter again (defense in depth)
   const approved = (result.results || []).filter(
-    (c: any) => c.status === 'APPROVED'
+    (c: { status: string }) => c.status === 'APPROVED'
   );
 
   return Response.json(wrapSuccess(approved, approved.length));
@@ -212,7 +212,7 @@ async function handleGetApprovedHypotheses(env: Env): Promise<Response> {
   `).all();
 
   const approved = (result.results || []).filter(
-    (h: any) => h.status === 'APPROVED'
+    (h: { status: string }) => h.status === 'APPROVED'
   );
 
   return Response.json(wrapSuccess(approved, approved.length));
@@ -235,7 +235,7 @@ async function handleCreateSource(request: Request, env: Env): Promise<Response>
   }
 
   // Check admissibility
-  const admissibility = checkSourceAdmissibility(body as any);
+  const admissibility = checkSourceAdmissibility(body as CreateSourceInput);
   
   // Insert source
   const id = crypto.randomUUID();
@@ -535,7 +535,7 @@ async function handleSubmitHypothesis(id: string, request: Request, env: Env): P
   `).bind(id).all();
 
   // Run auto-check
-  const autoCheck = autoCheckHypothesis(hypothesis, supportingClaims.results as any[]);
+  const autoCheck = autoCheckHypothesis(hypothesis, supportingClaims.results as Claim[]);
   
   if (!autoCheck.passed) {
     return Response.json(
