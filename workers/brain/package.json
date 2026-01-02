@@ -1,0 +1,21 @@
+{
+  "name": "scanminers-brain",
+  "version": "0.1.0",
+  "description": "Scanminers geological evidence management service",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create scanminers-brain",
+    "db:migrate": "wrangler d1 migrations apply BRAIN_DB",
+    "db:migrate:remote": "wrangler d1 migrations apply BRAIN_DB --remote",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

@@ -1,0 +1,39 @@
+# Scanminers Brain Worker
+# Separate service for geological evidence management
+# Per DOCTRINE 001: Binary Separation - API-only integration with website Worker
+
+name = "scanminers-brain"
+main = "src/index.ts"
+compatibility_date = "2025-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables (non-secret)
+[vars]
+BRAIN_REGION = "Turkey"
+BRAIN_VERSION = "0.1.0"
+
+# D1 Database for Brain data (separate from LEADS_DB)
+[[d1_databases]]
+binding = "BRAIN_DB"
+database_name = "scanminers-brain"
+database_id = "TO_BE_CREATED"
+migrations_dir = "database/migrations"
+
+# R2 Bucket for document storage
+[[r2_buckets]]
+binding = "BRAIN_DOCS"
+bucket_name = "scanminers-brain-docs"
+
+# Service binding back to main website (for auth validation if needed)
+# [[services]]
+# binding = "WEBSITE"
+# service = "scanminers-website"
+
+# Production environment overrides
+[env.production]
+# BRAIN_REVIEWER_IDS will be set via dashboard (secret)
+# Format: "credentials:admin-admin,github:12345678"
+
+[env.production.vars]
+BRAIN_REGION = "Turkey"
+BRAIN_VERSION = "0.1.0"
